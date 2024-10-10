@@ -15,6 +15,7 @@ As sports betting and fantasy sports grow, there is an increasingly large group 
 git clone https://github.com/TritonEden/Oracle-Arena.git
 cd Oracle-Arena
 docker build -t oracle-arena .
+docker run -p 8000:8000 -p 3000:3000 -p 80:80 oracle-arena
 ```
 
 ## Project Needs
