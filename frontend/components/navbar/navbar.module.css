@@ -1,0 +1,87 @@
+/* components/Navbar/Navbar.module.css */
+
+.navbar {
+    background-color: #1d1d1d;
+    /* padding: 0.5rem 1rem; */
+    position: fixed;
+    width: 100%;
+    height: 120px;
+    top: 0;
+    z-index: 1000;
+}
+
+.navContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 95%;
+    margin: 0 auto;
+}
+
+.navLogo img {
+    height: 40px;
+}
+
+.menuButton {
+    font-size: 1.5rem;
+    color: #fff;
+    background: none;
+    border: white;
+    cursor: pointer;
+    display: none;
+    /* Hidden on desktop */
+}
+
+.navLinks {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navLinks li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navLinks li a:hover {
+    color: #cc9a36;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .menuButton {
+        display: block;
+        /* Show on mobile */
+    }
+
+    .navLinks {
+        position: absolute;
+        top: 120px;
+        /* Height of navbar */
+        left: 0;
+        width: 100%;
+        background-color: #1d1d1d;
+        flex-direction: column;
+        align-items: center;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 1s ease;
+    }
+
+    .navLinks.active {
+        max-height: 300px;
+    }
+
+    .navLinks li {
+        width: 100%;
+        text-align: center;
+        padding: 0 0 1rem 0;
+        
+    }
+
+    .navLinks li:first-child {
+        padding: 1rem 0 1rem 0;
+    }
+}
