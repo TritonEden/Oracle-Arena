@@ -61,5 +61,12 @@ RUN pip install -r /app/backend/requirements.txt
 # Expose the required ports for Django, Next.js, and Nginx (if needed later)
 EXPOSE 8000 3000 80
 
+# # Run Nginx in the background
+# RUN nginx -g 'daemon off;' &
+
+# # Run the python server
+
+# RUN python backend/manage.py runserver &
+
 # Set the default command to run Bash
 CMD ["/bin/bash"]

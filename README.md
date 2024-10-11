@@ -18,6 +18,14 @@ docker build -t oracle-arena .
 docker run -p 8000:8000 -p 3000:3000 -p 80:80 oracle-arena
 ```
 
+3. In docker, to run the backend, run the following commands:
+
+```bash
+cd backend
+nginx -g "daemon off;" & # Start the nginx server
+python manage.py runserver 0.0.0.0:8000 &> /dev/null & # Start the Django server in the background -- add the extra commands as you wish
+```
+
 ## Project Needs
 
 1. Design a sleek and easy to use web frontend so users can find the stats they want quickly.
