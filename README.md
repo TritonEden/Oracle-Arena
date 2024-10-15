@@ -18,7 +18,8 @@ cd frontend
 npm install
 npm run dev
 ```
-For now, the default page is http://localhost:3000/home. Go to there to see the default webpage.
+
+For now, the default page is `http://localhost:3000/home`. Go to there to see the default webpage.
 
 ## Setup for docker
 
@@ -48,7 +49,7 @@ cd frontend
 npm run docker
 ```
 
-6. Open your browser and go to `http://localhost:3000/` to see the frontend of the web application.
+6. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
 
 ## Project Needs
 
