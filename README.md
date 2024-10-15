@@ -6,13 +6,26 @@ Oracle Arena - A web application that hosts original player performance metrics,
 
 As sports betting and fantasy sports grow, there is an increasingly large group of sports fans interested in advanced analytics. Fans want to further their understanding of sports in order to gain an upper hand when betting on games or simply to discuss the sports they love in further detail. This project seeks to develop a web application with the statistical analysis tools NBA fans need to increase their understanding of the league.
 
-## Setup
+## Setup for webpage (frontend)
+1. Install NodeJS
+2. (Optional): Install VSCode Extensions (ES7+ React, Javascript and Typescript, Tailwind CSS IntelliSense).
+3. Run the following commands:
+
+```bash
+git clone https://github.com/TritonEden/Oracle-Arena.git
+cd Oracle-Arena
+cd frontend
+npm install
+npm run dev
+```
+For now, the default page is http://localhost:3000/home. Go to there to see the default webpage.
+
+## Setup for docker
 
 1. Install docker and git (if not already installed)
 2. In your terminal, run the following commands:
 
 ```bash
-git clone https://github.com/TritonEden/Oracle-Arena.git
 cd Oracle-Arena
 docker build -t oracle-arena .
 docker run -p 8000:8000 -p 3000:3000 -p 80:80 -it oracle-arena
