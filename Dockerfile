@@ -57,6 +57,7 @@ COPY ./backend/nginx/conf/nginx.conf /etc/nginx/nginx.conf
 RUN pip install -r /app/backend/requirements.txt
 
 #Include frontend setup later -- use npm i
+RUN cd /app/frontend && npm install && cd ..
 
 # Expose the required ports for Django, Next.js, and Nginx (if needed later)
 EXPOSE 8000 3000 80
