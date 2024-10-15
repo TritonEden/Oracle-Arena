@@ -15,7 +15,7 @@ As sports betting and fantasy sports grow, there is an increasingly large group 
 git clone https://github.com/TritonEden/Oracle-Arena.git
 cd Oracle-Arena
 docker build -t oracle-arena .
-docker run -p 8000:8000 -p 3000:3000 -p 80:80 oracle-arena
+docker run -p 8000:8000 -p 3000:3000 -p 80:80 -it oracle-arena
 ```
 
 3. In docker, to run the backend, run the following commands:
@@ -25,6 +25,17 @@ cd backend
 nginx -g "daemon off;" & # Start the nginx server
 python manage.py runserver 0.0.0.0:8000 &> /dev/null & # Start the Django server in the background -- add the extra commands as you wish
 ```
+
+4. Open your browser and go to `http://localhost:8000/` to see the backend of the web application.
+
+5. In docker, to run the frontend, run the following commands:
+
+```bash
+cd frontend
+npm run docker
+```
+
+6. Open your browser and go to `http://localhost:3000/` to see the frontend of the web application.
 
 ## Project Needs
 
