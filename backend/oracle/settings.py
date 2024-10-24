@@ -80,10 +80,19 @@ WSGI_APPLICATION = 'oracle.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+assert Path(".env").exists(), "Create a .env file with the database password"
+
+with open(".env", "r") as f:
+    PASSWORD = f.read().strip() 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': PASSWORD,
+        'HOST': 'oracle-arena.cbyq4s08yfo5.us-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
