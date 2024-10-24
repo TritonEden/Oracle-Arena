@@ -19,7 +19,14 @@ npm install
 npm run dev
 ```
 
-For now, the default page is `http://localhost:3000/home`. Go to there to see the default webpage.
+The default home page is `http://localhost:3000/home`. Go to there to see the default webpage.
+Another way to actually see the production side of the webpage is to run the following commands:
+```bash
+cd frontend
+npm run build
+npm start
+```
+This will show which pages are static and server rendered and to see if we need to fix on any errors before deploying this website
 
 ## Setup for docker
 
