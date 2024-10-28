@@ -58,6 +58,25 @@ npm run docker
 
 6. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
 
+NOTE: Docker setup is not complete yet. We need to add the database part to the docker setup, which we are currently working on.
+
+## Temporary Setup for db (backend)
+
+1. Install PostgreSQL
+2. If you are on windows, add psql to your PATH
+
+### Obtaining the db
+
+1. Run `cd backend`
+2. Run `psql -p 5432 -U postgres -d temp_db -f temp_db.sql`
+3. Enter your password that you made when you installed PostgreSQL
+
+### Saving the db when done
+
+1. Make sure you are in the backend directory
+2. Run `pg_dump -U postgres -d temp_db > temp_db.sql`
+3. Enter your password that you made when you installed PostgreSQL
+
 ## Project Needs
 
 1. Design a sleek and easy to use web frontend so users can find the stats they want quickly.
