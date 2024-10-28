@@ -62,20 +62,10 @@ NOTE: Docker setup is not complete yet. We need to add the database part to the 
 
 ## Temporary Setup for db (backend)
 
-1. Install PostgreSQL
-2. If you are on windows, add psql to your PATH
-
-### Obtaining the db
-
-1. Run `cd backend`
-2. Run `psql -p 5432 -U postgres -d temp_db -f temp_db.sql`
-3. Enter your password that you made when you installed PostgreSQL
-
-### Saving the db when done
-
-1. Make sure you are in the backend directory
-2. Run `pg_dump -U postgres -d temp_db > temp_db.sql`
-3. Enter your password that you made when you installed PostgreSQL
+1. SSH into the EC2 instance with `ssh -i .\Ryan.pem ec2-user@ec2-3-95-168-187.compute-1.amazonaws.com` (Obviously you can't do this unless you have the .pem file, which I can provide if you need it).
+2. Go to the backend folder and `git pull` the latest changes.
+3. Run `python3 manage.py runserver 0.0.0.0:8000`
+4. On your local machine, go to `http://ec2-3-95-168-187.compute-1.amazonaws.com:8000/` to see the backend of the web application.
 
 ## Project Needs
 
