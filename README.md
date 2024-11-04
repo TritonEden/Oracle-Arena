@@ -7,6 +7,7 @@ Oracle Arena - A web application that hosts original player performance metrics,
 As sports betting and fantasy sports grow, there is an increasingly large group of sports fans interested in advanced analytics. Fans want to further their understanding of sports in order to gain an upper hand when betting on games or simply to discuss the sports they love in further detail. This project seeks to develop a web application with the statistical analysis tools NBA fans need to increase their understanding of the league.
 
 ## Setup for webpage (frontend)
+
 1. Install NodeJS
 2. (Optional): Install VSCode Extensions (ES7+ React, Javascript and Typescript, Tailwind CSS IntelliSense).
 3. Run the following commands:
