@@ -4,23 +4,27 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0117;
-    --foreground: #cc9a36;
+    --primary: #0a0117;
+    --secondary: #cc9a36;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--secondary);
+  background: var(--primary);
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  margin-top: 300px;
+  /* margin-top: 200px; */
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.nav {
+  padding-bottom: 23vh
 }
 
 .loadingDots {
@@ -55,4 +59,18 @@ body {
   100% {
     content: '';
   }
+}
+
+.filters {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 96%;
+}
+
+.datePicker {
+  display: flex;
+  justify-content: left;
+  width: 100px;
 }

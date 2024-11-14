@@ -1,0 +1,62 @@
+/* components/datePicker/datePicker.module.css */
+
+.prev-next-button {
+  color: white;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.625rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-button {
+  color: white;
+  font-weight: bold;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.625rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-button.selected {
+  border: 1px solid white;
+}
+
+.date-button.today {
+  color: #cc9a36;
+}
+
+.month-name {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Responsive Styles */
+@media (min-width: 640px) {
+  .prev-next-button, .date-button {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .month-name {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .prev-next-button, .date-button {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .month-name {
+    font-size: 1.5rem;
+  }
+}

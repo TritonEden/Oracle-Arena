@@ -1,15 +1,20 @@
 // import Image from "next/image";
 // import Link from "next/link";
 import Navbar from '../../components/navbar/navbar';
+import MyDayPicker from "../../components/datePicker/datePicker";
 
 export default function Home() {
   return (
     <main>
-      <Navbar />
-      <h1>HOME</h1>
-      <h2>
-        Coming Soon <span className="loadingDots"></span>
-      </h2>
+      <div className="nav">
+        <Navbar />
+      </div>
+      <div className="filters">
+        <div className="datePicker">
+          <MyDayPicker />
+        </div>
+        
+      </div>
     </main>
 
   );
