@@ -37,9 +37,6 @@ const Navbar: React.FC = () => {
                         <Link href="statistics">Stats</Link>
                     </li>
                     <li>
-                        <Link href="betPredict">Bet Predictions</Link>
-                    </li>
-                    <li>
                         <Link href="about">About</Link>
                     </li>
                 </ul>
