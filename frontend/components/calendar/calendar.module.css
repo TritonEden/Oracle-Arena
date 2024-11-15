@@ -54,11 +54,7 @@
 }
 
 .day:hover {
-  box-shadow: 0 0 0 2px white;
-}
-
-.day:active {
-  box-shadow: 0 0 0 2px white;
+  box-shadow: 0 0 0 2px #cc9a36;
 }
 
 .empty {
@@ -72,10 +68,6 @@
 
 .today {
   color: #cc9a36;
-}
-
-.selected.today {
-  box-shadow: 0 0 0 2px white;
 }
 
 .selectedDate {
