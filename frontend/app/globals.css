@@ -14,7 +14,7 @@ body {
   background: var(--primary);
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  /* margin-top: 200px; */
+  min-height: 100vh
 }
 
 @layer utilities {
@@ -24,7 +24,7 @@ body {
 }
 
 .nav {
-  padding-bottom: 42vh
+  padding-bottom: 24vh
 }
 
 .loadingDots {
@@ -64,13 +64,22 @@ body {
 .filters {
   position: absolute;
   left: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: 96%;
 }
 
 .datePicker {
-  display: flex;
-  justify-content: left;
-  width: 100px;
+  
+}
+
+.calendar {
+  
+}
+
+.search {
+  width: 175px
 }
