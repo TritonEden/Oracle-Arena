@@ -1,6 +1,5 @@
 import React from 'react'
 // import Link from 'next/link'
-import Navbar from "../../components/navbar/navbar"
 
 // Information about the player is stored in this interface
 interface Player {
@@ -22,7 +21,6 @@ const statistics = async () => {
 
   return (
     <div>
-      <Navbar />
       <h1 style={{ marginTop: '300px', textAlign: 'center'}}>STATISTICS</h1>
       <br></br>
       <p>{new Date().toLocaleDateString()}</p>
