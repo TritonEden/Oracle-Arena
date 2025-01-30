@@ -6,8 +6,6 @@ import Calendar from "../../components/calendar/calendar"
 export default function Home() {
   return (
     <main>
-      <div className="nav">
-      </div>
       <div className="filters">
         <div className="datePicker">
           <DatePicker />

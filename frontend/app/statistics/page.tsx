@@ -1,43 +1,73 @@
-import React from 'react'
-// import Link from 'next/link'
+"use client";
 
-// Information about the player is stored in this interface
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+
 interface Player {
   id: number;
   name: string;
-  address: {
-    street: string;
-  };
+  points_per_game: number;
+  team_name: string;
 }
 
-const statistics = async () => {
-  // fetch statistics data from a json placeholder (for now) and display the names of the players
-  // cache: 'no-store' allows the page to be server rendered on command
-  const res = await fetch('https://jsonplaceholder.typicode.com/users', {cache: 'no-store'})
+const Statistics = () => {
+  const [players, setPlayers] = useState<Player[]>([]);
 
-  // When we have backend up, we can revalidate this information and refresh our cache
-  // const res = await fetch('https://jsonplaceholder.typicode.com/users', {next: {revalidate: 1000}})
-  const players: Player[] = await res.json()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("https://jsonplaceholder.typicode.com/users");
+        setPlayers(data.map((player: any) => ({ id: player.id, name: player.name, points_per_game: Math.random() * 30, team_name: "Unknown" }))); // Mock points & team
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const columns = [
+    { accessorKey: "name", header: "Player Name" },
+    { accessorKey: "points_per_game", header: "Points Per Game" },
+    { accessorKey: "team_name", header: "Player Team" },
+  ];
+
+  const table = useReactTable({
+    data: players,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
-    <div>
-      <h1 style={{ marginTop: '300px', textAlign: 'center'}}>STATISTICS</h1>
-      <br></br>
-      <p>{new Date().toLocaleDateString()}</p>
-      <p>{new Date().toLocaleTimeString()}</p>
-      <h2 style={{ listStyleType: 'none', paddingLeft: '75px', textAlign: 'left' }}>Players</h2>
-      <ul style={{ listStyleType: 'disc', paddingLeft: '100px', textAlign: 'left' }}>
-        {players.map(player => 
-          <li key={player.id}> 
-            {player.name} - {player.address.street}
-          </li>
-        )}
-      </ul>
-      {/* <h2>
-        Coming Soon <span className="loadingDots"></span>
-      </h2> */}
+    <div className="p-4">
+      <h1 className="text-center text-xl font-bold mb-4">Statistics</h1>
+      <table className="border-collapse w-full border border-gray-300">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id} className="bg-gray-100">
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} className="border border-gray-300 p-2">
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id} className="hover:bg-gray-50">
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className="border border-gray-300 p-2">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
-}
+  );
+};
 
-export default statistics
+export default Statistics;

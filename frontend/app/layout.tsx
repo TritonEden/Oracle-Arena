@@ -9,15 +9,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
         <Navbar />
-        {children}
+        <div style={{ paddingTop: "180px" }}>{children}</div> {/* Adjust based on navbar height */}
       </body>
     </html>
   );
 }
+
