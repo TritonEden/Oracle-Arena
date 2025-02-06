@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addDays, subDays } from "date-fns";
 import styles from "./datePicker.module.css";
 
 const DateFilter: React.FC = () => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const getDateRange = () => {
-    const startDate = subDays(selectedDate, 2);
+    const startDate = subDays(selectedDate, isMobile ? 1 : 2); // Adjust based on mobile view
     const dates = [];
 
-    for (let i = 0; i <= 4; i++) {
+    // Add dates, ensuring the selected date is in the middle
+    for (let i = 0; i < (isMobile ? 3 : 5); i++) {
       dates.push(addDays(startDate, i));
     }
 
@@ -31,6 +33,19 @@ const DateFilter: React.FC = () => {
     const options: Intl.DateTimeFormatOptions = { month: "long" };
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center">

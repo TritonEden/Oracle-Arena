@@ -17,15 +17,19 @@ body {
   min-height: 100vh
 }
 
+main {
+  margin-top: 130px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
 
-.nav {
+/* .nav {
   padding-bottom: 24vh
-}
+} */
 
 .loadingDots {
   width: 100px;
@@ -59,27 +63,4 @@ body {
   100% {
     content: '';
   }
-}
-
-.filters {
-  position: absolute;
-  left: 50%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: 96%;
-}
-
-.datePicker {
-  
-}
-
-.calendar {
-  
-}
-
-.search {
-  width: 175px
 }

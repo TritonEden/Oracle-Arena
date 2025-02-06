@@ -1,0 +1,27 @@
+/* app/home/page.module.css */
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.datePicker {}
+
+.calendar {}
+
+.search {}
+
+.tableContainer {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gamesTable{
+  margin-left: auto;
+  margin-right: auto;
+}
