@@ -28,7 +28,6 @@
     border: white;
     cursor: pointer;
     display: none;
-    /* Hidden on desktop */
 }
 
 .navLinks {
@@ -48,17 +47,15 @@
     color: #cc9a36;
 }
 
-/* Responsive Styles */
+
 @media (max-width: 768px) {
     .menuButton {
         display: block;
-        /* Show on mobile */
     }
 
     .navLinks {
         position: absolute;
         top: 120px;
-        /* Height of navbar */
         left: 0;
         width: 100%;
         background-color: #1d1d1d;

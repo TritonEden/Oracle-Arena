@@ -2,11 +2,12 @@
 
 .filters {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 10vh;
 }
 
 .datePicker {}
@@ -16,12 +17,56 @@
 .search {}
 
 .tableContainer {
+  display: grid;
+  gap: 10px;
   width: 95%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
 }
 
-.gamesTable{
+.gamesTable {
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+}
+
+.headerRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  align-items: center;
+  padding-bottom: 5vh;
+}
+
+.gameRow {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 2fr 2fr;
+  align-items: center;
+  padding-bottom: 2vh;
+}
+
+.dataLabelRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  margin-left: 10vw;
+  margin-right: 10vw;
+}
+
+.dataRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  margin-left: 10vw;
+  margin-right: 10vw;
+}
+
+.tableCell {
+  color: white;
+}
+
+.actualData {
+  margin-left: 5vw;
+}
+
+.predictData {
+  margin-right: 5vw;
 }
