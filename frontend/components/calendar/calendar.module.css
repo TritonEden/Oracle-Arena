@@ -2,7 +2,7 @@
 
 .calendarModal {
   position: absolute;
-  top: 10%;
+  top: 130px;
   left: 50%;
   transform: translate(-50%, 0%);
   background-color: #1d1d1d;
