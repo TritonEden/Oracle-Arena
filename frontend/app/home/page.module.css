@@ -34,6 +34,10 @@
   grid-template-columns: 2fr 1fr 2fr;
   align-items: center;
   padding-bottom: 5vh;
+  margin-left: 10vh;
+  margin-right: 10vh;
+  font-size: large;
+  font-weight: bold;
 }
 
 .gameRow {
