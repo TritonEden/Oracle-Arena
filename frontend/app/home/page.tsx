@@ -1,7 +1,6 @@
-// import Image from "next/image";
-// import Link from "next/link";
 import DatePicker from "../../components/datePicker/datePicker";
-import Calendar from "../../components/calendar/calendar"
+import Calendar from "../../components/calendar/calendar";
+import SearchBar from "../../components/searchBar/searchBar"
 import styles from './page.module.css';
 
 export default function Home() {
@@ -15,7 +14,7 @@ export default function Home() {
           <Calendar />
         </div>
         <div className={styles.search}>
-          <p>Search</p>
+          <SearchBar />
         </div>
       </div>
 

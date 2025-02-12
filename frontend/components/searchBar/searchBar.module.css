@@ -1,0 +1,6 @@
+/* components/searchBar/searchBar.module.css */
+
+.searchBar {
+  display: flex;
+  align-items: center;
+}

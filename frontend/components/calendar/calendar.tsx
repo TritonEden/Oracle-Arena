@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import styles from './calendar.module.css';
@@ -148,7 +149,7 @@ const Calendar: React.FC = () => {
             src="/images/CalendarLogo.png"
             width={45}
             height={45}
-            alt="logo"
+            alt="calendarLogo"
           />
         </button>
       </div>
