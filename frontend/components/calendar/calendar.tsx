@@ -118,12 +118,12 @@ const Calendar: React.FC = () => {
             <div
               key={index}
               className={`${styles.day} ${day
-                  ? isSelectedDay(day)
-                    ? `${styles.selected} ${isToday(day) ? styles.today : ''}`
-                    : isToday(day)
-                      ? styles.today
-                      : ''
-                  : styles.empty
+                ? isSelectedDay(day)
+                  ? `${styles.selected} ${isToday(day) ? styles.today : ''}`
+                  : isToday(day)
+                    ? styles.today
+                    : ''
+                : styles.empty
                 }`}
               onClick={day ? () => handleDateSelect(day) : undefined}
             >
@@ -144,10 +144,10 @@ const Calendar: React.FC = () => {
           onClick={toggleCalendar}
           aria-label="Toggle Calendar"
         >
-          <Image
+          <Image className={styles.image}
             src="/images/CalendarLogo.png"
-            width={48}
-            height={55}
+            width={45}
+            height={45}
             alt="logo"
           />
         </button>

@@ -1,5 +1,16 @@
 /* components/calendar/calendar.module.css */
 
+.image {
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.image:hover {
+  transform: scale(1.1);
+  filter: invert(58%) sepia(89%) saturate(350%) hue-rotate(2deg) brightness(1.5);
+  transition: transform 0.3s ease-in-out;
+}
+
 .calendarModal {
   position: absolute;
   top: 130px;
