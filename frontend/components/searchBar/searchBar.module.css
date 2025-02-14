@@ -1,6 +1,92 @@
 /* components/searchBar/searchBar.module.css */
 
 .searchBar {
+  position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
+}
+
+.searchOverlay {
+  position: absolute;
+  z-index: 1000;
+}
+
+.imageOverlay {
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.imageOverlay:hover {
+  transform: scale(1.15);
+  filter: invert(58%) sepia(89%) saturate(350%) hue-rotate(2deg) brightness(1.5);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes inputAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.textBox {
+  background-color: #0a0117;
+  border: none;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  color: white;
+  caret-color: #cc9a36;
+  transition: border-color 0.3s ease;
+  animation: inputAppear 1s ease forwards;
+}
+
+.textBox:focus {
+  border-bottom-color: #cc9a36;
+}
+
+@keyframes searchButtonAppear {
+  from {
+    transform: translateX(-100px) rotate(0deg);
+    pointer-events: none;
+  }
+  to {
+    transform: translateX(0) rotate(270deg);
+    pointer-events: auto;
+  }
+}
+
+.toggleSearch {
+  position: relative;
+  animation: searchButtonAppear 1s ease forwards;
+  transform-origin: center;
+  margin-left: 10px;
+}
+
+.image {
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.image:hover {
+  transform: scale(1.15);
+  filter: invert(58%) sepia(89%) saturate(350%) hue-rotate(2deg) brightness(1.5);
+  transition: transform 0.3s ease-in-out;
+}
+
+@keyframes searchButtonDisappear {
+  from {
+    transform: translateX(0) rotate(270deg);
+  }
+  to {
+    transform: translateX(-100px) rotate(0deg);
+  }
+}
+
+.toggleSearch.reverse {
+  animation: searchButtonDisappear 1s ease forwards;
 }

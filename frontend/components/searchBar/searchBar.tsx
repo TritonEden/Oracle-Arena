@@ -14,9 +14,11 @@ const SearchBar: React.FC = () => {
     setText(event.target.value);
   };
 
-  const toggleSearchBar = (event: React.MouseEvent) => {
+  const ShowSearch = (event: React.MouseEvent) => {
     setIsActive(true);
-    inputRef.current?.focus();
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
     event.stopPropagation();
   };
 
@@ -26,12 +28,25 @@ const SearchBar: React.FC = () => {
   *    For clicking outside - ^^
   */
 
+
+  // NEED 'esc' BEING PRESSED TO MAKE ROTATION ANIMATION TO HAPPEN IN REVERSE
+  // REMOVE CONSOLE LOGS
+
   // useEffect(() => {
   //   const handleKeyDown = (event: KeyboardEvent) => {
   //     if (event.key === 'Escape') {
+  //       console.log("Escape pressed")
   //       setIsActive(false);
+
+  //       const toggleButton = document.querySelector(`.${styles.toggleSearch}`);
+  //       if (toggleButton) {
+  //         // Check if the class is being applied correctly
+  //         console.log("Adding reverse class");
+  //         toggleButton.classList.add(styles.reverse);
+  //       }
   //     }
   //   };
+
   //   document.addEventListener('keydown', handleKeyDown);
 
   //   return () => {
@@ -39,24 +54,24 @@ const SearchBar: React.FC = () => {
   //   };
   // }, []);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     if (
-  //       searchBarRef.current &&
-  //       !searchBarRef.current.contains(event.target as Node)
-  //     ) {
-  //       setIsActive(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        setIsActive(false);
+      }
+    };
 
-  //   document.addEventListener('click', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('click', handleClickOutside);
-  //   };
-  // }, []);
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className={styles.searchBar} ref={searchBarRef}>
+    <div className={styles.searchBar}>
       {isActive && (
         <input
           ref={inputRef}
@@ -68,19 +83,35 @@ const SearchBar: React.FC = () => {
         />
       )}
 
-      <button
-        className={styles.toggleSearch}
-        onClick={toggleSearchBar}
-        aria-label="Toggle Search"
-      >
-        <Image
-          className={styles.image}
-          src="/images/searchLogo.png"
-          width={30}
-          height={30}
-          alt="searchLogo"
-        />
-      </button>
+      {isActive ? (
+        <button
+          className={styles.toggleSearch}
+          // onClick={Search}
+          aria-label="Commense Search"
+        >
+          <Image
+            className={styles.image}
+            src="/images/searchLogo.png"
+            width={30}
+            height={30}
+            alt="searchLogo"
+          />
+        </button>
+      ) : (
+        <button
+          className={styles.searchOverlay}
+          onClick={ShowSearch}
+          aria-label="Show Search Bar"
+        >
+          <Image
+            className={styles.imageOverlay}
+            src="/images/searchLogo.png"
+            width={30}
+            height={30}
+            alt="searchLogoOverlay"
+          />
+        </button>
+      )}
     </div>
   );
 };
