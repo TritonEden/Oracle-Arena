@@ -24,6 +24,7 @@ SECRET_KEY = 'django-insecure-)9%z8*36wz%!p9-)dw#606i*46(ag*pn(8mw1g%zh%z*0v@n@7
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOCAL = True
 
 ALLOWED_HOSTS = []
 
@@ -85,16 +86,19 @@ assert Path(".env").exists(), "Create a .env file with the database password"
 with open(".env", "r") as f:
     PASSWORD = f.read().strip() 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': PASSWORD,
-        'HOST': 'oracle-arena.cbyq4s08yfo5.us-east-1.rds.amazonaws.com',
-        'PORT': '5432',
+if not LOCAL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': PASSWORD,
+            'HOST': 'oracle-arena.cbyq4s08yfo5.us-east-1.rds.amazonaws.com',
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {} #TODO: Change to tmp DB later
 
 ALLOWED_HOSTS = [
     'ec2-3-95-168-187.compute-1.amazonaws.com',

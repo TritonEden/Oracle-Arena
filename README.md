@@ -22,12 +22,28 @@ npm run dev
 
 The default home page is `http://localhost:3000/home`. Go to there to see the default webpage.
 Another way to actually see the production side of the webpage is to run the following commands:
+
 ```bash
 cd frontend
 npm run build
 npm start
 ```
+
 This will show which pages are static and server rendered and to see if we need to fix on any errors before deploying this website
+
+## Setup for backend
+
+1. Install Python 3.10 or higher with pip
+2. Run the following commands:
+
+```bash
+#Assuming you have already cloned the repo and are in the base directory
+cd backend
+pip install -r requirements.txt
+python manage.py runserver 127.0.0.1:8080
+```
+
+1. Open your browser and go to `http://localhost:8080/` to see the backend of the web application.
 
 ## Setup for docker
 
