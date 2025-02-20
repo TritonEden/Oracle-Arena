@@ -14,7 +14,7 @@ const SearchBar: React.FC = () => {
     setText(event.target.value);
   };
 
-  const ShowSearch = (event: React.MouseEvent) => {
+  const showSearch = (event: React.MouseEvent) => {
     setIsActive(true);
     setTimeout(() => {
       inputRef.current?.focus();
@@ -22,37 +22,24 @@ const SearchBar: React.FC = () => {
     event.stopPropagation();
   };
 
-  /* 
-  *  Event handlers for 'esc' being pressed and clicking outside the text box
-  *    For 'esc' - if the text box has characters, do not close the text box but lose focus
-  *    For clicking outside - ^^
-  */
+  const clearInput = () => {
+    setText('');
+    inputRef.current?.focus();
+  };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsActive(false);
+      }
+    };
 
-  // NEED 'esc' BEING PRESSED TO MAKE ROTATION ANIMATION TO HAPPEN IN REVERSE
-  // REMOVE CONSOLE LOGS
+    document.addEventListener('keydown', handleKeyDown);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event: KeyboardEvent) => {
-  //     if (event.key === 'Escape') {
-  //       console.log("Escape pressed")
-  //       setIsActive(false);
-
-  //       const toggleButton = document.querySelector(`.${styles.toggleSearch}`);
-  //       if (toggleButton) {
-  //         // Check if the class is being applied correctly
-  //         console.log("Adding reverse class");
-  //         toggleButton.classList.add(styles.reverse);
-  //       }
-  //     }
-  //   };
-
-  //   document.addEventListener('keydown', handleKeyDown);
-
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyDown);
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -60,34 +47,48 @@ const SearchBar: React.FC = () => {
         searchBarRef.current &&
         !searchBarRef.current.contains(event.target as Node)
       ) {
-        setIsActive(false);
+        if (text.trim() === '') {
+          setIsActive(false);
+        }
       }
     };
 
     document.addEventListener('click', handleClickOutside);
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [text]);
+
 
   return (
-    <div className={styles.searchBar}>
+    <div className={styles.searchBar} ref={searchBarRef}>
       {isActive && (
-        <input
-          ref={inputRef}
-          type="text"
-          placeholder="Search"
-          value={text}
-          onChange={handleInputChange}
-          className={styles.textBox}
-        />
+        <div className={styles.textBoxWrapper}>
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Search"
+            value={text}
+            onChange={handleInputChange}
+            className={styles.textBox}
+          />
+          {text && isActive && (
+            <button
+              className={styles.clearButton}
+              onClick={clearInput}
+              aria-label="Clear input"
+            >
+              &times; {/* The 'X' button */}
+            </button>
+          )}
+      </div>
       )}
 
       {isActive ? (
         <button
-          className={styles.toggleSearch}
-          // onClick={Search}
-          aria-label="Commense Search"
+          className={styles.searchButton}
+          aria-label="Commence Search"
         >
           <Image
             className={styles.image}
@@ -99,8 +100,8 @@ const SearchBar: React.FC = () => {
         </button>
       ) : (
         <button
-          className={styles.searchOverlay}
-          onClick={ShowSearch}
+          className={`${styles.searchOverlay} ${!isActive ? styles.searchOverlayActive : ''}`}
+          onClick={showSearch}
           aria-label="Show Search Bar"
         >
           <Image

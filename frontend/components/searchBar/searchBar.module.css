@@ -12,6 +12,23 @@
   z-index: 1000;
 }
 
+@keyframes searchOverlayAppear {
+  from {
+    transform: translateX(100px) rotate(270deg);
+    pointer-events: none;
+  }
+  to {
+    transform: translateX(0) rotate(0deg);
+    pointer-events: auto;
+  }
+}
+
+.searchOverlay {
+  position: relative;
+  animation: searchOverlayAppear 1s ease forwards;
+  transform-origin: center;
+}
+
 .imageOverlay {
   transform: scale(1);
   transition: transform 0.3s ease-in-out;
@@ -21,6 +38,10 @@
   transform: scale(1.15);
   filter: invert(58%) sepia(89%) saturate(350%) hue-rotate(2deg) brightness(1.5);
   transition: transform 0.3s ease-in-out;
+}
+
+.textBoxWrapper {
+  position: relative;
 }
 
 @keyframes inputAppear {
@@ -49,6 +70,23 @@
   border-bottom-color: #cc9a36;
 }
 
+.clearButton {
+  position: absolute;
+  right: 1px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease;
+}
+
+/* Show the "X" button when there is text */
+.textBox:not(:placeholder-shown) + .clearButton {
+  opacity: 1;
+}
+
 @keyframes searchButtonAppear {
   from {
     transform: translateX(-100px) rotate(0deg);
@@ -60,7 +98,7 @@
   }
 }
 
-.toggleSearch {
+.searchButton {
   position: relative;
   animation: searchButtonAppear 1s ease forwards;
   transform-origin: center;
@@ -87,6 +125,6 @@
   }
 }
 
-.toggleSearch.reverse {
+.searchButton.reverse {
   animation: searchButtonDisappear 1s ease forwards;
 }
