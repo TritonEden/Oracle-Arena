@@ -31,6 +31,7 @@ const SearchBar: React.FC = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsActive(false);
+        setText('');
       }
     };
 
@@ -79,7 +80,7 @@ const SearchBar: React.FC = () => {
               onClick={clearInput}
               aria-label="Clear input"
             >
-              &times; {/* The 'X' button */}
+              &times;
             </button>
           )}
       </div>

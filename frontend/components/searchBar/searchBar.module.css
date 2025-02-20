@@ -77,12 +77,9 @@
   border: none;
   color: white;
   cursor: pointer;
-  font-size: 18px;
-  opacity: 0; /* Initially hidden */
-  transition: opacity 0.3s ease;
+  opacity: 0;
 }
 
-/* Show the "X" button when there is text */
 .textBox:not(:placeholder-shown) + .clearButton {
   opacity: 1;
 }
