@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -86,6 +89,8 @@ assert Path(".env").exists(), "Create a .env file with the database password"
 with open(".env", "r") as f:
     PASSWORD = f.read().strip() 
 
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')
+
 if not LOCAL:
     DATABASES = {
         'default': {
@@ -97,8 +102,17 @@ if not LOCAL:
             'PORT': '5432',
         }
     }
-else:
-    DATABASES = {} #TODO: Change to tmp DB later
+else: # Local Docker Postgres DB
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'oracle_db',
+            'USER': 'oracle_admin',
+            'PASSWORD': POSTGRES_PASSWORD,
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    } 
 
 ALLOWED_HOSTS = [
     'ec2-3-95-168-187.compute-1.amazonaws.com',

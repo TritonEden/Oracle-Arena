@@ -19,3 +19,4 @@ six==1.16.0
 sqlparse==0.5.1
 tzdata==2024.2
 wheel==0.44.0
+python-dotenv
