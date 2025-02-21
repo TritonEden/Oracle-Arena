@@ -86,3 +86,17 @@
   margin-top: 10px;
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+  .image {
+    width: 35px;
+    height: auto;
+  }
+}
+
+@media (max-width: 614px) {
+  .image {
+    width: 32px;
+    height: auto;
+  }
+}

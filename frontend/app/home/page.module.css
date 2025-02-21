@@ -74,3 +74,15 @@
 .predictData {
   margin-right: 5vw;
 }
+
+@media (max-width: 768px) {
+  .filters {
+    padding-bottom: 7vh;
+  }
+}
+
+@media (max-width: 614px) {
+  .filters {
+    padding-bottom: 5vh;
+  }
+}

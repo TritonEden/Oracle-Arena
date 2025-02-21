@@ -17,6 +17,7 @@
     transform: translateX(100px) rotate(270deg);
     pointer-events: none;
   }
+
   to {
     transform: translateX(0) rotate(0deg);
     pointer-events: auto;
@@ -49,6 +50,7 @@
     opacity: 0;
     transform: translateX(-100px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -80,7 +82,7 @@
   opacity: 0;
 }
 
-.textBox:not(:placeholder-shown) + .clearButton {
+.textBox:not(:placeholder-shown)+.clearButton {
   opacity: 1;
 }
 
@@ -89,6 +91,7 @@
     transform: translateX(-100px) rotate(0deg);
     pointer-events: none;
   }
+
   to {
     transform: translateX(0) rotate(270deg);
     pointer-events: auto;
@@ -113,15 +116,111 @@
   transition: transform 0.3s ease-in-out;
 }
 
-@keyframes searchButtonDisappear {
-  from {
-    transform: translateX(0) rotate(270deg);
+@media (max-width: 768px) {
+  @keyframes searchOverlayAppear {
+    from {
+      transform: translateX(75px) rotate(270deg);
+      pointer-events: none;
+    }
+
+    to {
+      transform: translateX(0) rotate(0deg);
+      pointer-events: auto;
+    }
   }
-  to {
-    transform: translateX(-100px) rotate(0deg);
+
+  .searchOverlay {
+    position: relative;
+    animation: searchOverlayAppear 1s ease forwards;
+    transform-origin: center;
+  }
+
+  .imageOverlay {
+    width: 21px;
+    height: auto;
+  }
+
+  .textBox {
+    width: 150px;
+    font-size: 14px;
+  }
+
+  @keyframes searchButtonAppear {
+    from {
+      transform: translateX(-75px) rotate(0deg);
+      pointer-events: none;
+    }
+
+    to {
+      transform: translateX(0) rotate(270deg);
+      pointer-events: auto;
+    }
+  }
+
+  .searchButton {
+    position: relative;
+    animation: searchButtonAppear 1s ease forwards;
+    transform-origin: center;
+    margin-left: 5px;
+  }
+
+  .image {
+    width: 21px;
+    height: auto;
   }
 }
 
-.searchButton.reverse {
-  animation: searchButtonDisappear 1s ease forwards;
+@media (max-width: 614px) {
+  @keyframes searchOverlayAppear {
+    from {
+      transform: translateX(60px) rotate(270deg);
+      pointer-events: none;
+    }
+
+    to {
+      transform: translateX(0) rotate(0deg);
+      pointer-events: auto;
+    }
+  }
+
+  .searchOverlay {
+    position: relative;
+    animation: searchOverlayAppear 1s ease forwards;
+    transform-origin: center;
+  }
+
+  .imageOverlay {
+    width: 20px;
+    height: auto;
+  }
+
+  .textBox {
+    width: 120px;
+    font-size: 14px;
+  }
+
+  @keyframes searchButtonAppear {
+    from {
+      transform: translateX(-60px) rotate(0deg);
+      pointer-events: none;
+    }
+
+    to {
+      transform: translateX(0) rotate(270deg);
+      pointer-events: auto;
+    }
+  }
+
+  .searchButton {
+    position: relative;
+    animation: searchButtonAppear 1s ease forwards;
+    transform-origin: center;
+    margin-left: 5px;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    max-width: 20px;
+  }
 }

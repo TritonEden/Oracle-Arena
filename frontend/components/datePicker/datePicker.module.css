@@ -39,8 +39,10 @@
 }
 
 /* Responsive Styles */
-@media (min-width: 640px) {
-  .prev-next-button, .date-button {
+@media (min-width: 619px) {
+
+  .prev-next-button,
+  .date-button {
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
   }
@@ -51,7 +53,9 @@
 }
 
 @media (min-width: 768px) {
-  .prev-next-button, .date-button {
+
+  .prev-next-button,
+  .date-button {
     font-size: 0.875rem;
     padding: 0.25rem 0.75rem;
   }
