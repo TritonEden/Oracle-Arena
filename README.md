@@ -28,7 +28,7 @@ cd frontend
 npm run build
 npm start
 ```
-
+-
 This will show which pages are static and server rendered and to see if we need to fix on any errors before deploying this website
 
 ## Setup for backend
@@ -71,7 +71,7 @@ docker ps
 docker exec -it <container_id> /bin/bash
 ```
 
-3. In docker, to run the backend, run the following commands:
+4. In docker, to run the backend, run the following commands:
 
 ```bash
 cd backend
@@ -79,16 +79,16 @@ nginx -g "daemon off;" & # Start the nginx server
 # python manage.py runserver 0.0.0.0:8000 &> /dev/null & # Start the Django server in the background -- add the extra commands as you wish
 ```
 
-4. Open your browser and go to `http://localhost:8000/` to see the backend of the web application.
+5. Open your browser and go to `http://localhost:8000/` to see the backend of the web application.
 
-5. In docker, to run the frontend, run the following commands:
+6. In docker, to run the frontend, run the following commands:
 
 ```bash
 cd frontend
 npm run docker
 ```
 
-6. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
+7. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
 
 NOTE: Docker setup is not complete yet. We need to add the database part to the docker setup, which we are currently working on.
 

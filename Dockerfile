@@ -90,6 +90,8 @@ RUN mkdir -p /run/postgresql \
     && chown -R postgres:postgres /run/postgresql \
     && chmod 775 /run/postgresql
 
+COPY ./backend/database/entrypoint.sh /app/backend/database/entrypoint.sh
+    
 # Allow entrypoint script to be executable
 RUN chmod +x /app/backend/database/entrypoint.sh
 
