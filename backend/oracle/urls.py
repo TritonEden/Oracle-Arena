@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import testfunction, playersummary
+from .views import testfunction, playersummary, gamesummary
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('testfunction/', testfunction),
     #make a path that takes in just a playerid
     path('playersummary/<int:playerid>/', playersummary),
+    path('gamesummary/', gamesummary),
 ]
