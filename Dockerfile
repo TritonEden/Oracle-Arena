@@ -110,4 +110,4 @@ EXPOSE 8000 3000 80
 #CMD ["/bin/bash"]
 
 # Entrypoint script to start database 
-ENTRYPOINT ["/bin/sh", "/app/backend/database/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/backend/database/entrypoint.sh"]

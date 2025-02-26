@@ -60,6 +60,7 @@ NOTE: Now running the docker image should automatically start the Django backend
 TODO: Integrate nginx startup into entrypoint.sh script
 
 3. In a separate terminal, run the following commands to shell into the Docker container:
+
 ```bash
 # One Line to shell into the container
 docker exec -it $(docker ps --filter "ancestor=oracle-arena" --format "{{.ID}}" | head -n 1) /bin/bash
