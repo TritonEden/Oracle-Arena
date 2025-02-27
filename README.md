@@ -53,6 +53,16 @@ python manage.py runserver 127.0.0.1:8080
 ```bash
 cd Oracle-Arena
 docker build -t oracle-arena .
+
+## Use for Dev environment to mount local backend to docker container
+## Useful for testing code without needing to rebuild each time
+docker run --env-file .env \
+  -p 8000:8000 -p 3000:3000 -p 80:80 \
+  -v $(pwd)/backend:/app/backend \
+  -it oracle-arena \
+  sh -c "python manage.py runserver 0.0.0.0:8000 --noreload"
+
+## Use for production
 docker run --env-file .env -p 8000:8000 -p 3000:3000 -p 80:80 -it oracle-arena 
 ```
 
