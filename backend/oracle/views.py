@@ -32,8 +32,13 @@ def gamesummary(request):
     data = [
         {"team_1_logo": "Picture", "team_1_name": "The Ram Slammers", "start_time": 1, "team_2_name": "The Slam Rammers", "team_2_logo": "Picture"},
         {"team_1_logo": "Picture", "team_1_name": "Nolan and the Cuties", "start_time": 6, "team_2_name": "Anti-Nolan Team", "team_2_logo": "Picture"},
-        {"team_1_logo": "Picture", "team_1_name": "Triton", "start_time": 1, "team_2_name": "Proteus", "team_2_logo": "Picture"},
-        {"team_1_logo": "Picture", "team_1_name": "Kien Kongs", "start_time": 1, "team_2_name": "Kienzillas", "team_2_logo": "Picture"},
-        {"team_1_logo": "Picture", "team_1_name": "C. Clark Stans", "start_time": 1, "team_2_name": "Shaq Warriors", "team_2_logo": "Picture"},
+        {"team_1_logo": "Picture", "team_1_name": "Triton", "start_time": 6, "team_2_name": "Proteus", "team_2_logo": "Picture"},
+        {"team_1_logo": "Picture", "team_1_name": "Kien Kongs", "start_time": 8, "team_2_name": "Kienzillas", "team_2_logo": "Picture"},
+        {"team_1_logo": "Picture", "team_1_name": "C. Clark Stans", "start_time": 9, "team_2_name": "Shaq Warriors", "team_2_logo": "Picture"},
     ]
-    return JsonResponse(data, safe=False)
+    response = JsonResponse(data, safe=False)
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
+    
+    return response
