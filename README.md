@@ -56,11 +56,15 @@ docker build -t oracle-arena .
 
 ## Use for Dev environment to mount local backend to docker container
 ## Useful for testing code without needing to rebuild each time
-docker run --env-file .env \
+docker run --name oracle-arena --env-file .env \
   -p 8000:8000 -p 3000:3000 -p 80:80 \
   -v $(pwd)/backend:/app/backend \
+  -v postgres_data:/var/lib/postgresql/data \
   -it oracle-arena \
-  sh -c "python manage.py runserver 0.0.0.0:8000 --noreload"
+
+## After the initial run command a docker container called 'oracle-arena' will be created
+# Once closed the container can be started again with:
+docker start oracle-arena 
 
 ## Use for production
 docker run --env-file .env -p 8000:8000 -p 3000:3000 -p 80:80 -it oracle-arena 
@@ -72,7 +76,11 @@ TODO: Integrate nginx startup into entrypoint.sh script
 3. In a separate terminal, run the following commands to shell into the Docker container:
 
 ```bash
-# One Line to shell into the container
+
+## Access the database from CLI:
+docker exec -it oracle-arena psql -U oracle_admin -d oracle_db
+
+# OR One Line to shell into the container
 docker exec -it $(docker ps --filter "ancestor=oracle-arena" --format "{{.ID}}" | head -n 1) /bin/bash
 
 

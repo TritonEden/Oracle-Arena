@@ -48,11 +48,14 @@ else
 fi
 
 # Trap exit signals to ensure Django server stops gracefully
-trap 'echo "Stopping Django server..."; kill $DJANGO_PID; wait $DJANGO_PID' SIGTERM SIGINT
+trap 'echo "Stopping Django server and Nginx..."; kill $DJANGO_PID $NGINX_PID; wait $DJANGO_PID $NGINX_PID' SIGTERM SIGINT
 
 echo "Starting Django dev server..."
 python /app/backend/manage.py runserver 0.0.0.0:8000 &
 
+echo "Starting Nginx..."
+nginx -g 'daemon off;' &
+
 # Store the Django process ID and wait for it
 DJANGO_PID=$!
-wait $DJANGO_PID
+wait $DJANGO_PID $NGINX_PID
