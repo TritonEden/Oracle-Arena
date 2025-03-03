@@ -1,0 +1,60 @@
+team_id,season_year,team_location,team_name,team_abbreviation
+1610610035,1946-47,Toronto,Huskies,HUS
+1610612752,1946-47,New York,Knicks,NYK
+1610610031,1946-47,Pittsburgh,Ironmen,PIT
+1610610032,1946-47,Providence,Steamrollers,PRO
+1610610025,1946-47,Chicago,Stags,CHS
+1610612738,1946-47,Boston,Celtics,BOS
+1610610036,1946-47,Washington,Capitols,WAS
+1610610028,1946-47,Detroit,Falcons,DEF
+1610610034,1946-47,St. Louis,Bombers,BOM
+1610610026,1946-47,Cleveland,Rebels,CLR
+1610612744,1946-47,Philadelphia,Warriors,PHW
+1610612738,1947-48,Boston,Celtics,BOS
+1610610024,1947-48,Baltimore,Bullets,BAL
+1610612752,1947-48,New York,Knicks,NYK
+1610610036,1947-48,Washington,Capitols,WAS
+1610610034,1947-48,St. Louis,Bombers,BOM
+1610610025,1947-48,Chicago,Stags,CHS
+1610610032,1947-48,Providence,Steamrollers,PRO
+1610612744,1947-48,Philadelphia,Warriors,PHW
+1610610029,1948-49,Indianapolis,Jets,JET
+1610612752,1948-49,New York,Knicks,NYK
+1610610036,1948-49,Washington,Capitols,WAS
+1610612758,1948-49,Rochester,Royals,ROC
+1610610034,1948-49,St. Louis,Bombers,BOM
+1610610024,1948-49,Baltimore,Bullets,BAL
+1610612738,1948-49,Boston,Celtics,BOS
+1610610032,1948-49,Providence,Steamrollers,PRO
+1610612744,1948-49,Philadelphia,Warriors,PHW
+1610612765,1948-49,Ft. Wayne Zollner,Pistons,FTW
+1610610025,1948-49,Chicago,Stags,CHS
+1610612747,1948-49,Minneapolis,Lakers,MNL
+1610610025,1949-50,Chicago,Stags,CHS
+1610612738,1949-50,Boston,Celtics,BOS
+1610612737,1949-50,Tri-Cities,Blackhawks,TCB
+1610612752,1949-50,New York,Knicks,NYK
+1610612758,1949-50,Rochester,Royals,ROC
+1610612744,1949-50,Philadelphia,Warriors,PHW
+1610612755,1949-50,Syracuse,Nationals,SYR
+1610610027,1949-50,Denver,Nuggets,DN 
+1610610036,1949-50,Washington,Capitols,WAS
+1610610034,1949-50,St. Louis,Bombers,BOM
+1610610024,1949-50,Baltimore,Bullets,BAL
+1610612747,1949-50,Minneapolis,Lakers,MNL
+1610610030,1949-50,Indianapolis,Olympians,INO
+1610612765,1949-50,Ft. Wayne Zollner,Pistons,FTW
+1610610037,1949-50,Waterloo,Hawks,WAT
+1610610033,1949-50,Sheboygan,Redskins,SHE
+1610610023,1949-50,Anderson,Packers,AND
+1610612758,1950-51,Rochester,Royals,ROC
+1610610036,1950-51,Washington,Capitols,WAS
+1610612765,1950-51,Ft. Wayne Zollner,Pistons,FTW
+1610610030,1950-51,Indianapolis,Olympians,INO
+1610612755,1950-51,Syracuse,Nationals,SYR
+1610612747,1950-51,Minneapolis,Lakers,MNL
+1610612737,1950-51,Tri-Cities,Blackhawks,TCB
+1610612752,1950-51,New York,Knicks,NYK
+1610610024,1950-51,Baltimore,Bullets,BAL
+1610612744,1950-51,Philadelphia,Warriors,PHW
+1610612738,1950-51,Boston,Celtics,BOS
