@@ -6,11 +6,11 @@ import styles from "./gameTable.module.css";
 
 // Define TypeScript interface for game data
 interface Game {
+  startTime: number;
   homeTeamLogoID: string;
   homeTeamName: string;
-  startTime: number;
-  awayTeamName: string;
   awayTeamLogoID: string;
+  awayTeamName: string;
   predictedWinner: string;
   actualWinner: string;
   predictedTotal: string;
@@ -51,13 +51,13 @@ const GameTable: React.FC = () => {
             <div key={index}>
               <div className={styles.gameRow}>
                 <div className={styles.tableCell}>
-                  {/* <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.team_1_name} className={styles.logo} /> */}
+                  <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
                 <div className={styles.tableCell}>{game.homeTeamName}</div>
-                <div className={styles.tableCell}>{game.startTime}:00</div>
+                <div className={styles.tableCell}>{game.startTime}</div>
                 <div className={styles.tableCell}>{game.awayTeamName}</div>
                 <div className={styles.tableCell}>
-                  {/* <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.team_1_name} className={styles.logo} /> */}
+                  <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
               </div>
 

@@ -58,7 +58,7 @@ docker build -t oracle-arena .
 ## Useful for testing code without needing to rebuild each time
 docker run --name oracle-arena --env-file .env \
   -p 8000:8000 -p 3000:3000 -p 80:80 \
-  -v $(pwd)/backend:/app/backend \
+  -v $(pwd -W)/backend:/app/backend \
   -v postgres_data:/var/lib/postgresql/data \
   -it oracle-arena \
 
