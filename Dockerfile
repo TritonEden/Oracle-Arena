@@ -41,7 +41,8 @@ RUN pip install --upgrade pip && \
     pip install \
     django==5.1 \
     djangorestframework \
-    psycopg2-binary
+    psycopg2-binary \
+    nba-api
 
 # Install Node.js packages (Next.js, React, etc.)
 RUN npm install -g next react react-dom
