@@ -53,9 +53,9 @@ const GameTable: React.FC = () => {
                 <div className={styles.tableCell}>
                   <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
-                <div className={styles.tableCell}>{game.homeTeamName}</div>
+                <div className={`${styles.tableCell} ${styles.teamName}`}>{game.homeTeamName}</div>
                 <div className={styles.tableCell}>{game.startTime}</div>
-                <div className={styles.tableCell}>{game.awayTeamName}</div>
+                <div className={`${styles.tableCell} ${styles.teamName}`}>{game.awayTeamName}</div>
                 <div className={styles.tableCell}>
                   <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
