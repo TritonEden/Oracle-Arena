@@ -82,9 +82,11 @@ def presentGameSummary(request):
         data.append({
             'startTime': game_info["start_time"],
             'homeTeamLogoID': home_stats["team_id"],
-            'homeTeamName': home_stats["team_city"] + " " + home_stats["team_name"],
+            'homeTeamCity' : home_stats["team_city"],
+            'homeTeamName': home_stats["team_name"],
             'awayTeamLogoID': away_stats["team_id"],
-            'awayTeamName': away_stats["team_city"] + " " + away_stats["team_name"],    
+            'awayTeamCity' : away_stats["team_city"],
+            'awayTeamName': away_stats["team_name"],   
             'predictedWinner': win_prediction,
             'actualWinner': "--",
             'predictedTotal': over_under_prediction,
