@@ -8,8 +8,10 @@ import styles from "./gameTable.module.css";
 interface Game {
   startTime: number;
   homeTeamLogoID: string;
+  homeTeamCity: string
   homeTeamName: string;
   awayTeamLogoID: string;
+  awayTeamCity: string;
   awayTeamName: string;
   predictedWinner: string;
   actualWinner: string;
@@ -53,9 +55,19 @@ const GameTable: React.FC = () => {
                 <div className={styles.tableCell}>
                   <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
-                <div className={`${styles.tableCell} ${styles.teamName}`}>{game.homeTeamName}</div>
+                <div className={styles.tableCell}>
+                  <div className={styles.teamName}>
+                    <div>{game.homeTeamCity}</div>
+                    <div>{game.homeTeamName}</div>
+                  </div>
+                </div>
                 <div className={styles.tableCell}>{game.startTime}</div>
-                <div className={`${styles.tableCell} ${styles.teamName}`}>{game.awayTeamName}</div>
+                <div className={styles.tableCell}>
+                  <div className={styles.teamName}>
+                    <div>{game.awayTeamCity}</div>
+                    <div>{game.awayTeamName}</div>
+                  </div>
+                </div>
                 <div className={styles.tableCell}>
                   <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>

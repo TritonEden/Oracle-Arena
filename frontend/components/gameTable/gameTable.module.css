@@ -9,6 +9,8 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  font-size: large;
+  color: white;
 }
 
 .headerRow {
@@ -18,8 +20,9 @@
   padding-bottom: 5vh;
   margin-left: 14vw;
   margin-right: 14vw;
-  font-size: large;
+  font-size: 25px;
   font-weight: bold;
+  color: #cc9a36;
 }
 
 .gameRow {
@@ -34,7 +37,7 @@
 }
 
 .logo {
-  width: 70%;
+  width: 11vw;
 }
 
 .dataLabelRow {
@@ -44,6 +47,7 @@
   margin-left: 10vw;
   margin-right: 10vw;
   padding-bottom: 2vh;
+  color: #cc9a36;
 }
 
 .dataRow {
@@ -61,7 +65,6 @@
 .tableCell {
   display: flex;
   justify-content: center;
-  color: white;
 }
 
 .actualData {
@@ -70,4 +73,26 @@
 
 .predictData {
   margin-right: 5vw;
+}
+
+@media (max-width: 768px) {
+  .gamesTable {
+    font-size: 2.5vw;
+  }
+
+  .headerRow {
+    font-size: 3vw;
+  }
+
+  .teamName {
+    font-size: 3vw;
+  }
+
+  .logo {
+    width: 14vw;
+  }
+
+  .displayData {
+    padding-bottom: 5vh;
+  }
 }
