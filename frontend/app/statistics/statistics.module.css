@@ -3,14 +3,6 @@
   padding: 24px;
   max-width: 1000px;
   margin: auto;
-  /* 
-    Should just need to change 'margin: auto' to the below code.
-    I believe that there are errors in the html preventing the new CSS from displaying on my device.
-    
-    margin-top: 130px;
-    margin-left: auto;
-    margin-right: auto; 
-  */
 }
 
 /* Title Styling */

@@ -2,14 +2,34 @@
 
 .pageContainer {
   margin-top: 130px;
+  color: white;
 }
 
 .pageNav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  align-items: center;
   justify-items: center;
   width: 95%;
   margin-left: auto;
   margin-right: auto;
+  font-weight: bold;
+  color: #cc9a36;
+}
+
+.navItem {
+  padding: 1vh;
+}
+
+.navItem:hover {
+  color: white;
+  transition: transform 0.3s ease-in-out;
+}
+
+.navItemActive {
+  box-shadow: 0px 3px #cc9a36;
+}
+
+.subPage {
+  display: none;
+  margin-top: 5vh;
 }
