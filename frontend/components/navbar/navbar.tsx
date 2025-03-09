@@ -1,18 +1,39 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './navbar.module.css';
 
 const Navbar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+    
+            if (currentScrollY < 30) {
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+    
+            setLastScrollY(currentScrollY);
+        };
+    
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [lastScrollY]);
+
     return (
-        <nav className={styles.navbar}>
+        <nav className={`${styles.navbar} ${isVisible ? styles.show : styles.hide}`}>
             <div className={styles.navContainer}>
                 <Link href="home">
                     <Image

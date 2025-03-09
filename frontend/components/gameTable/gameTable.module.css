@@ -1,3 +1,5 @@
+/* components/gameTable/gameTable.module.css */
+
 .tableContainer {
   display: grid;
   padding-top: 10px;
@@ -9,6 +11,8 @@
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  font-size: large;
+  color: white;
 }
 
 .headerRow {
@@ -16,10 +20,11 @@
   grid-template-columns: 2fr 1fr 2fr;
   align-items: center;
   padding-bottom: 5vh;
-  margin-left: 10vh;
-  margin-right: 10vh;
-  font-size: large;
+  margin-left: 14vw;
+  margin-right: 14vw;
+  font-size: 25px;
   font-weight: bold;
+  color: #cc9a36;
 }
 
 .gameRow {
@@ -29,12 +34,22 @@
   padding-bottom: 2vh;
 }
 
+.teamName {
+  font-size: 35px;
+}
+
+.logo {
+  width: 11vw;
+}
+
 .dataLabelRow {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   margin-left: 10vw;
   margin-right: 10vw;
+  padding-bottom: 2vh;
+  color: #cc9a36;
 }
 
 .dataRow {
@@ -43,11 +58,15 @@
   align-items: center;
   margin-left: 10vw;
   margin-right: 10vw;
+}
+
+.displayData {
   padding-bottom: 10vh;
 }
 
 .tableCell {
-  color: white;
+  display: flex;
+  justify-content: center;
 }
 
 .actualData {
@@ -56,4 +75,26 @@
 
 .predictData {
   margin-right: 5vw;
+}
+
+@media (max-width: 768px) {
+  .gamesTable {
+    font-size: 2.5vw;
+  }
+
+  .headerRow {
+    font-size: 3vw;
+  }
+
+  .teamName {
+    font-size: 3vw;
+  }
+
+  .logo {
+    width: 14vw;
+  }
+
+  .displayData {
+    padding-bottom: 5vh;
+  }
 }
