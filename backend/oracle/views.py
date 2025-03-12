@@ -1,6 +1,8 @@
 import random
 from django.http import JsonResponse
 from django.db import connection
+from django.db import models
+from .models import PlayerGameStats
 from nba_api.live.nba.endpoints import scoreboard
 
 # def testFunction(request):
@@ -29,6 +31,23 @@ def playerSummary(request, playerid):
         {"player_name": "Clementina DuBuque", "points_per_game": 15.55, "player_team": "Kattie Turnpike"}
     ]
     return JsonResponse(data, safe=False)
+
+from .models import PlayerGameStats
+
+def player_stats(request):
+    players = PlayerGameStats.objects.all()  # Fetch all records
+    player_stats = []
+
+    for player in players:
+        player_stats.append({
+            "game_id": player.game_id,
+            "player_id": player.player_id,
+            "team_id": player.team_id,
+            "player_game_stats": player.player_game_stats,
+        })
+
+    return JsonResponse(player_stats, safe=False)
+
 
 def presentGameSummary(request):
     games = scoreboard.ScoreBoard()
@@ -92,6 +111,7 @@ def presentGameSummary(request):
             'predictedTotal': over_under_prediction,
             'actualTotal': "--"
         })
+
 
     response = JsonResponse(data, safe=False)
     response['Access-Control-Allow-Origin'] = '*'
