@@ -32,21 +32,40 @@ def playerSummary(request, playerid):
     ]
     return JsonResponse(data, safe=False)
 
-from .models import PlayerGameStats
+# Mock player stats data
+# def player_stats(request):
+#     player_stats = [
+#         {
+#             "game_id": "0021800001",
+#             "player_id": 203967,
+#             "team_id": 1610612755,
+#             "player_game_stats": {"PF": 5.0, "TO": 3.0, "AST": 1.0, "BLK": 0.0, "FGA": 8.0, "FGM": 3.0, "FTA": 0.0, "FTM": 0.0, "MIN": "22.000000:54", "PTS": 6.0, "REB": 6.0, "STL": 0.0, "DREB": 6.0, "FG3A": 4.0, "FG3M": 0.0, "OREB": 0.0, "FG_PCT": 0.375, "FT_PCT": 0.0, "FG3_PCT": 0.0, "PLUS_MINUS": -4.0}
+#         },
+#         {
+#             "game_id": "0021800001",
+#             "player_id": 203496,
+#             "team_id": 1610612755,
+#             "player_game_stats": {"PF": 5.0, "TO": 3.0, "AST": 1.0, "BLK": 0.0, "FGA": 8.0, "FGM": 3.0, "FTA": 0.0, "FTM": 0.0, "MIN": "22.000000:54", "PTS": 6.0, "REB": 6.0, "STL": 0.0, "DREB": 6.0, "FG3A": 4.0, "FG3M": 0.0, "OREB": 0.0, "FG_PCT": 0.375, "FT_PCT": 0.0, "FG3_PCT": 0.0, "PLUS_MINUS": -4.0}
+#         }
+#     ]
+    
+#     return JsonResponse(player_stats, safe=False)
+
+from django.db import connection
 
 def player_stats(request):
-    players = PlayerGameStats.objects.all()  # Fetch all records
-    player_stats = []
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM public."oracle_playergamestats" LIMIT 1000')
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
 
-    for player in players:
-        player_stats.append({
-            "game_id": player.game_id,
-            "player_id": player.player_id,
-            "team_id": player.team_id,
-            "player_game_stats": player.player_game_stats,
-        })
+        # # Log the rows and columns
+        # print("Rows:", rows)
+        # print("Columns:", columns)
 
-    return JsonResponse(player_stats, safe=False)
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
 
 
 def presentGameSummary(request):

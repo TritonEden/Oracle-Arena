@@ -1,8 +1,13 @@
 /* General Container */
 .container {
-  padding: 24px;
+  padding: 150px;
   max-width: 1000px;
   margin: auto;
+}
+
+/* Increase specificity by targeting the specific page */
+.container.statsPage {
+  padding-top: 80px; /* Add top padding to make space for the navbar */
 }
 
 /* Title Styling */
@@ -100,7 +105,7 @@
 /* Specific Styling for Player Stats Table */
 .playerRow {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* Adjust columns for Player, Team, and PPG */
+  grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr; /* Updated for new columns */
   padding: 12px;
   border-bottom: 1px solid #444;
 }
@@ -119,4 +124,37 @@
   text-align: center;
   font-size: 16px;
   color: #888;
+}
+
+/* Additional Styling for New Stats */
+.tableCell {
+  font-size: 14px;  /* Adjusted font size for clarity */
+}
+
+/* Optional: Responsive Styling */
+@media (max-width: 768px) {
+  .playerRow {
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* Adjust for smaller screens */
+  }
+}
+
+/* Styling for Player Image */
+.playerImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover; /* Ensure the image is properly cropped */
+}
+
+/* Updated Grid Layout for Player Row */
+.playerRow {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr 1fr 1fr 1fr 1fr 1fr; /* Adjust for name, image, team, stats */
+  padding: 12px;
+  border-bottom: 1px solid #444;
+}
+
+.playerRow:hover {
+  background: #333;
 }
