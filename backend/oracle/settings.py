@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)9%z8*36wz%!p9-)dw#606i*46(ag*pn(8mw1g%zh%z*0v@n@7
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-LOCAL = True
+LOCAL = False
 
 ALLOWED_HOSTS = []
 
@@ -98,9 +98,9 @@ if not LOCAL:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'postgres',
-            'USER': 'postgres',
+            'USER': 'rgutkeecsoraclearenaadmin',
             'PASSWORD': PASSWORD,
-            'HOST': 'oracle-arena.cbyq4s08yfo5.us-east-1.rds.amazonaws.com',
+            'HOST': 'rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com',
             'PORT': '5432',
         }
     }

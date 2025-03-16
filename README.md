@@ -28,7 +28,7 @@ cd frontend
 npm run build
 npm start
 ```
--
+
 This will show which pages are static and server rendered and to see if we need to fix on any errors before deploying this website
 
 ## Setup for backend
@@ -110,13 +110,6 @@ npm run docker
 7. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
 
 NOTE: Docker setup is not complete yet. We need to add the database part to the docker setup, which we are currently working on.
-
-## Temporary Setup for db (backend)
-
-1. SSH into the EC2 instance with `ssh -i .\Ryan.pem ec2-user@ec2-3-95-168-187.compute-1.amazonaws.com` (Obviously you can't do this unless you have the .pem file, which I can provide if you need it).
-2. Go to the backend folder and `git pull` the latest changes.
-3. Run `python3 manage.py runserver 0.0.0.0:8000`
-4. On your local machine, go to `http://ec2-3-95-168-187.compute-1.amazonaws.com:8000/` to see the backend of the web application.
 
 ## Project Needs
 
