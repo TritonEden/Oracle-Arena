@@ -1,0 +1,21 @@
+.statsTable {
+    margin-top: 20px;
+    padding: 10px;
+  }
+  
+  .statsTableContainer {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .statsTableContainer th,
+  .statsTableContainer td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .statsTableContainer th {
+    background-color: #f2f2f2;
+  }
+  
