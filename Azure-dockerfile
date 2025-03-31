@@ -1,0 +1,65 @@
+# Use Alpine OS as the base image
+FROM alpine:3.18
+
+# Avoid Python buffering issues
+ENV PYTHONUNBUFFERED=1
+
+
+RUN apk update && apk add --no-cache \
+    bash \
+    build-base \
+    linux-headers \
+    libffi-dev \
+    openssl-dev \
+    bzip2-dev \
+    zlib-dev \
+    xz-dev \
+    readline-dev \
+    sqlite-dev \
+    git \
+    curl \
+    make \
+    gcc \
+    g++ \
+    libc-dev \
+    ca-certificates \
+    python3 \
+    py3-pip \
+    python3-dev \
+    postgresql-libs \
+    nginx \
+    vim \
+    && rm -rf /var/cache/apk/* # Remove cache to reduce image size
+
+# Upgrade pip and install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install \
+      django==5.1 \
+      djangorestframework \
+      psycopg2-binary \
+      nba-api \
+      gunicorn
+
+
+WORKDIR /app
+
+
+
+# Install Python dependencies from requirements.txt
+COPY ./backend/requirements.txt /app/backend/requirements.txt
+RUN pip install -r /app/backend/requirements.txt
+
+COPY . /app
+
+# Copy Nginx configuration
+COPY ./backend/nginx/conf/nginx.conf /etc/nginx/nginx.conf
+
+# 8000 for Django dev server, 80 for Nginx
+EXPOSE 8000 80
+
+
+COPY ./backend/azure-entrypoint.sh /app/azure-entrypoint.sh
+RUN chmod +x /app/azure-entrypoint.sh
+
+# Entrypoint script launches Nginx and Django server 
+ENTRYPOINT ["/bin/bash", "/app/azure-entrypoint.sh"]
