@@ -33,3 +33,53 @@
   display: none;
   margin-top: 5vh;
 }
+
+.about {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.teamMemberA {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  justify-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.teamMemberB {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  justify-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.imageContainerLeft {
+
+}
+
+.imageContainerRight {
+  
+}
+
+.aboutMemberLeft {
+  text-align: right;
+}
+
+.aboutMemberRight {
+  text-align: left;
+}
+
+.name {
+  font-size: larger;
+  font-weight: 800;
+}
+
+.text {
+  padding-top: 2vh;
+  padding-bottom: 3vh;
+}
