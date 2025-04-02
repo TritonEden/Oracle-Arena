@@ -134,9 +134,31 @@ const About = () => {
               <p className={styles.name}>Kien Nguyen</p>
               <p className={styles.description}>Frontend Development: Statistics</p>
               <p className={styles.text}>
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
               </p>
+              <h2>🏀 My History with Basketball</h2>
+                <ul>
+                  <li>I'm pretty sure I've touched a basketball 20 times in my whole entire lifespan</li>
+                  <li>I discovered basketball in middle school in PE class. IT... sadly... DID NOT DISCOVER ME BACK!</li>
+                  <li>My teammates call me "The Decoy" because nobody guards me.</li>
+                </ul>
+
+              <h2>🏟 What I Like About Oracle Arena</h2>
+                <ul>
+                    <li>The name alone makes me sound like I know basketball stats... BUT I know nothing!</li>
+                    <li>Gives me an excuse to talk basketball, despite my complete lack of skill and experience with it.</li>
+                </ul>
+
+              <h2>💻 What I Worked On</h2>
+                <ul>
+                    <li>Built the player stats page, where even my terrible stats would look decent.</li>
+                    <li>Mocked player data—because the only way I can dominate in basketball is if I literally make up the numbers.</li>
+                </ul>
+              
+              <h2>⛹️ Favorite Team/Player</h2>
+                <ul>
+                    <li>Lebron James. He's old... but he plays like me if I took basketball seriously...</li>
+                </ul>
+
             </div>
             <div className={styles.imageContainerRight}>
               <Image
