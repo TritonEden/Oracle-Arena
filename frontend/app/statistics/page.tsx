@@ -1,58 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import styles from "./Statistics.module.css"; // Import the CSS module
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import styles from "./statistics.module.css";
 
-// Define TypeScript interface for player data
 interface Player {
-  id: number;
-  name: string;
-  points_per_game: number;
+  player_id: number;
+  player_first_name: string;
+  player_last_name: string;
   team_name: string;
+  // Add an image URL if available
+  image_url?: string;
 }
 
-const Statistics: React.FC = () => {
+const PlayerStats: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
 
+  // Fetch the list of players from the CSV
   useEffect(() => {
-    fetch("http://localhost:8000/api/player_stats/")  // API URL for player stats
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setPlayers(data);
-      })
+    fetch("http://localhost:8000/api/player_stats")
+      .then((response) => response.json())
+      .then((data) => setPlayers(data))
       .catch((error) => console.error("Error fetching player data:", error));
   }, []);
 
   return (
-    <div className={styles.tableContainer}>
-      <div className={styles.playersTable}>
-        {/* Header Row */}
-        <div className={styles.headerRow}>
-          <div>Player</div>
-          <div>Team</div>
-          <div>Points Per Game</div>
+    <div style={{ paddingTop: "120px" }}>
+      <div className={styles.container}>
+        <h2 className={styles.title}>Player Stats</h2>
+        <div className={styles.grid}>
+          {players.map((player) => (
+            <Link
+              key={player.player_id}
+              href={`/player/${player.player_id}`}
+              className={styles.cardLink}
+            >
+              <div className={styles.card}>
+                {/* Display player image if available, else a placeholder */}
+                <div className={styles.imagePlaceholder}>
+                  {player.image_url ? (
+                    <img src={player.image_url} alt={`${player.player_first_name} ${player.player_last_name}`} />
+                  ) : (
+                    "No Image"
+                  )}
+                </div>
+                <div className={styles.info}>
+                  <h3>
+                    {player.player_first_name} {player.player_last_name}
+                  </h3>
+                  <p>Team: {player.team_name}</p>
+                  <p>ID: {player.player_id}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
-
-        {/* Table Body */}
-        {players.length > 0 ? (
-          players.map((player) => (
-            <div key={player.id} className={styles.playerRow}>
-              <div className={styles.tableCell}>{player.name}</div>
-              <div className={styles.tableCell}>{player.team_name}</div>
-              <div className={styles.tableCell}>{player.points_per_game.toFixed(2)}</div>
-            </div>
-          ))
-        ) : (
-          <div className={styles.noData}>No player data available.</div>
-        )}
       </div>
     </div>
   );
 };
 
-export default Statistics;
+export default PlayerStats;
