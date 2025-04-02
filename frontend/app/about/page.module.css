@@ -44,7 +44,6 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
-  justify-items: center;
   margin-left: auto;
   margin-right: auto;
 }
@@ -53,25 +52,78 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   align-items: center;
-  justify-items: center;
   margin-left: auto;
   margin-right: auto;
 }
 
-.imageContainerLeft {
+@keyframes imageLeftAppear {
+  from {
+    transform: translateX(-500px) rotate(-270deg);
+  }
 
+  to {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.imageContainerLeft {
+  display: grid;
+  justify-content: center;
+  animation: imageLeftAppear 1s ease forwards;
+  transform-origin: center;
+}
+
+@keyframes imageRightAppear {
+  from {
+    transform: translateX(500px) rotate(270deg);
+  }
+
+  to {
+    transform: translateX(0) rotate(0deg);
+  }
 }
 
 .imageContainerRight {
-  
+  display: grid;
+  justify-content: center;
+  animation: imageRightAppear 1s ease forwards;
+  transform-origin: center;
+}
+
+@keyframes aboutMemberLeftAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-500px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .aboutMemberLeft {
   text-align: right;
+  margin-left: 8vw;
+  animation: aboutMemberLeftAppear 1s ease forwards;
+}
+
+@keyframes aboutMemberRightAppear {
+  from {
+    opacity: 0;
+    transform: translateX(500px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .aboutMemberRight {
   text-align: left;
+  margin-right: 8vw;
+  animation: aboutMemberRightAppear 1s ease forwards;
 }
 
 .name {

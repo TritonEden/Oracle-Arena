@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import styles from "./page.module.css";
+import Image from 'next/image';
+import styles from './page.module.css';
 
 const About = () => {
   const router = useRouter();
@@ -51,15 +52,21 @@ const About = () => {
         <div>
           <div className={styles.teamMemberA}>
             <div className={styles.imageContainerLeft}>
-              image
+              <Image
+                src="/images/tritonPicture.png"
+                width={300}
+                height={300}
+                alt="Triton (J Smoove)"
+              />
             </div>
             <div className={styles.aboutMemberRight}>
               <p className={styles.name}>Triton Eden</p>
               <p className={styles.description}>Machine Learning Model</p>
+              <p className={styles.text}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
             </div>
-          </div>
-          <div className={styles.text}>
-            text
           </div>
         </div>
         {/* William Duff */}
@@ -68,28 +75,40 @@ const About = () => {
             <div className={styles.aboutMemberLeft}>
               <p className={styles.name}>William Duff</p>
               <p className={styles.description}>Frontend Development: Home / About</p>
+              <p className={styles.text}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
             </div>
             <div className={styles.imageContainerRight}>
-              image
+              <Image
+                src="/images/willPicture.png"
+                width={300}
+                height={300}
+                alt="Will (Shaq-a-roni)"
+              />
             </div>
-          </div>
-          <div className={styles.text}>
-            text
           </div>
         </div>
         {/* Nolan Coffey */}
         <div>
           <div className={styles.teamMemberA}>
             <div className={styles.imageContainerLeft}>
-              image
+              <Image
+                src="/images/nolanPicture.png"
+                width={300}
+                height={300}
+                alt="Nolan (Swaggy C)"
+              />
             </div>
             <div className={styles.aboutMemberRight}>
               <p className={styles.name}>Nolan Coffey</p>
-              <p className={styles.description}>Backend Development</p>
+              <p className={styles.description}>Backend Development: DevOps</p>
+              <p className={styles.text}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
             </div>
-          </div>
-          <div className={styles.text}>
-            text
           </div>
         </div>
         {/* Kien Nguyen */}
@@ -98,28 +117,40 @@ const About = () => {
             <div className={styles.aboutMemberLeft}>
               <p className={styles.name}>Kien Nguyen</p>
               <p className={styles.description}>Frontend Development: Statistics</p>
+              <p className={styles.text}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
             </div>
             <div className={styles.imageContainerRight}>
-              image
+              <Image
+                src="/images/kienPicture.png"
+                width={300}
+                height={300}
+                alt="Kien (Kong)"
+              />
             </div>
-          </div>
-          <div className={styles.text}>
-            text
           </div>
         </div>
         {/* Ryan Peruski */}
         <div>
           <div className={styles.teamMemberA}>
             <div className={styles.imageContainerLeft}>
-              image
+              <Image
+                src="/images/peruskiPicture.png"
+                width={300}
+                height={300}
+                alt="Persuki (Ram Slam)"
+              />
             </div>
             <div className={styles.aboutMemberRight}>
               <p className={styles.name}>Ryan Peruski</p>
-              <p className={styles.description}>Backend Development</p>
+              <p className={styles.description}>Backend Development: Data Management</p>
+              <p className={styles.text}>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+              </p>
             </div>
-          </div>
-          <div className={styles.text}>
-            text
           </div>
         </div>
       </div>
