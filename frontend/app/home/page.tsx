@@ -14,9 +14,9 @@ export default function Home() {
         <div className={styles.calendar}>
           <Calendar />
         </div>
-        <div className={styles.search}>
+        {/* <div className={styles.search}>
           <SearchBar />
-        </div>
+        </div> */}
       </div>
       <div className={styles.gameTable}>
         <GameTable />

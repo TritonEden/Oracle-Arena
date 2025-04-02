@@ -2,7 +2,8 @@
 
 .filters {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(3, 1fr); This is for if there is a search bar*/ 
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
   width: 95%;
   margin-top: 130px;
@@ -15,7 +16,7 @@
 
 .calendar {}
 
-.search {}
+/* .search {} */
 
 .gameTable {}
 

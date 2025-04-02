@@ -14,8 +14,8 @@
 .calendarModal {
   position: absolute;
   top: 130px;
-  left: 50%;
-  transform: translate(-50%, 0%);
+  left: 80%;
+  transform: translate(-80%, 0%);
   background-color: #1d1d1d;
   color: white;
   border-radius: 8px;

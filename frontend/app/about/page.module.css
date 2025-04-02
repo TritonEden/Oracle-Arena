@@ -32,6 +32,7 @@
 .subPage {
   display: none;
   margin-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 .about {
@@ -129,6 +130,7 @@
 .name {
   font-size: larger;
   font-weight: 800;
+  color: #cc9a36;
 }
 
 .text {
