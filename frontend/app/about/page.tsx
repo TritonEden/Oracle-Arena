@@ -84,7 +84,7 @@ const About = () => {
               I became a basketball fan at 10 years old while watching the Miami Heat go on their run to win the finals in 2013.
               I have been a LeBron stan from day 1, and trust me, when I am in the gym I play just like him. As an NBA fan,
               I have always focused on players and love analyzing which stats best measure a player's impact on winning.
-              I'm constantly browsing Basketball Reference and I catch as many Lakers games as I can. I love using Oracle Arena
+              I am constantly browsing Basketball Reference and I catch as many Lakers games as I can. I love using Oracle Arena
               as an NBA analysis tool. Finding out which statistics have most impact winning according to our models is incredibly
               exciting for me. Besides coming up with the idea for Oracle Arena, my primary work for this project has been developing
               the machine learning model used for our predictions, including training and testing. I have also worked on data extraction.
@@ -140,8 +140,8 @@ const About = () => {
               <p className={styles.name}>Nolan Coffey</p>
               <p className={styles.description}>Backend Development: DevOps</p>
               <p className={styles.text}>
-                I've seen some NBA games, caught UT men's basketball, and played enough pickup to know there are two types of players: 
-                those who call every foul and those who've studied Malice at the Palace like it's a game tape. I aspire to be somewhere 
+                I have seen some NBA games, caught UT men's basketball, and played enough pickup to know there are two types of players: 
+                those who call every foul and those who've studied Malice at the Palace like it is a game tape. I aspire to be somewhere 
                 in between with aggressive box outs, minimal criminal charges. I am proud of what we have created with Oracle Arena, and 
                 feel that we have made something for every type of basketball fan. I am excited to see how this project continues to evolve.
                 I am responsible for working on our Backend Pipeline consisting of Nginx and Django, containerizing with Docker and deployment to Azure. 
