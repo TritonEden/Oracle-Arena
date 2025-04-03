@@ -31,7 +31,7 @@
 
 .subPage {
   display: none;
-  margin-top: 5vh;
+  margin-top: 10vh;
   padding-bottom: 5vh;
 }
 
@@ -39,6 +39,22 @@
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.sectionLabel {
+  font-size: 30px;
+  color: #cc9a36;
+  padding-bottom: 2vh;
+}
+
+.missionStatement {
+  font-style: italic;
+  font-size: 38px;
+  padding-bottom: 10vh;
+}
+
+.history {
+  padding-bottom: 10vh;
 }
 
 .teamMemberA {
@@ -135,5 +151,25 @@
 
 .text {
   padding-top: 2vh;
-  padding-bottom: 3vh;
+  padding-bottom: 5vh;
+}
+
+@media (max-width: 800px) {
+  .teamMemberA, .teamMemberB {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "image" 
+      "text";
+  }
+
+  .imageContainerLeft, .imageContainerRight {
+    grid-area: image;
+    padding-bottom: 2vh;
+  }
+
+  .aboutMemberLeft, .aboutMemberRight {
+    grid-area: text;
+    text-align: center;
+    margin: 0;
+  }
 }
