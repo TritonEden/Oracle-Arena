@@ -213,10 +213,10 @@ team_id,season_year,team_location,team_name,team_abbreviation
 1610612757,2024-25,Portland,Trail Blazers,POR
 1610612751,2024-25,Brooklyn,Nets,BKN
 1610612764,2024-25,Washington,Wizards,WAS
-1610616853,2024-25,,Young Stars,KEN
-1610616851,2024-25,,Global Stars,CHK
-1610616852,2024-25,,OGs,SHQ
-1610616854,2024-25,,Rising Stars,CAN
+1610616853,2024-25,Global,Young Stars,KEN
+1610616851,2024-25,Global,Global Stars,CHK
+1610616852,2024-25,Global,OGs,SHQ
+1610616854,2024-25,Global,Rising Stars,CAN
 1610616834,2018-19,Team,LeBron,LBN
 1610616833,2018-19,Team,Giannis,GNS
 12329,2019-20,Shanghai,Sharks,SDS

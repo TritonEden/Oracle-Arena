@@ -198,3 +198,15 @@ def fetch_with_retry(func, *args, **kwargs):
             else:
                 print(f"Failed after {retries} attempts: {e}")
                 return None
+            
+def check_dfs(dfs: list):
+    """
+    Check if the dataframes are empty or have missing values. Does not check for duplicates or mismatched ids
+    """
+    for df in dfs:
+        if df.isnull().values.any():
+            print(f"Missing values in {df.columns[df.isnull().any()].tolist()}")
+            #Print the rows where these values are missing
+            print(df[df.isnull().any(axis=1)])
+            return False
+    return True
