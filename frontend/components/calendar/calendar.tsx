@@ -4,9 +4,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import styles from './calendar.module.css';
 
-const Calendar: React.FC = () => {
+interface CalendarProps {
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ selectedDate, setSelectedDate }) => {
   const [calendarOpen, setCalendarOpen] = useState<boolean>(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [currentMonth, setCurrentMonth] = useState<number>(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState<number>(new Date().getFullYear());
 
@@ -60,8 +64,15 @@ const Calendar: React.FC = () => {
 
   /* Setting selected date  */
   const handleDateSelect = (date: number) => {
-    setSelectedDate(new Date(currentYear, currentMonth, date));
+    const newDate = new Date(currentYear, currentMonth, date);
+
+    setSelectedDate(newDate);
     setCalendarOpen(false);
+  };
+
+  const changeYear = (increment: number) => {
+    const newYear = currentYear + increment;
+    setCurrentYear(newYear);
   };
 
   /* Month change buttons */
@@ -101,13 +112,23 @@ const Calendar: React.FC = () => {
   const renderCalendar = () => {
     const daysArray = generateCalendar();
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const today = new Date();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
 
     return (
       <div className={styles.calendar}>
+        <div className={styles.year}>
+          <button className={styles.arrowButton} onClick={() => changeYear(-1)}>&lt;</button>
+          <span className={`${currentYear === todayYear ? styles.today : ''}`}>{currentYear}</span>
+          <button className={styles.arrowButton} onClick={() => changeYear(1)}>&gt;</button>
+        </div>
         <div className={styles.month}>
-          <button onClick={() => changeMonth(-1)}>&lt;</button>
-          <span>{monthNames[currentMonth]} {currentYear}</span>
-          <button onClick={() => changeMonth(1)}>&gt;</button>
+          <button className={styles.arrowButton} onClick={() => changeMonth(-1)}>&lt;</button>
+          <span className={`${currentMonth === todayMonth && currentYear === todayYear ? styles.today : ''}`}>
+            {monthNames[currentMonth]}
+          </span>
+          <button className={styles.arrowButton} onClick={() => changeMonth(1)}>&gt;</button>
         </div>
         <div className={styles.days}>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (

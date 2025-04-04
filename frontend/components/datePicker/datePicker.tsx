@@ -1,12 +1,16 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import { addDays, subDays } from "date-fns";
 import styles from "./datePicker.module.css";
 
-const DateFilter: React.FC = () => {
+interface DateFilterProps {
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
+}
+
+const DateFilter: React.FC<DateFilterProps> = ({ selectedDate, setSelectedDate }) => {
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const getDateRange = () => {
@@ -49,7 +53,7 @@ const DateFilter: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className={styles["month-name"]}>
+      <div className={styles.monthName}>
         {getMonthName(selectedDate)} {selectedDate.getFullYear()}
       </div>
 
@@ -57,16 +61,16 @@ const DateFilter: React.FC = () => {
         <button
           onClick={() => handleDateChange(subDays(selectedDate, 1))}
           disabled={selectedDate === subDays(today, 2)}
-          className={styles["prev-next-button"]}
+          className={styles.arrowButton}
         >
-          &#60;
+          &lt;
         </button>
 
         {getDateRange().map((date, index) => (
           <button
             key={index}
             onClick={() => handleDateChange(date)}
-            className={`${styles["date-button"]} ${date.toDateString() === selectedDate.toDateString()
+            className={`${styles.dateButton} ${date.toDateString() === selectedDate.toDateString()
                 ? styles.selected
                 : ""
               } ${isToday(date) ? styles.today : ""}`}
@@ -78,9 +82,9 @@ const DateFilter: React.FC = () => {
         <button
           onClick={() => handleDateChange(addDays(selectedDate, 1))}
           disabled={selectedDate === addDays(today, 2)}
-          className={styles["prev-next-button"]}
+          className={styles.arrowButton}
         >
-          &#62;
+          &gt;
         </button>
       </div>
     </div>
