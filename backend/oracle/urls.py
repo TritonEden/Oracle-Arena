@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 # from .views import testfunction, playersummary, gamesummary
 # from .views import presentGameSummary, player_stats, get_player_game_stats
-from .views import presentGameSummary, get_players, get_player_game_stats
+from .views import presentGameSummary, get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('testfunction/', testfunction),
@@ -28,4 +28,7 @@ urlpatterns = [
     path('api/player_stats/', get_players, name='get_players'),
     # path('api/player_stats/', player_stats, name='player_stats'),
     path("api/player_game_stats/<int:player_id>/", get_player_game_stats, name="player_game_stats"),
+    path("api/player_game_stats/", get_all_player_game_stats, name="all_player_game_stats"),
+    path("api/games/", get_games, name="games"),
+    path("api/teams/", get_teams, name="teams"),
 ]

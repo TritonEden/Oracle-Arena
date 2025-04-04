@@ -20,38 +20,69 @@ from nba_api.live.nba.endpoints import scoreboard
 #     return JsonResponse(result, safe=False)
 
 def get_player_game_stats(request, player_id):
-    stats = get_player_stats_from_csv(player_id)
-    return JsonResponse(stats, safe=False)
+    with connection.cursor() as cursor:
+        # Execute raw SQL query, with paramaterized query to prevent SQL injection
+        cursor.execute("SELECT * FROM playergamestats WHERE player_id = %s;", [player_id])
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]
+        # Get column names
+        return JsonResponse([dict(zip(columns, row)) for row in rows], safe=False)
+    
+def get_all_player_game_stats(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM playergamestats;")
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
+
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
+
+# def get_player_game_stats(request, player_id):
+#     stats = get_player_stats_from_csv(player_id)
+#     return JsonResponse(stats, safe=False)
+
+# def get_players(request):
+#     players = get_players_from_csv()
+#     return JsonResponse(players, safe=False)
 
 def get_players(request):
-    players = get_players_from_csv()
-    return JsonResponse(players, safe=False)
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM players;")
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
 
-# def player_stats(request):
-#     player_stats = [
-#         {"player_id": 203967, "player_first_name": "Dario", "player_last_name": "Šarić", "team_name": "N/A"},
-#         {"player_id": 203496, "player_first_name": "Robert", "player_last_name": "Covington", "team_name": "N/A"},
-#         {"player_id": 203954, "player_first_name": "Joel", "player_last_name": "Embiid", "team_name": "N/A"},
-#         {"player_id": 1628365, "player_first_name": "Markelle", "player_last_name": "Fultz", "team_name": "N/A"},
-#         {"player_id": 1627732, "player_first_name": "Ben", "player_last_name": "Simmons", "team_name": "N/A"},
-#         {"player_id": 101161, "player_first_name": "Amir", "player_last_name": "Johnson", "team_name": "N/A"},
-#         {"player_id": 200755, "player_first_name": "JJ", "player_last_name": "Redick", "team_name": "N/A"},
-#         {"player_id": 204456, "player_first_name": "T.J.", "player_last_name": "McConnell", "team_name": "N/A"},
-#         {"player_id": 1629013, "player_first_name": "Landry", "player_last_name": "Shamet", "team_name": "N/A"},
-#         {"player_id": 1628413, "player_first_name": "Jonah", "player_last_name": "Bolden", "team_name": "N/A"},
-#         {"player_id": 1627788, "player_first_name": "Furkan", "player_last_name": "Korkmaz", "team_name": "N/A"},
-#         {"player_id": 1627743, "player_first_name": "Demetrius", "player_last_name": "Jackson", "team_name": "N/A"},
-#         {"player_id": 1629003, "player_first_name": "Shake", "player_last_name": "Milton", "team_name": "N/A"},
-#         {"player_id": 1628369, "player_first_name": "Jayson", "player_last_name": "Tatum", "team_name": "N/A"},
-#         {"player_id": 202330, "player_first_name": "Gordon", "player_last_name": "Hayward", "team_name": "N/A"},
-#         {"player_id": 201143, "player_first_name": "Al", "player_last_name": "Horford", "team_name": "N/A"},
-#         {"player_id": 1627759, "player_first_name": "Jaylen", "player_last_name": "Brown", "team_name": "N/A"},
-#         {"player_id": 202681, "player_first_name": "Kyrie", "player_last_name": "Irving", "team_name": "N/A"},
-#         {"player_id": 202694, "player_first_name": "Marcus", "player_last_name": "Morris Sr.", "team_name": "N/A"},
-#         {"player_id": 1626179, "player_first_name": "Terry", "player_last_name": "Rozier", "team_name": "N/A"},
-#     ]
-    
-#     return JsonResponse(player_stats, safe=False)
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
+
+def get_teams(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM teams;")
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
+
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
+
+def get_games(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT * FROM games;")
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
+
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
 
 
 def presentGameSummary(request):
