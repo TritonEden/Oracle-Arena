@@ -1,0 +1,68 @@
+/* statistics.module.css */
+.container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardLink:hover {
+  background-color: #f0f0f0;
+}
+
+.imagePlaceholder {
+  height: 100px;
+  background-color: #e0e0e0;
+  margin-bottom: 10px;
+}
+
+.info {
+  padding: 10px;
+}
+
+.statsTable {
+  margin-top: 40px;
+}
+
+.statsTableContainer {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.statsTableContainer th,
+.statsTableContainer td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.statsTableContainer th {
+  background-color: #f0f0f0;
+}
+
+.statsTableContainer tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

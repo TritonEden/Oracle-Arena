@@ -2,54 +2,58 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "./statistics.module.css";
+import styles from "./teams.module.css";
 
-interface Player {
-  player_id: number;
-  player_first_name: string;
-  player_last_name: string;
+interface Team {
+  team_id: number;
+  team_location: string;
   team_name: string;
-  // Add an image URL if available
-  image_url?: string;
+  team_abbreviation: string;
+  season_year: string;
+  team_photo_url?: string | null;
 }
 
-const PlayerStats: React.FC = () => {
-  const [players, setPlayers] = useState<Player[]>([]);
+const TeamStats: React.FC = () => {
+  const [teams, setTeams] = useState<Team[]>([]);
 
-  // Fetch the list of players from the CSV
   useEffect(() => {
-    fetch("http://localhost:8000/api/player_stats")
-      .then((response) => response.json())
-      .then((data) => setPlayers(data))
-      .catch((error) => console.error("Error fetching player data:", error));
+    fetch("http://localhost:8000/api/teams/")
+      .then((res) => res.json())
+      .then((data) => {
+        // Sort by season_year descending (most recent first)
+        const sorted = [...data].sort(
+          (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
+        );
+        setTeams(sorted);
+      })
+      .catch((err) => console.error("Error fetching team data:", err));
   }, []);
 
   return (
     <div style={{ paddingTop: "120px" }}>
       <div className={styles.container}>
-        <h2 className={styles.title}>Player Stats</h2>
+        <h2 className={styles.title}>NBA Teams by Season</h2>
         <div className={styles.grid}>
-          {players.map((player) => (
+          {teams.map((team) => (
             <Link
-              key={player.player_id}
-              href={`/player/${player.player_id}`}
+              key={team.team_id + team.season_year}
+              href="/player_stats" // Redirect to all players for now
               className={styles.cardLink}
             >
               <div className={styles.card}>
-                {/* Display player image if available, else a placeholder */}
                 <div className={styles.imagePlaceholder}>
-                  {player.image_url ? (
-                    <img src={player.image_url} alt={`${player.player_first_name} ${player.player_last_name}`} />
+                  {team.team_photo_url ? (
+                    <img src={team.team_photo_url} alt={`${team.team_name}`} />
                   ) : (
-                    "No Image"
+                    "No Team Image"
                   )}
                 </div>
                 <div className={styles.info}>
                   <h3>
-                    {player.player_first_name} {player.player_last_name}
+                    {team.team_location} ({team.team_abbreviation})
                   </h3>
-                  <p>Team: {player.team_name}</p>
-                  <p>ID: {player.player_id}</p>
+                  <p>{team.team_name}</p>
+                  <p>Season: {team.season_year}</p>
                 </div>
               </div>
             </Link>
@@ -60,4 +64,4 @@ const PlayerStats: React.FC = () => {
   );
 };
 
-export default PlayerStats;
+export default TeamStats;

@@ -88,9 +88,6 @@ WSGI_APPLICATION = 'oracle.wsgi.application'
 
 assert Path(".env").exists(), "Create a .env file with the database password"
 
-# with open(".env", "r") as f:
-#     PASSWORD = f.read().strip() 
-
 PASSWORD = os.getenv('PASSWORD', '')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')
 
