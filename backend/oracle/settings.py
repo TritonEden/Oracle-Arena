@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)9%z8*36wz%!p9-)dw#606i*46(ag*pn(8mw1g%zh%z*0v@n@7
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-LOCAL = True
+LOCAL = False
 
 ALLOWED_HOSTS = []
 
@@ -88,9 +88,10 @@ WSGI_APPLICATION = 'oracle.wsgi.application'
 
 assert Path(".env").exists(), "Create a .env file with the database password"
 
-with open(".env", "r") as f:
-    PASSWORD = f.read().strip() 
+# with open(".env", "r") as f:
+#     PASSWORD = f.read().strip() 
 
+PASSWORD = os.getenv('PASSWORD', '')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')
 
 if not LOCAL:
@@ -102,6 +103,9 @@ if not LOCAL:
             'PASSWORD': PASSWORD,
             'HOST': 'rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com',
             'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require'
+            }
         }
     }
 else: # Local Docker Postgres DB
