@@ -247,6 +247,28 @@ def get_home_away_team_names(request, game_id):
 
     return JsonResponse(result, safe=False)
 
+#Gets all players from a team, given a season and team
+def get_players_from_team(request, team_id, season_year):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT DISTINCT 
+                p.player_id,
+                p.first_name,
+                p.last_name
+            FROM player_game_stats pgs
+            JOIN players p ON pgs.player_id::TEXT = p.player_id::TEXT
+            JOIN games g ON pgs.game_id::TEXT = g.game_id::TEXT
+            WHERE pgs.team_id::TEXT = %s
+            AND g.season_year = %s;
+        """, [team_id, season_year])
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
+
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
+
 def presentGameSummary(request):
     games = scoreboard.ScoreBoard()
 
