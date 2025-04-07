@@ -34,9 +34,9 @@ urlpatterns = [
     path("api/players/", get_players, name="players"),
     path("api/wins_losses/", get_wins_losses, name="wins_losses"),
     path("api/game_ids/", get_game_ids, name="game_ids"),
-    path("api/player_stats_for_season/<int:player_id>/<str:season_id>/", get_player_stats_for_season, name="player_stats_for_season"),
-    path("api/player_average_stats_for_season/<int:player_id>/<str:season_id>/", get_player_average_stats_for_season, name="player_average_stats_for_season"),
-    path("api/players_from_team/<int:team_id>/<str:season_id>/", get_players_from_team, name="players_from_team"),
+    path("api/player_stats_for_season/<int:player_id>/<str:season_year>/", get_player_stats_for_season, name="player_stats_for_season"),
+    path("api/player_average_stats_for_season/<int:player_id>/<str:season_year>/", get_player_average_stats_for_season, name="player_average_stats_for_season"),
+    path("api/players_from_team/<int:team_id>/<str:season_year>/", get_players_from_team, name="players_from_team"),
     #Get team given team name
 
 ]

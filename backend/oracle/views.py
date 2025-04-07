@@ -169,9 +169,9 @@ def get_player_stats_for_season(request, player_id, season_year):
         cursor.execute("""
             SELECT pgs.game_id, pgs.player_game_stats
             FROM Player_Game_Stats pgs
-            JOIN Games g ON g.game_id::INTEGER = pgs.game_id::INTEGER
-            WHERE pgs.player_id::TEXT = %s
-            AND g.season_year::TEXT = %s;
+            JOIN Games g ON g.game_id = pgs.game_id::INTEGER
+            WHERE pgs.player_id = %s
+            AND g.season_year = %s;
         """, [player_id, season_year])
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
@@ -193,10 +193,10 @@ def get_player_average_stats_for_season(request, player_id, season_year):
                 key,
                 AVG((value)::NUMERIC) AS avg_val
             FROM Player_Game_Stats pgs
-            JOIN Games g ON g.game_id::TEXT = pgs.game_id::TEXT
+            JOIN Games g ON g.game_id = pgs.game_id::INTEGER
             CROSS JOIN LATERAL jsonb_each_text(pgs.player_game_stats::JSONB)
-            WHERE pgs.player_id::TEXT = %s
-                AND g.season_year::TEXT = %s
+            WHERE pgs.player_id::INTEGER = %s::INTEGER
+                AND g.season_year = %s
                 AND value ~ '^\d+(\.\d+)?$'  -- only allow numbers or decimals
             GROUP BY key
             ) sub;
@@ -256,9 +256,9 @@ def get_players_from_team(request, team_id, season_year):
                 p.first_name,
                 p.last_name
             FROM player_game_stats pgs
-            JOIN players p ON pgs.player_id::TEXT = p.player_id::TEXT
-            JOIN games g ON pgs.game_id::TEXT = g.game_id::TEXT
-            WHERE pgs.team_id::TEXT = %s
+            JOIN players p ON p.player_id = pgs.player_id::INTEGER
+            JOIN games g ON g.game_id = pgs.game_id::INTEGER
+            WHERE pgs.team_id = %s
             AND g.season_year = %s;
         """, [team_id, season_year])
         rows = cursor.fetchall()  # Get all rows

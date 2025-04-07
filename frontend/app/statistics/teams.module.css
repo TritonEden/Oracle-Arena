@@ -1,6 +1,5 @@
-/* statistics.module.css */
 .container {
-  width: 80%;
+  width: 90%;
   margin: auto;
   padding: 20px;
 }
@@ -13,15 +12,22 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Adjust grid for smaller boxes */
   gap: 20px;
 }
 
 .card {
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  background-color: #fff;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }
 
 .cardLink {
@@ -34,35 +40,41 @@
 }
 
 .imagePlaceholder {
-  height: 100px;
-  background-color: #e0e0e0;
-  margin-bottom: 10px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px; /* Center the image container */
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagePlaceholder img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block; /* Ensure the image fills the container */
+  background-color: transparent; /* Remove any background color */
 }
 
 .info {
-  padding: 10px;
+  padding: 5px;
 }
 
-.statsTable {
-  margin-top: 40px;
+.abbreviation {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 5px;
 }
 
-.statsTableContainer {
-  width: 100%;
-  border-collapse: collapse;
+.teamLocation,
+.teamName,
+.seasonYear {
+  font-size: 1em;
+  margin-bottom: 5px;
 }
 
-.statsTableContainer th,
-.statsTableContainer td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-}
-
-.statsTableContainer th {
-  background-color: #f0f0f0;
-}
-
-.statsTableContainer tr:nth-child(even) {
-  background-color: #f9f9f9;
+.filter {
+  margin-bottom: 20px;
+  font-size: 16px;
 }
