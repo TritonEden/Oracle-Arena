@@ -1,84 +1,73 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import styles from "./playerDetail.module.css";
 
 interface PlayerGameStats {
   game_id: string;
-  team_id: string;
   stats: {
     MIN: string;
-    FGM: string;
-    FGA: string;
-    FG_PCT: string;
-    FG3M: string;
-    FG3A: string;
-    FG3_PCT: string;
-    FTM: string;
-    FTA: string;
-    FT_PCT: string;
-    OREB: string;
-    DREB: string;
-    REB: string;
-    AST: string;
-    STL: string;
-    BLK: string;
-    TO: string;
-    PF: string;
-    PTS: string;
-    PLUS_MINUS: string;
+    FGM: number;
+    FGA: number;
+    FG_PCT: number;
+    FG3M: number;
+    FG3A: number;
+    FG3_PCT: number;
+    FTM: number;
+    FTA: number;
+    FT_PCT: number;
+    OREB: number;
+    DREB: number;
+    REB: number;
+    AST: number;
+    STL: number;
+    BLK: number;
+    TO: number;
+    PF: number;
+    PTS: number;
+    PLUS_MINUS: number;
   };
 }
 
 const PlayerDetail: React.FC = () => {
   const { player_id } = useParams();
+  const searchParams = useSearchParams();
+  const season_year = searchParams.get("season") ?? "2024-25";
+
   const [stats, setStats] = useState<PlayerGameStats[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/player_game_stats/${player_id}`)
+    fetch(`http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`)
       .then((response) => response.json())
       .then((data) => {
-        // Log the raw data to check its structure
-        console.log("API Response Data:", data);
+        const parsedStats: PlayerGameStats[] = data.map((entry: any) => ({
+          game_id: entry.game_id,
+          stats: JSON.parse(entry.player_game_stats),
+        }));
 
-        const parsedStats = data.map((stat: any) => {
-          let parsedStatsArray = stat.stats && stat.stats.length > 0 ? stat.stats : [{
-            MIN: 'N/A', FGM: 'N/A', FGA: 'N/A', FG_PCT: 'N/A', FG3M: 'N/A', FG3A: 'N/A', FG3_PCT: 'N/A',
-            FTM: 'N/A', FTA: 'N/A', FT_PCT: 'N/A', OREB: 'N/A', DREB: 'N/A', REB: 'N/A', AST: 'N/A',
-            STL: 'N/A', BLK: 'N/A', TO: 'N/A', PF: 'N/A', PTS: 'N/A', PLUS_MINUS: 'N/A'
-          }];
-
-          console.log("Parsed Stats Array:", parsedStatsArray);
-
-          return {
-            ...stat,
-            stats: parsedStatsArray[0], // Take the first element if the array is not empty
-          };
-        });
-        setStats(parsedStats);
+        const sorted = parsedStats.sort((a, b) => b.game_id.localeCompare(a.game_id));
+        setStats(sorted);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching player stats:", error);
+        console.error("Error fetching player season stats:", error);
         setLoading(false);
       });
-  }, [player_id]);
+  }, [player_id, season_year]);
 
   return (
     <div style={{ paddingTop: "120px" }}>
-      <h2>Player Stats</h2>
+      <h2>Player {player_id} - Stats for {season_year}</h2>
       {loading ? (
         <p>Loading...</p>
       ) : stats.length > 0 ? (
         <div className={styles.statsTable}>
-          <h3>Game Stats for Player {player_id}</h3>
           <table className={styles.statsTableContainer}>
             <thead>
               <tr>
                 <th>Game ID</th>
-                <th>Team ID</th>
                 <th>MIN</th>
                 <th>FGM</th>
                 <th>FGA</th>
@@ -105,7 +94,6 @@ const PlayerDetail: React.FC = () => {
               {stats.map((stat) => (
                 <tr key={stat.game_id}>
                   <td>{stat.game_id}</td>
-                  <td>{stat.team_id}</td>
                   <td>{stat.stats.MIN}</td>
                   <td>{stat.stats.FGM}</td>
                   <td>{stat.stats.FGA}</td>
@@ -132,7 +120,7 @@ const PlayerDetail: React.FC = () => {
           </table>
         </div>
       ) : (
-        <p>No stats available for this player.</p>
+        <p>No stats available for this player this season.</p>
       )}
     </div>
   );
