@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import DatePicker from "../../components/datePicker/datePicker";
 import Calendar from "../../components/calendar/calendar";
-import SearchBar from "../../components/searchBar/searchBar";
+// import SearchBar from "../../components/searchBar/searchBar";
 import GameTable from "../../components/gameTable/gameTable";
 import styles from './page.module.css';
 
