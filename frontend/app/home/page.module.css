@@ -20,14 +20,14 @@
 
 .gameTable {}
 
-@media (max-width: 768px) {
+@media (max-width: 1280px) {
   .filters {
-    padding-bottom: 7vh;
+    padding-bottom: 5vh;
   }
 }
 
-@media (max-width: 614px) {
+@media (max-width: 768px) {
   .filters {
-    padding-bottom: 5vh;
+    padding-bottom: 3vh;
   }
 }

@@ -19,23 +19,38 @@
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   align-items: center;
-  padding-bottom: 5vh;
+  padding-bottom: 4vh;
   margin-left: 14vw;
   margin-right: 14vw;
-  font-size: 25px;
+  font-size: 1.3rem;
   font-weight: bold;
   color: #cc9a36;
+}
+
+.gamesTable hr {
+  border-color: #555;
+  width: 95%;
+  margin: auto;
+  padding-bottom: 2vh;
 }
 
 .gameRow {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 2fr 1fr;
   align-items: center;
-  padding-bottom: 2vh;
+  padding: 2vh 0 2vh;
 }
 
 .teamName {
-  font-size: 35px;
+  font-size: 2rem;
+}
+
+.awayTeam {
+  border-right: 1px solid #555;
+}
+
+.homeTeam {
+  border-left: 1px solid #555;
 }
 
 .logo {
@@ -61,7 +76,7 @@
 }
 
 .displayData {
-  padding-bottom: 10vh;
+  padding-bottom: 5vh;
 }
 
 .tableCell {
@@ -79,15 +94,11 @@
 
 @media (max-width: 768px) {
   .gamesTable {
-    font-size: 2.5vw;
-  }
-
-  .headerRow {
-    font-size: 3vw;
+    font-size: 0.7rem;
   }
 
   .teamName {
-    font-size: 3vw;
+    font-size: 1.1rem;
   }
 
   .logo {
