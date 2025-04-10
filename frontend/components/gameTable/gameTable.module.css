@@ -19,6 +19,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   align-items: center;
+  padding-top: 4vh;
   padding-bottom: 4vh;
   margin-left: 14vw;
   margin-right: 14vw;

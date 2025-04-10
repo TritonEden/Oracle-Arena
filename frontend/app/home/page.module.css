@@ -2,14 +2,15 @@
 
 .filters {
   display: grid;
-  /* grid-template-columns: repeat(3, 1fr); This is for if there is a search bar*/ 
+  /* grid-template-columns: repeat(3, 1fr); This is for if there is a search bar*/
   grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-  width: 95%;
+  align-items: flex-end;
+  width: 90%;
   margin-top: 130px;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 10vh;
+  padding-bottom: 4vh;
+  border-bottom: 1px solid white;
 }
 
 .datePicker {}
