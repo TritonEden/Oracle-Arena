@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 # from .views import testfunction, playersummary, gamesummary
 # from .views import presentGameSummary, player_stats, get_player_game_stats
-from .views import presentGameSummary, get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats, get_players, get_wins_losses, get_game_ids, get_player_stats_for_season, get_player_average_stats_for_season, get_players_from_team, get_team_game_results
+from .views import presentGameSummary, get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats, get_players, get_wins_losses, get_game_ids, get_player_stats_for_season, get_player_average_stats_for_season, get_players_from_team, get_team_game_results, get_game
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('testfunction/', testfunction),
@@ -38,4 +38,5 @@ urlpatterns = [
     path("api/player_stats_for_season/<int:player_id>/<str:season_year>/", get_player_stats_for_season, name="player_stats_for_season"),
     path("api/player_average_stats_for_season/<int:player_id>/<str:season_year>/", get_player_average_stats_for_season, name="player_average_stats_for_season"),
     path("api/players_from_team/<int:team_id>/<str:season_year>/", get_players_from_team, name="players_from_team"),
+    path("api/game/<int:game_id>/", get_game, name="game"),
 ]

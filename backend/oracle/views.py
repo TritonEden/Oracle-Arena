@@ -23,7 +23,17 @@ from nba_api.live.nba.endpoints import scoreboard
 def get_player_game_stats(request, player_id):
     with connection.cursor() as cursor:
         # Execute raw SQL query, with paramaterized query to prevent SQL injection
-        cursor.execute("SELECT * FROM playergamestats WHERE player_id = %s;", [player_id])
+        cursor.execute("SELECT * FROM player_game_stats WHERE player_id = %s;", [player_id])
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]
+        # Get column names
+        return JsonResponse([dict(zip(columns, row)) for row in rows], safe=False)
+    
+# Gets all player game stats
+def get_game(request, game_id):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query, with paramaterized query to prevent SQL injection
+        cursor.execute("SELECT * FROM games WHERE game_id = %s;", [game_id])
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]
         # Get column names
@@ -32,7 +42,7 @@ def get_player_game_stats(request, player_id):
 def get_all_player_game_stats(request):
     with connection.cursor() as cursor:
         # Execute raw SQL query
-        cursor.execute("SELECT * FROM playergamestats;")
+        cursor.execute("SELECT * FROM player_game_stats;")
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
 
