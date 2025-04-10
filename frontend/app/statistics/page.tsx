@@ -67,7 +67,7 @@ const TeamStats: React.FC = () => {
           {filteredTeams.map((team) => (
             <Link
               key={team.team_id + team.season_year}
-              href="/player_stats"
+              href={`/team_players/${team.team_id}/${team.season_year}`}
               className={styles.cardLink}
             >
               <div className={styles.card}>

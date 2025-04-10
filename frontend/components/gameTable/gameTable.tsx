@@ -53,23 +53,23 @@ const GameTable: React.FC = () => {
             <div key={index}>
               <div className={styles.gameRow}>
                 <div className={styles.tableCell}>
-                  <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
+                  <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.awayTeamName} className={styles.logo} />
                 </div>
-                <div className={styles.tableCell}>
-                  <div className={styles.teamName}>
-                    <div>{game.homeTeamCity}</div>
-                    <div>{game.homeTeamName}</div>
-                  </div>
-                </div>
-                <div className={styles.tableCell}>{game.startTime}</div>
-                <div className={styles.tableCell}>
+                <div className={`${styles.tableCell} ${styles.awayTeam}`}>
                   <div className={styles.teamName}>
                     <div>{game.awayTeamCity}</div>
                     <div>{game.awayTeamName}</div>
                   </div>
                 </div>
+                <div className={styles.tableCell}>{game.startTime}</div>
+                <div className={`${styles.tableCell} ${styles.homeTeam}`}>
+                  <div className={styles.teamName}>
+                    <div>{game.homeTeamCity}</div>
+                    <div>{game.homeTeamName}</div>
+                  </div>
+                </div>
                 <div className={styles.tableCell}>
-                  <img src={`https://cdn.nba.com/logos/nba/${game.awayTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
+                  <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />
                 </div>
               </div>
 
