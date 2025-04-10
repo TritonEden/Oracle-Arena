@@ -5,6 +5,7 @@ from nba_api.live.nba.endpoints import boxscore
 from nba_api.stats.endpoints import boxscoresummaryv2
 import json
 import time
+import math
 
 def get_home_away_team(game_id):
     """
@@ -210,3 +211,113 @@ def check_dfs(dfs: list):
             print(df[df.isnull().any(axis=1)])
             return False
     return True
+
+import json
+import math
+
+def json_fix(df):
+    # This function will clean the 'player_game_stats' column
+    
+    # Function to replace NaN with None in nested data structures
+    def replace_nan_with_none(data):
+        if isinstance(data, dict):
+            return {key: replace_nan_with_none(value) for key, value in data.items()}
+        elif isinstance(data, list):
+            return [replace_nan_with_none(item) for item in data]
+        elif isinstance(data, float) and math.isnan(data):
+            return None
+        else:
+            return data
+
+    jsons = []
+
+    # Convert the 'player_game_stats' column to a list
+    stats_list = df["player_game_stats"].to_list()
+
+    # Process each row in the list
+    for stat in stats_list:
+        # Convert the string to a dictionary safely
+        try:
+            stat_dict = json.loads(stat)  # Safely parse the JSON string into a dictionary
+            # Replace NaN values with None recursively
+            stat_dict = replace_nan_with_none(stat_dict)
+            # Convert back to a JSON string
+            stat_dict = json.dumps(stat_dict)
+            jsons.append(stat_dict)
+        except json.JSONDecodeError:
+            print(f"Error decoding JSON: {stat}")
+            jsons.append(None)  # In case of an error, append None
+
+    # Drop the old column and add the new one
+    df = df.drop(columns=["player_game_stats"])
+    df["player_game_stats"] = jsons
+
+    return df
+
+
+import sys
+def fill_games_df_v1(boxscore, games_df):
+
+    games = boxscore.get_dict()
+
+    for game in games['scoreboard']['games']:
+
+        game_id = game['gameId']
+        game_date = game['gameEt']
+        # Turn 2025-04-10T23:00:00Z into a date object -- truncate time
+        game_date = game_date.split("T")[0]
+        game_date = date.fromisoformat(game_date)
+        game_date = game_date.strftime("%Y-%m-%d")
+
+        home_team_id = game['homeTeam']['teamId']
+        away_team_id = game['awayTeam']['teamId']
+        season_year = get_season(game_id)
+        
+        new_row = pd.DataFrame([
+            {'game_id': game_id, 'season_year': season_year, 'game_date': game_date,
+            'home_team_id': home_team_id, 'away_team_id': away_team_id}
+        ])
+
+        # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
+        existing_keys = set(zip(games_df['game_id'], games_df['season_year']))
+        new_rows_filtered = new_row[~new_row.apply(lambda row: (row['game_id'], row['season_year']) in existing_keys, axis=1)]
+
+        # Concatenate only if new unique rows exist
+        if not new_rows_filtered.empty:
+            games_df = pd.concat([games_df, new_rows_filtered], ignore_index=True)
+
+    return games_df
+
+def fill_teams_df_v1(boxscore, teams_df):
+
+    games = boxscore.get_dict()
+
+    for game in games['scoreboard']['games']:
+
+        game_id = game['gameId']
+        season_year = get_season(game_id)
+        home_team = game['homeTeam']
+        away_team = game['awayTeam']
+
+
+        
+        # Convert the data to a data frame and concatenate it with the existing teams_df
+        new_rows = pd.DataFrame([
+            {'team_id': home_team["teamId"], 'season_year': season_year,
+            'team_location': home_team["teamCity"], 'team_name': home_team["teamName"],
+            'team_abbreviation': home_team["teamTricode"]},
+
+            {'team_id': away_team["teamId"], 'season_year': season_year,
+            'team_location': away_team["teamCity"], 'team_name': away_team["teamName"],
+            'team_abbreviation': away_team["teamTricode"]},
+        ])
+
+        # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
+        existing_keys = set(zip(teams_df['team_id'], teams_df['season_year']))
+        new_rows_filtered = new_rows[~new_rows.apply(lambda row: (row['team_id'], row['season_year']) in existing_keys, axis=1)]
+
+        # Concatenate only if new unique rows exist
+        if not new_rows_filtered.empty:
+            teams_df = pd.concat([teams_df, new_rows_filtered], ignore_index=True)
+        
+    return teams_df

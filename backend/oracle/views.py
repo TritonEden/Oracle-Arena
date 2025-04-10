@@ -126,6 +126,67 @@ def get_wins_losses(request, team_id, season_year):
 
     return JsonResponse(result, safe=False)
 
+#Given a team id and season year, show all of the games and results from that game -- essentially it is how the wins and losses are calculated
+def get_team_game_results(request, team_id, season_year):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("""
+            WITH TeamGames AS (
+                SELECT DISTINCT g.game_id, g.game_date,
+                    CASE 
+                        WHEN g.home_team_id = t.team_id THEN 'home'
+                        ELSE 'away'
+                    END AS role,
+                    g.home_team_id, g.away_team_id
+                FROM Games g
+                JOIN Teams t ON g.home_team_id = t.team_id OR g.away_team_id = t.team_id
+                WHERE t.team_id = %s AND g.season_year = %s
+            ),
+            Scores AS (
+                SELECT 
+                    pgs.game_id, pgs.team_id,
+                    SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
+                FROM player_game_stats pgs
+                GROUP BY pgs.game_id, pgs.team_id
+            ),
+            GameResults AS (
+                SELECT tg.game_id::INTEGER, tg.game_date, 
+                    s1.team_score::NUMERIC AS team_score,
+                    s2.team_score::NUMERIC AS opp_score,
+                    CASE WHEN s1.team_score > s2.team_score THEN 1 ELSE 0 END AS win
+                FROM TeamGames tg
+                JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.home_team_id::INTEGER
+                JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.away_team_id::INTEGER
+                WHERE tg.role = 'home'
+
+                UNION
+
+                SELECT tg.game_id::INTEGER, tg.game_date, 
+                    s1.team_score::NUMERIC AS team_score,
+                    s2.team_score::NUMERIC AS opp_score,
+                    CASE WHEN s1.team_score > s2.team_score THEN 1 ELSE 0 END AS win
+                FROM TeamGames tg
+                JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.away_team_id::INTEGER
+                JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.home_team_id::INTEGER
+                WHERE tg.role = 'away'
+            ),
+            Streak AS (
+                SELECT *, 
+                    ROW_NUMBER() OVER (ORDER BY game_date ASC) AS rn,
+                    SUM(win) OVER (ORDER BY game_date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_wins
+                FROM GameResults
+            )
+            SELECT *
+            FROM GameResults;
+        """, [team_id, season_year])
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]  # Get column names
+
+        # Format the result as a list of dictionaries
+        result = [dict(zip(columns, row)) for row in rows]
+
+    return JsonResponse(result, safe=False)
+
 def get_players(request):
     with connection.cursor() as cursor:
         # Execute raw SQL query
