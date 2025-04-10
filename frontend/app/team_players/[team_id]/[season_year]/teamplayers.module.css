@@ -1,69 +1,123 @@
 /* teamplayers.module.css */
 
 .container {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-  }
-  
-  .title {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-  }
-  
-  .card {
-    border: 1px solid #ccc;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    transition: transform 0.2s ease;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  }
-  
-  .card:hover {
-    transform: translateY(-4px);
-  }
-  
-  .cardLink {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .imagePlaceholder {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.back {
+  text-align: left;
+  margin-left: 3%;
+}
+
+.back span {
+  font-size: larger;
+}
+
+.backButton:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  text-align: center;
+  font-size: 2em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: border 0.2s ease-in-out;
+  background-color: none;
+}
+
+.card:hover {
+  outline: 3px solid #cc9a36;
+  border: none;
+}
+
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 120px;
+  background-color: transparent;
+  border-bottom: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.imagePlaceholder img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+
+}
+
+.info {
+  padding-top: 10px;
+}
+
+.info h3 {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.info p {
+  font-size: 0.9em;
+  color: #555;
+}
+
+@media (max-width: 1280px) {
+  .container {
     width: 100%;
-    height: 120px;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
   }
-  
-  .imagePlaceholder img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
+
+  .back {
+    width: max-content;
   }
-  
-  .info {
-    padding-top: 10px;
+
+  .title {
+    font-size: 1.5rem;
+    margin: auto;
   }
-  
-  .info h3 {
-    font-size: 1.1em;
-    margin: 0;
+}
+
+@media (max-width: 620px) {
+  .back {
+    width: max-content;
   }
-  
-  .info p {
-    font-size: 0.9em;
-    color: #555;
+
+  .title {
+    position: relative;
+    font-size: 1rem;
+    text-align: right;
   }
-  
+}

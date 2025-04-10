@@ -58,8 +58,15 @@ const PlayerDetail: React.FC = () => {
   }, [player_id, season_year]);
 
   return (
-    <div style={{ paddingTop: "120px" }}>
-      <h2>Player {player_id} - Stats for {season_year}</h2>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.back}>
+          <button className={styles.backButton}>
+            <span>&lt;</span> Back to Players
+          </button>
+        </div>
+        <h2>Player {player_id} - Stats for {season_year}</h2>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : stats.length > 0 ? (

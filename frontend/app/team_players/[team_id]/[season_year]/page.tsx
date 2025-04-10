@@ -55,9 +55,17 @@ const TeamPlayersPage: React.FC = () => {
     : `Team ${team_id} - Season ${season_year}`;
 
   return (
-    <div style={{ paddingTop: "120px" }}>
+    <div style={{ paddingTop: "130px" }}>
       <div className={styles.container}>
-        <h2 className={styles.title}>{teamTitle}</h2>
+        <div className={styles.header}>
+          <div className={styles.back}>
+            <button className={styles.backButton}>
+              <span>&lt;</span> Back to Teams
+            </button>
+          </div>
+          <h2 className={styles.title}>{teamTitle}</h2>
+        </div>
+
         <div className={styles.grid}>
           {players.length === 0 ? (
             <p>No players found.</p>

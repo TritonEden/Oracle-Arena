@@ -21,7 +21,6 @@
   border-radius: 10px;
   padding: 10px;
   text-align: center;
-  box-shadow: none;
   transition: border 0.2s ease-in-out;
   background-color: none;
 }
@@ -73,6 +72,7 @@
 .seasonYear {
   font-size: 1em;
   margin-bottom: 5px;
+  color: white;
 }
 
 .filter {
