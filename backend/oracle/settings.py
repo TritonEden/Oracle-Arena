@@ -121,6 +121,7 @@ ALLOWED_HOSTS = [
     'ec2-3-95-168-187.compute-1.amazonaws.com',
     'localhost',
     '127.0.0.1',
+    '172.210.68.66', #Azure's VM IP address
 ]
 
 
