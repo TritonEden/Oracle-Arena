@@ -1,5 +1,15 @@
 /* components/gameTable/gameTable.module.css */
 
+.loading {
+  width: 100vw;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 .tableContainer {
   display: grid;
   padding-top: 10px;

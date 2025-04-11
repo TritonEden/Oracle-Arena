@@ -325,8 +325,41 @@ def get_home_away_team_info_on_date(request, game_date):
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
 
-        # Format the result as a list of dictionaries
-        result = [dict(zip(columns, row)) for row in rows]
+        result = []
+        for row in rows:
+            home_stats = {
+                "team_id": row[columns.index('home_team_id')],
+                "team_city": row[columns.index('home_team_location')],
+                "team_name": row[columns.index('home_team_name')],
+                "team_abbreviation": row[columns.index('home_team_abbreviation')]
+            }
+
+            away_stats = {
+                "team_id": row[columns.index('away_team_id')],
+                "team_city": row[columns.index('away_team_location')],
+                "team_name": row[columns.index('away_team_name')],
+                "team_abbreviation": row[columns.index('away_team_abbreviation')]
+            }
+
+            win_prediction = home_stats["team_name"]  # Placeholder, you can adjust with your prediction logic
+            over_under_prediction = str(float(row[columns.index('home_score')]) + float(row[columns.index('away_score')]))  # Example total
+
+            # Construct the result dictionary
+            game_info = {
+                # 'startTime': row[columns.index('game_date')],
+                'homeTeamLogoID': home_stats["team_id"],
+                'homeTeamCity': home_stats["team_city"],
+                'homeTeamName': home_stats["team_name"],
+                'awayTeamLogoID': away_stats["team_id"],
+                'awayTeamCity': away_stats["team_city"],
+                'awayTeamName': away_stats["team_name"],   
+                'predictedWinner': win_prediction,
+                'actualWinner': "--",  # Placeholder for actual winner if you have data
+                'predictedTotal': over_under_prediction,
+                'actualTotal': "--"  # Placeholder for actual total if you have data
+            }
+
+            result.append(game_info)
 
     return JsonResponse(result, safe=False)
 
@@ -352,73 +385,73 @@ def get_players_from_team(request, team_id, season_year):
 
     return JsonResponse(result, safe=False)
 
-def presentGameSummary(request):
-    games = scoreboard.ScoreBoard()
+# def presentGameSummary(request):
+#     games = scoreboard.ScoreBoard()
 
-    games_data = games.get_dict()
+#     games_data = games.get_dict()
 
-    data = []
+#     data = []
 
-    for game in games_data['scoreboard']['games']: 
-        start_time = game['gameStatusText']
+#     for game in games_data['scoreboard']['games']: 
+#         start_time = game['gameStatusText']
 
-        # Home team details
-        home_team = game['homeTeam']
-        home_stats = {
-            "team_name": home_team["teamName"],
-            "team_city" : home_team["teamCity"],
-            "team_id": home_team["teamId"],
-            "team_abbrev": home_team["teamTricode"],
-            "wins": home_team["wins"],
-            "losses": home_team["losses"],
-            "score": home_team["score"]
-        }
+#         # Home team details
+#         home_team = game['homeTeam']
+#         home_stats = {
+#             "team_name": home_team["teamName"],
+#             "team_city" : home_team["teamCity"],
+#             "team_id": home_team["teamId"],
+#             "team_abbrev": home_team["teamTricode"],
+#             "wins": home_team["wins"],
+#             "losses": home_team["losses"],
+#             "score": home_team["score"]
+#         }
 
-        # Away team details
-        away_team = game['awayTeam']
-        away_stats = {
-            "team_name": away_team["teamName"],
-            "team_city" : away_team["teamCity"],
-            "team_id": away_team["teamId"],
-            "team_abbrev": away_team["teamTricode"],
-            "wins": away_team["wins"],
-            "losses": away_team["losses"],
-            "score": away_team["score"]
-        }
+#         # Away team details
+#         away_team = game['awayTeam']
+#         away_stats = {
+#             "team_name": away_team["teamName"],
+#             "team_city" : away_team["teamCity"],
+#             "team_id": away_team["teamId"],
+#             "team_abbrev": away_team["teamTricode"],
+#             "wins": away_team["wins"],
+#             "losses": away_team["losses"],
+#             "score": away_team["score"]
+#         }
 
-        # Store game data in a dictionary
-        game_info = {
-            "start_time": start_time,
-            "home_team": home_stats,
-            "away_team": away_stats
-        }
+#         # Store game data in a dictionary
+#         game_info = {
+#             "start_time": start_time,
+#             "home_team": home_stats,
+#             "away_team": away_stats
+#         }
 
-        win_prediction = home_stats["team_abbrev"] if home_stats["wins"] > away_stats["wins"] else away_stats["team_abbrev"]
-        over_under_prediction = random.randint(223, 233)
-        # Decide whether to add 0.5 or not
-        if random.choice([True, False]):
-            over_under_prediction = over_under_prediction + 0.5
-        else:
-            over_under_prediction = over_under_prediction
+#         win_prediction = home_stats["team_abbrev"] if home_stats["wins"] > away_stats["wins"] else away_stats["team_abbrev"]
+#         over_under_prediction = random.randint(223, 233)
+#         # Decide whether to add 0.5 or not
+#         if random.choice([True, False]):
+#             over_under_prediction = over_under_prediction + 0.5
+#         else:
+#             over_under_prediction = over_under_prediction
     
-        data.append({
-            'startTime': game_info["start_time"],
-            'homeTeamLogoID': home_stats["team_id"],
-            'homeTeamCity' : home_stats["team_city"],
-            'homeTeamName': home_stats["team_name"],
-            'awayTeamLogoID': away_stats["team_id"],
-            'awayTeamCity' : away_stats["team_city"],
-            'awayTeamName': away_stats["team_name"],   
-            'predictedWinner': win_prediction,
-            'actualWinner': "--",
-            'predictedTotal': over_under_prediction,
-            'actualTotal': "--"
-        })
+#         data.append({
+#             'startTime': game_info["start_time"],
+#             'homeTeamLogoID': home_stats["team_id"],
+#             'homeTeamCity' : home_stats["team_city"],
+#             'homeTeamName': home_stats["team_name"],
+#             'awayTeamLogoID': away_stats["team_id"],
+#             'awayTeamCity' : away_stats["team_city"],
+#             'awayTeamName': away_stats["team_name"],   
+#             'predictedWinner': win_prediction,
+#             'actualWinner': "--",
+#             'predictedTotal': over_under_prediction,
+#             'actualTotal': "--"
+#         })
 
 
-    response = JsonResponse(data, safe=False)
-    response['Access-Control-Allow-Origin'] = '*'
-    response['Access-Control-Allow-Methods'] = 'GET'
-    response['Access-Control-Allow-Headers'] = 'Content-Type'
+#     response = JsonResponse(data, safe=False)
+#     response['Access-Control-Allow-Origin'] = '*'
+#     response['Access-Control-Allow-Methods'] = 'GET'
+#     response['Access-Control-Allow-Headers'] = 'Content-Type'
     
-    return response
+#     return response

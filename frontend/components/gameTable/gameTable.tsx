@@ -19,23 +19,42 @@ interface Game {
   actualTotal: string;
 }
 
-const GameTable: React.FC = () => {
+interface GameTableProps {
+  selectedDate: Date;
+}
+
+const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/presentGameSummary/")
-      .then((response) => {
+    const fetchGames = async () => {
+      const sqlDate = selectedDate.toISOString().split('T')[0];
+      setLoading(true);
+      try {
+        const response = await fetch(`http://localhost:8000/api/home_away_team_info_on_date/${sqlDate}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => {
+        const data = await response.json();
         setGames(data);
-      })
-      .catch((error) => console.error("Error fetching game summary:", error));
-  }, []);
+      } catch (error) {
+        console.error("Error fetching game summary:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchGames();
+  }, [selectedDate]);
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        Loading Games ...
+      </div>
+    )
+  }
 
   return (
     <div className={styles.tableContainer}>
