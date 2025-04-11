@@ -40,12 +40,12 @@ This will show which pages are static and server rendered and to see if we need 
 cd Oracle-Arena
 
 # Build and run
-docker-compose up --build
+docker compose up --build
 
 # Run
-docker-compose up
+docker compose up
 # Stop
-docker-compose down
+docker compose down
 
 ## Extra steps if compose isn't working
 docker build -t oracle-arena -f Azure-dockerfile .
