@@ -38,6 +38,16 @@ This will show which pages are static and server rendered and to see if we need 
 
 ```bash
 cd Oracle-Arena
+
+# Build and run
+docker-compose up --build
+
+# Run
+docker-compose up
+# Stop
+docker-compose down
+
+## Extra steps if compose isn't working
 docker build -t oracle-arena -f Azure-dockerfile .
 
 ## Use for Dev environment to mount local backend to docker container
