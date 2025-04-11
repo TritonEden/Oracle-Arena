@@ -38,14 +38,16 @@
 .statsTable {}
 
 .statsTableContainer {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #555;
   width: 100%;
   margin: auto;
 }
 
 .statsTableContainer th,
 .statsTableContainer td {
-  border: 2px solid #555;
+  border: 1px solid #555;
   padding: 8px;
   text-align: center;
   color: white;
@@ -65,16 +67,37 @@
     font-size: 1.5rem;
     margin: auto;
   }
+
+  .statsTable {
+    overflow-x: auto;
+  }
+
+  .gameCol {
+    position: sticky;
+    left: 0;
+    background-color: #0a0117;
+  }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 700px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
   .back {
-    width: max-content;
-    padding-right: 20px;
+    align-self: flex-start;
+    margin: 10px 0;
   }
 
   .header h2 {
     position: relative;
-    font-size: 1rem;
+    left: auto;
+    transform: none;
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 0 auto;
   }
 }

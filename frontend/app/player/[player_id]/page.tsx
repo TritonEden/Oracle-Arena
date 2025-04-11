@@ -74,7 +74,7 @@ const PlayerDetail: React.FC = () => {
           <table className={styles.statsTableContainer}>
             <thead>
               <tr>
-                <th>Game ID</th>
+                <th className={styles.gameCol}>Game ID</th>
                 <th>MIN</th>
                 <th>FGM</th>
                 <th>FGA</th>
@@ -100,7 +100,7 @@ const PlayerDetail: React.FC = () => {
             <tbody>
               {stats.map((stat) => (
                 <tr key={stat.game_id}>
-                  <td>{stat.game_id}</td>
+                  <td className={styles.gameCol}>{stat.game_id}</td>
                   <td>{stat.stats.MIN}</td>
                   <td>{stat.stats.FGM}</td>
                   <td>{stat.stats.FGA}</td>
