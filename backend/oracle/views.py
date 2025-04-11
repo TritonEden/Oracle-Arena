@@ -280,8 +280,8 @@ def get_player_average_stats_for_season(request, player_id, season_year):
 
     return JsonResponse(result, safe=False)
 
-#Gets home and away team names given a game id -- used for the game summary page
-def get_home_away_team_names(request, game_id):
+#Gets home and away team names given a game date -- used for the game summary page
+def get_home_away_team_info_on_date(request, game_date):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
@@ -292,12 +292,18 @@ def get_home_away_team_names(request, game_id):
                     SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
                 FROM player_game_stats pgs
                 GROUP BY pgs.game_id, pgs.team_id
-            )
+            ), 
+            GameStats AS (
             SELECT 
+                ht.team_location AS home_team_location,
                 ht.team_name AS home_team_name,
+                ht.team_abbreviation AS home_team_abbreviation,
+                at.team_location AS away_team_location,
                 at.team_name AS away_team_name,
+                at.team_abbreviation AS away_team_abbreviation,
                 hs.team_score AS home_score,
-                ascore.team_score AS away_score
+                ascore.team_score AS away_score,
+                g.game_date
             FROM games g
             JOIN teams ht 
                 ON g.home_team_id::TEXT = ht.team_id::TEXT AND g.season_year = ht.season_year
@@ -307,9 +313,11 @@ def get_home_away_team_names(request, game_id):
                 ON hs.game_id = g.game_id::TEXT AND hs.team_id = g.home_team_id::TEXT
             JOIN TeamScores ascore 
                 ON ascore.game_id = g.game_id::TEXT AND ascore.team_id = g.away_team_id::TEXT
-            WHERE g.game_id::TEXT = %s;
+            WHERE g.game_date = %s
+            )
+            SELECT * FROM GameStats gs;
 
-        """, [game_id])
+        """, [game_date])
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
 
