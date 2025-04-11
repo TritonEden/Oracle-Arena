@@ -298,12 +298,15 @@ def get_home_away_team_info_on_date(request, game_date):
                 ht.team_location AS home_team_location,
                 ht.team_name AS home_team_name,
                 ht.team_abbreviation AS home_team_abbreviation,
+                ht.team_id AS home_team_id,
                 at.team_location AS away_team_location,
                 at.team_name AS away_team_name,
                 at.team_abbreviation AS away_team_abbreviation,
+                at.team_id AS away_team_id,
                 hs.team_score AS home_score,
                 ascore.team_score AS away_score,
-                g.game_date
+                g.game_date,
+                g.game_id AS game_id
             FROM games g
             JOIN teams ht 
                 ON g.home_team_id::TEXT = ht.team_id::TEXT AND g.season_year = ht.season_year
