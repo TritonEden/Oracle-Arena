@@ -26,7 +26,8 @@ RUN apk update && apk add --no-cache \
     python3 \
     py3-pip \
     python3-dev \
-    postgresql-libs \
+    postgresql \
+    postgresql-dev \
     nginx \
     vim \
     && rm -rf /var/cache/apk/* # Remove cache to reduce image size
@@ -38,7 +39,8 @@ RUN pip install --upgrade pip && \
       djangorestframework \
       psycopg2-binary \
       nba-api \
-      gunicorn
+      gunicorn \
+      SQLAlchemy
 
 
 WORKDIR /app
@@ -58,8 +60,8 @@ COPY ./backend/nginx/conf/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8000 80
 
 
-COPY ./backend/azure-entrypoint.sh /app/azure-entrypoint.sh
-RUN chmod +x /app/azure-entrypoint.sh
+COPY ./backend/azure-entrypoint.sh /app/backend/azure-entrypoint.sh
+RUN chmod +x /app/backend/azure-entrypoint.sh
 
 # Entrypoint script launches Nginx and Django server 
-ENTRYPOINT ["/bin/bash", "/app/azure-entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/backend/azure-entrypoint.sh"]

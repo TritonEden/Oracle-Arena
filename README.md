@@ -31,35 +31,20 @@ npm start
 
 This will show which pages are static and server rendered and to see if we need to fix on any errors before deploying this website
 
-## Setup for backend
-
-1. Install Python 3.10 or higher with pip
-2. Run the following commands:
-
-```bash
-#Assuming you have already cloned the repo and are in the base directory
-cd backend
-pip install -r requirements.txt
-python manage.py runserver 127.0.0.1:8080
-```
-
-1. Open your browser and go to `http://localhost:8080/` to see the backend of the web application.
-
-## Setup for docker
+## Setup for Docker backend
 
 1. Install docker and git (if not already installed)
 2. In your terminal, run the following commands:
 
 ```bash
 cd Oracle-Arena
-docker build -t oracle-arena .
+docker build -t oracle-arena -f Azure-dockerfile .
 
 ## Use for Dev environment to mount local backend to docker container
 ## Useful for testing code without needing to rebuild each time
 docker run --name oracle-arena --env-file .env \
   -p 8000:8000 -p 3000:3000 -p 80:80 \
   -v $(pwd -W)/backend:/app/backend \
-  -v postgres_data:/var/lib/postgresql/data \
   -it oracle-arena \
 
 ## After the initial run command a docker container called 'oracle-arena' will be created
@@ -67,20 +52,14 @@ docker run --name oracle-arena --env-file .env \
 docker start oracle-arena 
 
 ## Use for production
-docker run --env-file .env -p 8000:8000 -p 3000:3000 -p 80:80 -it oracle-arena 
+docker run --env-file .env -p 8000:8000 -p 80:80 -it oracle-arena 
 ```
-
-NOTE: Now running the docker image should automatically start the Django backend, however nginx still needs to be manually started
-TODO: Integrate nginx startup into entrypoint.sh script
 
 3. In a separate terminal, run the following commands to shell into the Docker container:
 
 ```bash
 
-## Access the database from CLI:
-docker exec -it oracle-arena psql -U oracle_admin -d oracle_db
-
-# OR One Line to shell into the container
+# One Line to shell into the container
 docker exec -it $(docker ps --filter "ancestor=oracle-arena" --format "{{.ID}}" | head -n 1) /bin/bash
 
 
@@ -90,26 +69,10 @@ docker ps
 docker exec -it <container_id> /bin/bash
 ```
 
-4. In docker, to run the backend, run the following commands:
 
-```bash
-cd backend
-nginx -g "daemon off;" & # Start the nginx server
-# python manage.py runserver 0.0.0.0:8000 &> /dev/null & # Start the Django server in the background -- add the extra commands as you wish
-```
+4. Open your browser and go to `http://localhost:8000/` to see the backend of the web application.
 
-5. Open your browser and go to `http://localhost:8000/` to see the backend of the web application.
-
-6. In docker, to run the frontend, run the following commands:
-
-```bash
-cd frontend
-npm run docker
-```
-
-7. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
-
-NOTE: Docker setup is not complete yet. We need to add the database part to the docker setup, which we are currently working on.
+5. Open your browser and go to `http://localhost:3000/home` to see the frontend of the web application.
 
 ## Project Needs
 

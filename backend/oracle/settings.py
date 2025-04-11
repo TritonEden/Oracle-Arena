@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'oracle.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-assert Path(".env").exists(), "Create a .env file with the database password"
+#assert Path(".env").exists(), "Create a .env file with the database password"
 
 PASSWORD = os.getenv('PASSWORD', '')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')

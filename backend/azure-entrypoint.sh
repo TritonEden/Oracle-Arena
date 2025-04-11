@@ -10,6 +10,8 @@ else
     echo "No pending migrations."
 fi
 
+cd /app/backend/
+
 echo "Starting Gunicorn (Django backend)..."
 
 gunicorn oracle.wsgi:application \
