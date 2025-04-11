@@ -43,7 +43,7 @@ players_df = pd.DataFrame(columns=['player_id', 'player_first_name', 'player_las
 games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id'])
 player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 'player_game_stats'])
 
-days = [date.today() - timedelta(days=i) for i in range(6)] #Do 5 days back
+days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days back, 6 days forward
 
 for current_date in days:
 
