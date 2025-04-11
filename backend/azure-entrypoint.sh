@@ -10,6 +10,9 @@ else
     echo "No pending migrations."
 fi
 
+echo "Starting cron..."
+crond -f -l 8 &
+
 cd /app/backend/
 
 echo "Starting Gunicorn (Django backend)..."

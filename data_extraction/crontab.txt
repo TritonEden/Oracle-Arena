@@ -1,0 +1,1 @@
+0 12 * * * python3 /app/data_extraction/add_in_background.py >> /var/log/cron.log 2>&1

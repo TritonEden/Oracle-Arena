@@ -13,9 +13,10 @@ import warnings
 import random
 import sqlalchemy.exc as sa_exc
 
-with open("../backend/.env", "r") as f:
-    password = f.readlines()[0].strip()
-assert os.path.exists("../backend/.env"), "Please create a .env file in the backend directory."
+# with open("../backend/.env", "r") as f:
+    # password = f.readlines()[0].strip()
+# assert os.path.exists("../backend/.env"), "Please create a .env file in the backend directory."
+password = os.getenv('PASSWORD', '')
 
 def safe_row_insert(df, table_name, engine):
     with warnings.catch_warnings():

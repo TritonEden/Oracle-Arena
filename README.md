@@ -43,7 +43,7 @@ docker build -t oracle-arena -f Azure-dockerfile .
 ## Use for Dev environment to mount local backend to docker container
 ## Useful for testing code without needing to rebuild each time
 docker run --name oracle-arena --env-file .env \
-  -p 8000:8000 -p 3000:3000 -p 80:80 \
+  -p 8000:8000 -p 80:80 \
   -v $(pwd -W)/backend:/app/backend \
   -it oracle-arena \
 
