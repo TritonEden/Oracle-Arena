@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import styles from "./playerDetail.module.css";
 
 interface PlayerGameStats {
@@ -33,7 +33,10 @@ interface PlayerGameStats {
 const PlayerDetail: React.FC = () => {
   const { player_id } = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const season_year = searchParams.get("season") ?? "2024-25";
+  const team_id = searchParams.get("team_id"); // Assume team_id is passed in the query string
 
   const [stats, setStats] = useState<PlayerGameStats[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +64,16 @@ const PlayerDetail: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.back}>
-          <button className={styles.backButton}>
+          <button
+            className={styles.backButton}
+            onClick={() => {
+              if (team_id) {
+                router.push(`/team_players/${team_id}/${season_year}`);
+              } else {
+                router.push("/statistics"); // fallback
+              }
+            }}
+          >
             <span>&lt;</span> Back to Players
           </button>
         </div>
@@ -98,8 +110,8 @@ const PlayerDetail: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {stats.map((stat) => (
-                <tr key={stat.game_id}>
+            {stats.map((stat, index) => (
+              <tr key={`${stat.game_id}-${index}`}>
                   <td className={styles.gameCol}>{stat.game_id}</td>
                   <td>{stat.stats.MIN}</td>
                   <td>{stat.stats.FGM}</td>

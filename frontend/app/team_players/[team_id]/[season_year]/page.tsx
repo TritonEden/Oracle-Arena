@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import styles from "./teamplayers.module.css";
 import Link from "next/link";
 
@@ -20,6 +20,7 @@ interface Team {
 }
 
 const TeamPlayersPage: React.FC = () => {
+  const router = useRouter();
   const params = useParams();
   const team_id = params?.team_id as string;
   const season_year = params?.season_year as string;
@@ -59,7 +60,10 @@ const TeamPlayersPage: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.back}>
-            <button className={styles.backButton}>
+            <button
+              className={styles.backButton}
+              onClick={() => router.push("/statistics")}
+            >
               <span>&lt;</span> Back to Teams
             </button>
           </div>
@@ -73,7 +77,7 @@ const TeamPlayersPage: React.FC = () => {
             players.map((player) => (
               <Link
                 key={player.player_id}
-                href={`/player/${player.player_id}?season=${season_year}`}  // Include season as a query parameter
+                href={`/player/${player.player_id}?season=${season_year}&team_id=${team_id}`}
                 className={styles.cardLink}
               >
                 <div className={styles.card}>
