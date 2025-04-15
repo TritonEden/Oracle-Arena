@@ -191,30 +191,33 @@ const PlayerDetail: React.FC = () => {
             <table className={styles.statsTableContainer}>
               <thead>{avgHeaders}</thead>
               <tbody>
-                {averageStats.map((season, idx) => (
-                  <tr key={idx}>
-                    <td>{season.season}</td>
-                    <td>{season.stats.FGM?.toFixed(1)}</td>
-                    <td>{season.stats.FGA?.toFixed(1)}</td>
-                    <td>{season.stats.FG_PCT?.toFixed(3)}</td>
-                    <td>{season.stats.FG3M?.toFixed(1)}</td>
-                    <td>{season.stats.FG3A?.toFixed(1)}</td>
-                    <td>{season.stats.FG3_PCT?.toFixed(3)}</td>
-                    <td>{season.stats.FTM?.toFixed(1)}</td>
-                    <td>{season.stats.FTA?.toFixed(1)}</td>
-                    <td>{season.stats.FT_PCT?.toFixed(3)}</td>
-                    <td>{season.stats.OREB?.toFixed(1)}</td>
-                    <td>{season.stats.DREB?.toFixed(1)}</td>
-                    <td>{season.stats.REB?.toFixed(1)}</td>
-                    <td>{season.stats.AST?.toFixed(1)}</td>
-                    <td>{season.stats.STL?.toFixed(1)}</td>
-                    <td>{season.stats.BLK?.toFixed(1)}</td>
-                    <td>{season.stats.TO?.toFixed(1)}</td>
-                    <td>{season.stats.PF?.toFixed(1)}</td>
-                    <td>{season.stats.PTS?.toFixed(1)}</td>
-                    <td>{season.stats.PLUS_MINUS?.toFixed(1)}</td>
-                  </tr>
-                ))}
+                {averageStats.map((season, idx) => {
+                  const s = season.stats;
+                  return (
+                    <tr key={idx}>
+                      <td>{season.season}</td>
+                      <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
+                      <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
+                      <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
+                      <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.REB?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.AST?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.STL?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.BLK?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.TO?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.PF?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.PTS?.toFixed(1) ?? "-"}</td>
+                      <td>{s?.PLUS_MINUS?.toFixed(1) ?? "-"}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
