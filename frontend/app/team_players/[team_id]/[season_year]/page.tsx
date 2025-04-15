@@ -27,16 +27,16 @@ const TeamPlayersPage: React.FC = () => {
 
   const [players, setPlayers] = useState<Player[]>([]);
   const [team, setTeam] = useState<Team | null>(null);
+  const [loadingPlayers, setLoadingPlayers] = useState(true);
+  const [loadingTeam, setLoadingTeam] = useState(true);
 
   useEffect(() => {
     if (team_id && season_year) {
-      // Fetch players from the team
       fetch(`http://localhost:8000/api/players_from_team/${team_id}/${season_year}/`)
         .then((res) => res.json())
         .then((data) => setPlayers(data))
-        .catch((err) => console.error("Error fetching players:", err));
+        .finally(() => setLoadingPlayers(false));
 
-      // Fetch all teams and find the one matching team_id and season_year
       fetch("http://localhost:8000/api/teams/")
         .then((res) => res.json())
         .then((data) => {
@@ -47,9 +47,11 @@ const TeamPlayersPage: React.FC = () => {
           );
           setTeam(matched || null);
         })
-        .catch((err) => console.error("Error fetching team data:", err));
+        .finally(() => setLoadingTeam(false));
     }
   }, [team_id, season_year]);
+
+  const isLoading = loadingPlayers || loadingTeam;
 
   const teamTitle = team
     ? `${team.team_location} ${team.team_name} (${team.season_year})`
@@ -67,14 +69,16 @@ const TeamPlayersPage: React.FC = () => {
               <span>&lt;</span> Back to Teams
             </button>
           </div>
-          <h2 className={styles.title}>{teamTitle}</h2>
+          <h2 className={styles.title}>{isLoading ? "Loading..." : teamTitle}</h2>
         </div>
 
-        <div className={styles.grid}>
-          {players.length === 0 ? (
-            <p>No players found.</p>
-          ) : (
-            players.map((player) => (
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : players.length === 0 ? (
+          <p>No players found.</p>
+        ) : (
+          <div className={styles.grid}>
+            {players.map((player) => (
               <Link
                 key={player.player_id}
                 href={`/player/${player.player_id}?season=${season_year}&team_id=${team_id}`}
@@ -92,13 +96,12 @@ const TeamPlayersPage: React.FC = () => {
                   </div>
                   <div className={styles.info}>
                     <h3>{player.first_name} {player.last_name}</h3>
-                    <p>ID: {player.player_id}</p>
                   </div>
                 </div>
               </Link>
-            ))
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

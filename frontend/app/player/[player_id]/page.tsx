@@ -6,28 +6,7 @@ import styles from "./playerDetail.module.css";
 
 interface PlayerGameStats {
   game_id: string;
-  stats: {
-    MIN: string;
-    FGM: number;
-    FGA: number;
-    FG_PCT: number;
-    FG3M: number;
-    FG3A: number;
-    FG3_PCT: number;
-    FTM: number;
-    FTA: number;
-    FT_PCT: number;
-    OREB: number;
-    DREB: number;
-    REB: number;
-    AST: number;
-    STL: number;
-    BLK: number;
-    TO: number;
-    PF: number;
-    PTS: number;
-    PLUS_MINUS: number;
-  };
+  stats: { [key: string]: any };
 }
 
 const PlayerDetail: React.FC = () => {
@@ -36,29 +15,50 @@ const PlayerDetail: React.FC = () => {
   const router = useRouter();
 
   const season_year = searchParams.get("season") ?? "2024-25";
-  const team_id = searchParams.get("team_id"); // Assume team_id is passed in the query string
+  const team_id = searchParams.get("team_id");
 
   const [stats, setStats] = useState<PlayerGameStats[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [loadingName, setLoadingName] = useState(true);
+  const [playerName, setPlayerName] = useState<string>("");
 
+  // Fetch player name
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/players/`)
+      .then((res) => res.json())
+      .then((data) => {
+        const foundPlayer = data.find((p: any) => p.player_id.toString() === player_id);
+        if (foundPlayer) {
+          setPlayerName(`${foundPlayer.first_name} ${foundPlayer.last_name}`);
+        }
+        setLoadingName(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch player name", err);
+        setLoadingName(false);
+      });
+  }, [player_id]);
+
+  // Fetch stats
   useEffect(() => {
     fetch(`http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`)
-      .then((response) => response.json())
+      .then((res) => res.json())
       .then((data) => {
-        const parsedStats: PlayerGameStats[] = data.map((entry: any) => ({
+        const parsed: PlayerGameStats[] = data.map((entry: any) => ({
           game_id: entry.game_id,
           stats: JSON.parse(entry.player_game_stats),
         }));
 
-        const sorted = parsedStats.sort((a, b) => b.game_id.localeCompare(a.game_id));
-        setStats(sorted);
-        setLoading(false);
+        setStats(parsed.sort((a, b) => b.game_id.localeCompare(a.game_id)));
+        setLoadingStats(false);
       })
-      .catch((error) => {
-        console.error("Error fetching player season stats:", error);
-        setLoading(false);
+      .catch((err) => {
+        console.error("Error fetching player season stats:", err);
+        setLoadingStats(false);
       });
   }, [player_id, season_year]);
+
+  const isLoading = loadingStats || loadingName;
 
   return (
     <div className={styles.container}>
@@ -66,53 +66,33 @@ const PlayerDetail: React.FC = () => {
         <div className={styles.back}>
           <button
             className={styles.backButton}
-            onClick={() => {
-              if (team_id) {
-                router.push(`/team_players/${team_id}/${season_year}`);
-              } else {
-                router.push("/statistics"); // fallback
-              }
-            }}
+            onClick={() =>
+              router.push(team_id ? `/team_players/${team_id}/${season_year}` : "/statistics")
+            }
           >
             <span>&lt;</span> Back to Players
           </button>
         </div>
-        <h2>Player {player_id} - Stats for {season_year}</h2>
+        <h2>
+          {isLoading ? "Loading..." : `${playerName} - Stats for ${season_year}`}
+        </h2>
       </div>
-      {loading ? (
+
+      {isLoading ? (
         <p>Loading...</p>
       ) : stats.length > 0 ? (
         <div className={styles.statsTable}>
           <table className={styles.statsTableContainer}>
             <thead>
               <tr>
-                <th className={styles.gameCol}>Game ID</th>
-                <th>MIN</th>
-                <th>FGM</th>
-                <th>FGA</th>
-                <th>FG%</th>
-                <th>FG3M</th>
-                <th>FG3A</th>
-                <th>FG3%</th>
-                <th>FTM</th>
-                <th>FTA</th>
-                <th>FT%</th>
-                <th>OREB</th>
-                <th>DREB</th>
-                <th>REB</th>
-                <th>AST</th>
-                <th>STL</th>
-                <th>BLK</th>
-                <th>TO</th>
-                <th>PF</th>
-                <th>PTS</th>
-                <th>+/-</th>
+                <th>MIN</th><th>FGM</th><th>FGA</th><th>FG%</th><th>FG3M</th><th>FG3A</th><th>FG3%</th>
+                <th>FTM</th><th>FTA</th><th>FT%</th><th>OREB</th><th>DREB</th><th>REB</th>
+                <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
               </tr>
             </thead>
             <tbody>
-            {stats.map((stat, index) => (
-              <tr key={`${stat.game_id}-${index}`}>
-                  <td className={styles.gameCol}>{stat.game_id}</td>
+              {stats.map((stat, index) => (
+                <tr key={index}>
                   <td>{stat.stats.MIN}</td>
                   <td>{stat.stats.FGM}</td>
                   <td>{stat.stats.FGA}</td>
