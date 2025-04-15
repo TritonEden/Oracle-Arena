@@ -41,7 +41,6 @@
 }
 
 .statsTableContainer {
-  border-collapse: collapse;
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid #555;
@@ -62,10 +61,31 @@
   color: #cc9a36;
 }
 
-.gameCol {
+.dateCol {
   position: sticky;
   left: 0;
   background-color: #0a0117;
+}
+
+.averageStats {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  color: #eee;
+}
+
+.averageStats h3 {
+  margin-bottom: 10px;
+}
+
+.averageStats ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.averageStats li {
+  margin-bottom: 5px;
 }
 
 @media (max-width: 1280px) {
@@ -102,25 +122,4 @@
     text-align: center;
     margin: 0 auto;
   }
-}
-
-.averageStats {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: #1f1f1f;
-  border-radius: 8px;
-  color: #eee;
-}
-
-.averageStats h3 {
-  margin-bottom: 10px;
-}
-
-.averageStats ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.averageStats li {
-  margin-bottom: 5px;
 }

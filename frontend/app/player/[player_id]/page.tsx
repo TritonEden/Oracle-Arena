@@ -112,7 +112,7 @@ const PlayerDetail: React.FC = () => {
 
   const fullHeaders = (
     <tr>
-      <th>Date</th>
+      <th className={styles.dateCol}>Date</th>
       <th>MIN</th><th>FGM</th><th>FGA</th><th>FG%</th><th>FG3M</th><th>FG3A</th><th>FG3%</th>
       <th>FTM</th><th>FTA</th><th>FT%</th><th>OREB</th><th>DREB</th><th>REB</th>
       <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
@@ -121,7 +121,7 @@ const PlayerDetail: React.FC = () => {
   
   const avgHeaders = (
     <tr>
-      <th>Season</th>
+      <th className={styles.dateCol}>Season</th>
       <th>FGM</th><th>FGA</th><th>FG%</th><th>FG3M</th><th>FG3A</th><th>FG3%</th>
       <th>FTM</th><th>FTA</th><th>FT%</th><th>OREB</th><th>DREB</th><th>REB</th>
       <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
@@ -156,7 +156,7 @@ const PlayerDetail: React.FC = () => {
               <tbody>
                 {stats.map((stat, index) => (
                   <tr key={index}>
-                    <td>{stat.game_date}</td>
+                    <td className={styles.dateCol}>{stat.game_date}</td>
                     <td>{stat.stats.MIN}</td>
                     <td>{stat.stats.FGM}</td>
                     <td>{stat.stats.FGA}</td>
@@ -195,7 +195,7 @@ const PlayerDetail: React.FC = () => {
                   const s = season.stats;
                   return (
                     <tr key={idx}>
-                      <td>{season.season}</td>
+                      <td className={styles.dateCol}>{season.season}</td>
                       <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
                       <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
                       <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
