@@ -30,24 +30,91 @@ const TeamPlayersPage: React.FC = () => {
   const [loadingPlayers, setLoadingPlayers] = useState(true);
   const [loadingTeam, setLoadingTeam] = useState(true);
 
+  const convertToMinutes = (time: string): number => {
+    const [minutes, seconds] = time.split(":").map((str) => parseFloat(str));
+    return minutes + seconds / 60;
+  };
+
   useEffect(() => {
     if (team_id && season_year) {
-      fetch(`http://localhost:8000/api/players_from_team/${team_id}/${season_year}/`)
-        .then((res) => res.json())
-        .then((data) => setPlayers(data))
-        .finally(() => setLoadingPlayers(false));
+      // Check local storage for cached players data
+      const cachedPlayers = localStorage.getItem(`players-${team_id}-${season_year}`);
+      if (cachedPlayers) {
+        setPlayers(JSON.parse(cachedPlayers));
+        setLoadingPlayers(false);
+      } else {
+        fetch(`http://localhost:8000/api/players_from_team/${team_id}/${season_year}/`)
+          .then((res) => res.json())
+          .then(async (data) => {
+            const enrichedPlayers = await Promise.all(
+              data.map(async (player: Player) => {
+                try {
+                  const res = await fetch(
+                    `http://localhost:8000/api/player_stats_for_season/${player.player_id}/${season_year}/`
+                  );
+                  const stats = await res.json();
+                  const uniqueGames = new Set<string>();
+                  let totalMinutes = 0;
+                  let gamesPlayed = 0;
 
-      fetch("http://localhost:8000/api/teams/")
-        .then((res) => res.json())
-        .then((data) => {
-          const matched = data.find(
-            (t: Team) =>
-              t.team_id.toString() === team_id &&
-              t.season_year === season_year
-          );
-          setTeam(matched || null);
-        })
-        .finally(() => setLoadingTeam(false));
+                  for (const stat of stats) {
+                    const parsed = JSON.parse(stat.player_game_stats);
+                    const allZero = Object.values(parsed).every(
+                      (val) => val === 0 || val === null || val === ""
+                    );
+                    if (stat.game_id.startsWith("2") && !allZero) {
+                      uniqueGames.add(stat.game_id);
+                      gamesPlayed += 1;
+                      const minutesPlayed = convertToMinutes(parsed.MIN);
+                      totalMinutes += minutesPlayed;
+                    }
+                  }
+
+                  const avgMinutes = totalMinutes / Math.max(gamesPlayed, 1);
+                  const maxGameMinutes = 48; 
+                  const fieldTimePct = avgMinutes / maxGameMinutes;
+                  return {
+                    ...player,
+                    gamesPlayed,
+                    fieldTimePct,
+                    popularityScore: gamesPlayed * fieldTimePct,
+                  };
+                } catch (err) {
+                  console.error(`Error fetching stats for player ${player.player_id}`, err);
+                  return {
+                    ...player,
+                    gamesPlayed: 0,
+                    fieldTimePct: 0,
+                    popularityScore: 0,
+                  };
+                }
+              })
+            );
+
+            enrichedPlayers.sort((a, b) => b.popularityScore - a.popularityScore);
+            setPlayers(enrichedPlayers);
+            localStorage.setItem(`players-${team_id}-${season_year}`, JSON.stringify(enrichedPlayers)); // Cache data
+          })
+          .finally(() => setLoadingPlayers(false));
+      }
+
+      // Check local storage for cached team data
+      const cachedTeam = localStorage.getItem(`team-${team_id}-${season_year}`);
+      if (cachedTeam) {
+        setTeam(JSON.parse(cachedTeam));
+        setLoadingTeam(false);
+      } else {
+        fetch("http://localhost:8000/api/teams/")
+          .then((res) => res.json())
+          .then((data) => {
+            const matched = data.find(
+              (t: Team) => t.team_id.toString() === team_id && t.season_year === season_year
+            );
+            setTeam(matched || null);
+            localStorage.setItem(`team-${team_id}-${season_year}`, JSON.stringify(matched || null)); // Cache team data
+          })
+          .finally(() => setLoadingTeam(false));
+      }
     }
   }, [team_id, season_year]);
 

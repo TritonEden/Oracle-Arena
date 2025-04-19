@@ -25,9 +25,10 @@ const PlayerDetail: React.FC = () => {
 
   const [stats, setStats] = useState<PlayerGameStats[]>([]);
   const [averageStats, setAverageStats] = useState<AverageStats[]>([]);
-  const [loadingStats, setLoadingStats] = useState(true);
-  const [loadingName, setLoadingName] = useState(true);
   const [playerName, setPlayerName] = useState<string>("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const gamesPerPage = 10;
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/players/`)
@@ -37,47 +38,68 @@ const PlayerDetail: React.FC = () => {
         if (foundPlayer) {
           setPlayerName(`${foundPlayer.first_name} ${foundPlayer.last_name}`);
         }
-        setLoadingName(false);
       })
       .catch((err) => {
         console.error("Failed to fetch player name", err);
-        setLoadingName(false);
       });
   }, [player_id]);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`);
+        const res = await fetch(
+          `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
+        );
         const data = await res.json();
 
-        const filtered = data
-          .filter((entry: any) => entry.game_id.startsWith("2"))
-          .sort((a: any, b: any) => b.game_id.localeCompare(a.game_id)) // most recent first
-          .slice(0, 10);
+        const uniqueGamesMap = new Map<string, any>();
+        for (const entry of data) {
+          if (entry.game_id.startsWith("2") && !uniqueGamesMap.has(entry.game_id)) {
+            uniqueGamesMap.set(entry.game_id, entry);
+          }
+        }
+
+        const uniqueGames = Array.from(uniqueGamesMap.values());
 
         const withDates: PlayerGameStats[] = await Promise.all(
-          filtered.map(async (entry: any) => {
+          uniqueGames.map(async (entry: any) => {
             const dateRes = await fetch(`http://localhost:8000/api/game/${entry.game_id}/`);
             const dateData = await dateRes.json();
+            const stats = JSON.parse(entry.player_game_stats);
+        
+            // Format the MIN field by splitting and trimming the extra decimals
+            if (stats.MIN) {
+              const [minutes, seconds] = stats.MIN.split(":");
+              stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
+            }
+        
             return {
               game_id: entry.game_id,
-              game_date: dateData[0]?.game_date ?? "1970-01-01", // fallback to oldest date
-              stats: JSON.parse(entry.player_game_stats),
+              game_date: dateData[0]?.game_date ?? "1970-01-01",
+              stats: stats,
             };
           })
         );
 
-        // Sort by game_date descending
-        withDates.sort((a, b) => new Date(b.game_date).getTime() - new Date(a.game_date).getTime());
+        // Helper to check if all stats are zero, null, or empty string
+        const isEmptyStats = (stats: { [key: string]: any }) => {
+          return (
+            !stats ||
+            Object.values(stats).every(
+              (val) => val === 0 || val === null || val === ""
+            )
+          );
+        };
 
-        setStats(withDates.slice(0, 10)); // take 10 most recent games
+        const filteredStats = withDates.filter((entry) => !isEmptyStats(entry.stats));
 
-        setStats(withDates);
+        const sortedByDate = filteredStats.sort(
+          (a, b) => new Date(b.game_date).getTime() - new Date(a.game_date).getTime()
+        );
+
+        setStats(sortedByDate);
       } catch (err) {
         console.error("Error fetching player season stats:", err);
-      } finally {
-        setLoadingStats(false);
       }
     };
 
@@ -108,8 +130,6 @@ const PlayerDetail: React.FC = () => {
     });
   }, [player_id, season_year]);
 
-  const isLoading = loadingStats || loadingName;
-
   const fullHeaders = (
     <tr>
       <th>Date</th>
@@ -118,7 +138,7 @@ const PlayerDetail: React.FC = () => {
       <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
     </tr>
   );
-  
+
   const avgHeaders = (
     <tr>
       <th>Season</th>
@@ -127,6 +147,9 @@ const PlayerDetail: React.FC = () => {
       <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
     </tr>
   );
+
+  const totalPages = Math.ceil(stats.length / gamesPerPage);
+  const currentStats = stats.slice((currentPage - 1) * gamesPerPage, currentPage * gamesPerPage);
 
   return (
     <div className={styles.container}>
@@ -141,88 +164,115 @@ const PlayerDetail: React.FC = () => {
             <span>&lt;</span> Back to Players
           </button>
         </div>
-        <h2>{isLoading ? "Loading..." : `${playerName} - Games for ${season_year}`}</h2>
+        <h2>{`${playerName} - Games for ${season_year}`}</h2>
       </div>
 
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          {/* Recent Games Table */}
-          <h2 style={{ color: "#cc9a36", marginBottom: "10px" }}>Recent Games</h2>
-          <div className={styles.statsTable}>
-            <table className={styles.statsTableContainer}>
-              <thead>{fullHeaders}</thead>
-              <tbody>
-                {stats.map((stat, index) => (
-                  <tr key={index}>
-                    <td>{stat.game_date}</td>
-                    <td>{stat.stats.MIN}</td>
-                    <td>{stat.stats.FGM}</td>
-                    <td>{stat.stats.FGA}</td>
-                    <td>{stat.stats.FG_PCT}</td>
-                    <td>{stat.stats.FG3M}</td>
-                    <td>{stat.stats.FG3A}</td>
-                    <td>{stat.stats.FG3_PCT}</td>
-                    <td>{stat.stats.FTM}</td>
-                    <td>{stat.stats.FTA}</td>
-                    <td>{stat.stats.FT_PCT}</td>
-                    <td>{stat.stats.OREB}</td>
-                    <td>{stat.stats.DREB}</td>
-                    <td>{stat.stats.REB}</td>
-                    <td>{stat.stats.AST}</td>
-                    <td>{stat.stats.STL}</td>
-                    <td>{stat.stats.BLK}</td>
-                    <td>{stat.stats.TO}</td>
-                    <td>{stat.stats.PF}</td>
-                    <td>{stat.stats.PTS}</td>
-                    <td>{stat.stats.PLUS_MINUS}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Recent Games Table */}
+      <h2 style={{ color: "#cc9a36", marginBottom: "10px" }}>Recent Games</h2>
+      <div className={styles.statsTable}>
+        <table className={styles.statsTableContainer}>
+          <thead>{fullHeaders}</thead>
+          <tbody>
+            {currentStats.map((stat, index) => (
+              <tr key={index}>
+                <td>{stat.game_date}</td>
+                <td>
+                  {stat.stats.MIN
+                    ? stat.stats.MIN.split(":")[0] + ":" + stat.stats.MIN.split(":")[1].padStart(2, "0")
+                    : "-"}
+                </td>
+                <td>{stat.stats.FGM}</td>
+                <td>{stat.stats.FGA}</td>
+                <td>{stat.stats.FG_PCT}</td>
+                <td>{stat.stats.FG3M}</td>
+                <td>{stat.stats.FG3A}</td>
+                <td>{stat.stats.FG3_PCT}</td>
+                <td>{stat.stats.FTM}</td>
+                <td>{stat.stats.FTA}</td>
+                <td>{stat.stats.FT_PCT}</td>
+                <td>{stat.stats.OREB}</td>
+                <td>{stat.stats.DREB}</td>
+                <td>{stat.stats.REB}</td>
+                <td>{stat.stats.AST}</td>
+                <td>{stat.stats.STL}</td>
+                <td>{stat.stats.BLK}</td>
+                <td>{stat.stats.TO}</td>
+                <td>{stat.stats.PF}</td>
+                <td>{stat.stats.PTS}</td>
+                <td>{stat.stats.PLUS_MINUS}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-          {/* Season Averages Table */}
-          <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>
-            Season Averages
-          </h2>
-          <div className={styles.statsTable}>
-            <table className={styles.statsTableContainer}>
-              <thead>{avgHeaders}</thead>
-              <tbody>
-                {averageStats.map((season, idx) => {
-                  const s = season.stats;
-                  return (
-                    <tr key={idx}>
-                      <td>{season.season}</td>
-                      <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
-                      <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
-                      <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
-                      <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.REB?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.AST?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.STL?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.BLK?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.TO?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.PF?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.PTS?.toFixed(1) ?? "-"}</td>
-                      <td>{s?.PLUS_MINUS?.toFixed(1) ?? "-"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </>
-      )}
+        {/* Pagination Controls */}
+        <div style={{ marginTop: "10px", textAlign: "center" }}>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={styles.paginationArrow}
+          >
+            &lt;
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`${styles.paginationButton} ${
+                currentPage === i + 1 ? styles.activePage : ""
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={styles.paginationArrow}
+          >
+            &gt;
+          </button>
+        </div>
+      </div>
+
+      {/* Season Averages Table */}
+      <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>Season Averages</h2>
+      <div className={styles.statsTable}>
+        <table className={styles.statsTableContainer}>
+          <thead>{avgHeaders}</thead>
+          <tbody>
+            {averageStats.map((season, idx) => {
+              const s = season.stats;
+              return (
+                <tr key={idx}>
+                  <td>{season.season}</td>
+                  <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.REB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.AST?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.STL?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.BLK?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.TO?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PF?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PTS?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PLUS_MINUS?.toFixed(1) ?? "-"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

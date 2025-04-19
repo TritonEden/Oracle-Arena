@@ -124,3 +124,26 @@
 .averageStats li {
   margin-bottom: 5px;
 }
+
+.paginationButton,
+.paginationArrow {
+  padding: 6px 12px;
+  margin: 0 4px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.paginationArrow[disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.activePage {
+  background-color: #cc9a36;
+  color: white;
+  border-color: #cc9a36;
+}

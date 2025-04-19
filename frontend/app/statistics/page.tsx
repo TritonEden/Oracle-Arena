@@ -20,18 +20,35 @@ const TeamStats: React.FC = () => {
   const [showCurrentSeasonOnly, setShowCurrentSeasonOnly] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/teams/")
-      .then((res) => res.json())
-      .then((data) => {
-        const sorted = [...data].sort(
-          (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
-        );
-        setTeams(sorted);
-        setFilteredTeams(
-          sorted.filter((team) => team.season_year === CURRENT_SEASON)
-        );
-      })
-      .catch((err) => console.error("Error fetching team data:", err));
+    // Check if cached data exists in sessionStorage
+    const cachedData = sessionStorage.getItem("teamsData");
+    if (cachedData) {
+      // Parse and use the cached data
+      const data = JSON.parse(cachedData);
+      const sorted = [...data].sort(
+        (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
+      );
+      setTeams(sorted);
+      setFilteredTeams(
+        sorted.filter((team) => team.season_year === CURRENT_SEASON)
+      );
+    } else {
+      // If no cached data, fetch from API
+      fetch("http://localhost:8000/api/teams/")
+        .then((res) => res.json())
+        .then((data) => {
+          const sorted = [...data].sort(
+            (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
+          );
+          setTeams(sorted);
+          setFilteredTeams(
+            sorted.filter((team) => team.season_year === CURRENT_SEASON)
+          );
+          // Cache the fetched data in sessionStorage
+          sessionStorage.setItem("teamsData", JSON.stringify(data));
+        })
+        .catch((err) => console.error("Error fetching team data:", err));
+    }
   }, []);
 
   const handleFilterChange = () => {
@@ -75,9 +92,6 @@ const TeamStats: React.FC = () => {
                   <img
                     src={getTeamLogoUrl(team.team_id)}
                     alt={`${team.team_name} logo`}
-                    onError={(e) => {
-                      // (e.target as HTMLImageElement).src = "/fallback-logo.png"; // Optional fallback image
-                    }}
                   />
                 </div>
                 <div className={styles.info}>
