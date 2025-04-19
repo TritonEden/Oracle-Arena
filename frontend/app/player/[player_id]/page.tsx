@@ -15,6 +15,17 @@ interface AverageStats {
   stats: { [key: string]: number };
 }
 
+const overUnderOptions = [
+  { label: "PTS", key: "PTS" },
+  { label: "3-PT Made", key: "FG3M" },
+  { label: "REB", key: "REB" },
+  { label: "AST", key: "AST" },
+  { label: "FGM", key: "FGM" },
+  { label: "DREB", key: "DREB" },
+  { label: "REB+AST", key: "REB+AST" },
+  { label: "PTS+REB+AST", key: "PTS+REB+AST" },
+];
+
 const PlayerDetail: React.FC = () => {
   const { player_id } = useParams();
   const searchParams = useSearchParams();
@@ -29,6 +40,9 @@ const PlayerDetail: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const gamesPerPage = 10;
+
+  const [selectedStat, setSelectedStat] = useState("PTS");
+  const [compareValue, setCompareValue] = useState<number | null>(null);
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/players/`)
@@ -66,13 +80,12 @@ const PlayerDetail: React.FC = () => {
             const dateRes = await fetch(`http://localhost:8000/api/game/${entry.game_id}/`);
             const dateData = await dateRes.json();
             const stats = JSON.parse(entry.player_game_stats);
-        
-            // Format the MIN field by splitting and trimming the extra decimals
+
             if (stats.MIN) {
               const [minutes, seconds] = stats.MIN.split(":");
               stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
             }
-        
+
             return {
               game_id: entry.game_id,
               game_date: dateData[0]?.game_date ?? "1970-01-01",
@@ -81,15 +94,8 @@ const PlayerDetail: React.FC = () => {
           })
         );
 
-        // Helper to check if all stats are zero, null, or empty string
-        const isEmptyStats = (stats: { [key: string]: any }) => {
-          return (
-            !stats ||
-            Object.values(stats).every(
-              (val) => val === 0 || val === null || val === ""
-            )
-          );
-        };
+        const isEmptyStats = (stats: { [key: string]: any }) =>
+          !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
 
         const filteredStats = withDates.filter((entry) => !isEmptyStats(entry.stats));
 
@@ -130,26 +136,26 @@ const PlayerDetail: React.FC = () => {
     });
   }, [player_id, season_year]);
 
-  const fullHeaders = (
-    <tr>
-      <th>Date</th>
-      <th>MIN</th><th>FGM</th><th>FGA</th><th>FG%</th><th>FG3M</th><th>FG3A</th><th>FG3%</th>
-      <th>FTM</th><th>FTA</th><th>FT%</th><th>OREB</th><th>DREB</th><th>REB</th>
-      <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
-    </tr>
-  );
-
-  const avgHeaders = (
-    <tr>
-      <th>Season</th>
-      <th>FGM</th><th>FGA</th><th>FG%</th><th>FG3M</th><th>FG3A</th><th>FG3%</th>
-      <th>FTM</th><th>FTA</th><th>FT%</th><th>OREB</th><th>DREB</th><th>REB</th>
-      <th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>PF</th><th>PTS</th><th>+/-</th>
-    </tr>
-  );
-
   const totalPages = Math.ceil(stats.length / gamesPerPage);
   const currentStats = stats.slice((currentPage - 1) * gamesPerPage, currentPage * gamesPerPage);
+
+  const getStatValue = (s: any) => {
+    switch (selectedStat) {
+      case "REB+AST":
+        return (s.REB ?? 0) + (s.AST ?? 0);
+      case "PTS+REB+AST":
+        return (s.PTS ?? 0) + (s.REB ?? 0) + (s.AST ?? 0);
+      default:
+        return s[selectedStat] ?? 0;
+    }
+  };
+
+  const getColorClass = (statVal: number) => {
+    if (compareValue === null || isNaN(compareValue)) return "";
+    if (statVal > compareValue) return styles.green;
+    if (statVal < compareValue) return styles.red;
+    return "";
+  };
 
   return (
     <div className={styles.container}>
@@ -167,111 +173,115 @@ const PlayerDetail: React.FC = () => {
         <h2>{`${playerName} - Games for ${season_year}`}</h2>
       </div>
 
+      {/* Over/Under Controls */}
+      <div style={{ margin: "20px 0" }}>
+        <label>
+          Compare:
+          <select
+            value={selectedStat}
+            onChange={(e) => setSelectedStat(e.target.value)}
+            style={{ margin: "0 10px" }}
+          >
+            {overUnderOptions.map((opt) => (
+              <option key={opt.key} value={opt.key}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Value:
+          <input
+            type="number"
+            value={compareValue ?? ""}
+            onChange={(e) => setCompareValue(e.target.value ? parseFloat(e.target.value) : null)}
+            style={{ marginLeft: "10px", width: "80px" }}
+          />
+        </label>
+      </div>
+
       {/* Recent Games Table */}
       <h2 style={{ color: "#cc9a36", marginBottom: "10px" }}>Recent Games</h2>
       <div className={styles.statsTable}>
         <table className={styles.statsTableContainer}>
-          <thead>{fullHeaders}</thead>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>MIN</th>
+              <th>FGM</th>
+              <th>FGA</th>
+              <th>FG%</th>
+              <th>FG3M</th>
+              <th>FG3A</th>
+              <th>FG3%</th>
+              <th>FTM</th>
+              <th>FTA</th>
+              <th>FT%</th>
+              <th>OREB</th>
+              <th>DREB</th>
+              <th>REB</th>
+              <th>AST</th>
+              <th>STL</th>
+              <th>BLK</th>
+              <th>TO</th>
+              <th>PF</th>
+              <th>PTS</th>
+              <th>+/-</th>
+              <th>{selectedStat}</th>
+            </tr>
+          </thead>
           <tbody>
-            {currentStats.map((stat, index) => (
-              <tr key={index}>
-                <td>{stat.game_date}</td>
-                <td>
-                  {stat.stats.MIN
-                    ? stat.stats.MIN.split(":")[0] + ":" + stat.stats.MIN.split(":")[1].padStart(2, "0")
-                    : "-"}
-                </td>
-                <td>{stat.stats.FGM}</td>
-                <td>{stat.stats.FGA}</td>
-                <td>{stat.stats.FG_PCT}</td>
-                <td>{stat.stats.FG3M}</td>
-                <td>{stat.stats.FG3A}</td>
-                <td>{stat.stats.FG3_PCT}</td>
-                <td>{stat.stats.FTM}</td>
-                <td>{stat.stats.FTA}</td>
-                <td>{stat.stats.FT_PCT}</td>
-                <td>{stat.stats.OREB}</td>
-                <td>{stat.stats.DREB}</td>
-                <td>{stat.stats.REB}</td>
-                <td>{stat.stats.AST}</td>
-                <td>{stat.stats.STL}</td>
-                <td>{stat.stats.BLK}</td>
-                <td>{stat.stats.TO}</td>
-                <td>{stat.stats.PF}</td>
-                <td>{stat.stats.PTS}</td>
-                <td>{stat.stats.PLUS_MINUS}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Pagination Controls */}
-        <div style={{ marginTop: "10px", textAlign: "center" }}>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className={styles.paginationArrow}
-          >
-            &lt;
-          </button>
-
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`${styles.paginationButton} ${
-                currentPage === i + 1 ? styles.activePage : ""
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className={styles.paginationArrow}
-          >
-            &gt;
-          </button>
-        </div>
-      </div>
-
-      {/* Season Averages Table */}
-      <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>Season Averages</h2>
-      <div className={styles.statsTable}>
-        <table className={styles.statsTableContainer}>
-          <thead>{avgHeaders}</thead>
-          <tbody>
-            {averageStats.map((season, idx) => {
-              const s = season.stats;
+            {currentStats.map((stat, index) => {
+              const statVal = getStatValue(stat.stats);
+              const colorClass = getColorClass(statVal);
               return (
-                <tr key={idx}>
-                  <td>{season.season}</td>
-                  <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
-                  <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
-                  <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
-                  <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.REB?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.AST?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.STL?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.BLK?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.TO?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.PF?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.PTS?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.PLUS_MINUS?.toFixed(1) ?? "-"}</td>
+                <tr key={index}>
+                  <td>{stat.game_date}</td>
+                  <td>{stat.stats.MIN ?? "-"}</td>
+                  <td>{stat.stats.FGM}</td>
+                  <td>{stat.stats.FGA}</td>
+                  <td>{stat.stats.FG_PCT}</td>
+                  <td>{stat.stats.FG3M}</td>
+                  <td>{stat.stats.FG3A}</td>
+                  <td>{stat.stats.FG3_PCT}</td>
+                  <td>{stat.stats.FTM}</td>
+                  <td>{stat.stats.FTA}</td>
+                  <td>{stat.stats.FT_PCT}</td>
+                  <td>{stat.stats.OREB}</td>
+                  <td>{stat.stats.DREB}</td>
+                  <td>{stat.stats.REB}</td>
+                  <td>{stat.stats.AST}</td>
+                  <td>{stat.stats.STL}</td>
+                  <td>{stat.stats.BLK}</td>
+                  <td>{stat.stats.TO}</td>
+                  <td>{stat.stats.PF}</td>
+                  <td>{stat.stats.PTS}</td>
+                  <td>{stat.stats.PLUS_MINUS}</td>
+                  <td className={colorClass}>{statVal}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        <div style={{ marginTop: "10px", textAlign: "center" }}>
+          <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className={styles.paginationArrow}>
+            &lt;
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`${styles.paginationButton} ${currentPage === i + 1 ? styles.activePage : ""}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className={styles.paginationArrow}>
+            &gt;
+          </button>
+        </div>
       </div>
     </div>
   );

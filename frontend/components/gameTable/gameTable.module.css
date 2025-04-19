@@ -103,6 +103,16 @@
   margin-right: 5vw;
 }
 
+.noData {
+  width: 100vw;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .gamesTable {
     font-size: 0.7rem;
