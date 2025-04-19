@@ -44,6 +44,31 @@ const PlayerDetail: React.FC = () => {
   const [selectedStat, setSelectedStat] = useState("PTS");
   const [compareValue, setCompareValue] = useState<number | null>(null);
 
+  const avgHeaders = (
+    <tr>
+      <th>Season</th>
+      <th>FGM</th>
+      <th>FGA</th>
+      <th>FG%</th>
+      <th>3PM</th>
+      <th>3PA</th>
+      <th>3P%</th>
+      <th>FTM</th>
+      <th>FTA</th>
+      <th>FT%</th>
+      <th>OREB</th>
+      <th>DREB</th>
+      <th>REB</th>
+      <th>AST</th>
+      <th>STL</th>
+      <th>BLK</th>
+      <th>TO</th>
+      <th>PF</th>
+      <th>PTS</th>
+      <th>+/-</th>
+    </tr>
+  );
+
   useEffect(() => {
     fetch(`http://localhost:8000/api/players/`)
       .then((res) => res.json())
@@ -139,14 +164,16 @@ const PlayerDetail: React.FC = () => {
   const totalPages = Math.ceil(stats.length / gamesPerPage);
   const currentStats = stats.slice((currentPage - 1) * gamesPerPage, currentPage * gamesPerPage);
 
-  const getStatValue = (s: any) => {
+  const getStatValue = (s: any): number => {
+    const toNum = (val: any) => Number(val ?? 0); // Helper for coercion
+  
     switch (selectedStat) {
       case "REB+AST":
-        return (s.REB ?? 0) + (s.AST ?? 0);
+        return toNum(s.REB) + toNum(s.AST);
       case "PTS+REB+AST":
-        return (s.PTS ?? 0) + (s.REB ?? 0) + (s.AST ?? 0);
+        return toNum(s.PTS) + toNum(s.REB) + toNum(s.AST);
       default:
-        return s[selectedStat] ?? 0;
+        return toNum(s[selectedStat]);
     }
   };
 
@@ -177,7 +204,7 @@ const PlayerDetail: React.FC = () => {
       <div style={{ margin: "20px 0" }}>
         <label>
           Compare:
-          <select
+          <select className={styles.formControl}
             value={selectedStat}
             onChange={(e) => setSelectedStat(e.target.value)}
             style={{ margin: "0 10px" }}
@@ -191,8 +218,7 @@ const PlayerDetail: React.FC = () => {
         </label>
         <label>
           Value:
-          <input
-            type="number"
+          <input type="number" className={styles.formControl}
             value={compareValue ?? ""}
             onChange={(e) => setCompareValue(e.target.value ? parseFloat(e.target.value) : null)}
             style={{ marginLeft: "10px", width: "80px" }}
@@ -282,6 +308,43 @@ const PlayerDetail: React.FC = () => {
             &gt;
           </button>
         </div>
+      </div>
+
+      {/* Season Averages Table */}
+      <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>Season Averages</h2>
+      <div className={styles.statsTable}>
+        <table className={styles.statsTableContainer}>
+          <thead>{avgHeaders}</thead>
+          <tbody>
+            {averageStats.map((season, idx) => {
+              const s = season.stats;
+              return (
+                <tr key={idx}>
+                  <td>{season.season}</td>
+                  <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.REB?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.AST?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.STL?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.BLK?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.TO?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PF?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PTS?.toFixed(1) ?? "-"}</td>
+                  <td>{s?.PLUS_MINUS?.toFixed(1) ?? "-"}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -167,3 +167,28 @@
   color: white;
   border-color: #cc9a36;
 }
+
+.green {
+  color: green !important;
+  font-weight: bold;
+}
+
+.red {
+  color: red !important;
+  font-weight: bold;
+}
+
+.formControl {
+  background-color: #0a0117;
+  color: #cc9a36;
+  border: 1px solid #cc9a36;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: #ffaa3b;
+  box-shadow: 0 0 4px #ffaa3b;
+}
