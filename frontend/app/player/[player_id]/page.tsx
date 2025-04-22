@@ -201,7 +201,7 @@ const PlayerDetail: React.FC = () => {
       </div>
 
       {/* Over/Under Controls */}
-      <div style={{ margin: "20px 0" }}>
+      <div className={styles.formContainer} style={{ margin: "20px 0" }}>
         <label>
           Compare:
           <select className={styles.formControl}
@@ -233,6 +233,7 @@ const PlayerDetail: React.FC = () => {
           <thead>
             <tr>
               <th>Date</th>
+              <th>{selectedStat}</th>
               <th>MIN</th>
               <th>FGM</th>
               <th>FGA</th>
@@ -253,7 +254,6 @@ const PlayerDetail: React.FC = () => {
               <th>PF</th>
               <th>PTS</th>
               <th>+/-</th>
-              <th>{selectedStat}</th>
             </tr>
           </thead>
           <tbody>
@@ -263,6 +263,7 @@ const PlayerDetail: React.FC = () => {
               return (
                 <tr key={index}>
                   <td>{stat.game_date}</td>
+                  <td className={colorClass}>{statVal}</td>
                   <td>{stat.stats.MIN ?? "-"}</td>
                   <td>{stat.stats.FGM}</td>
                   <td>{stat.stats.FGA}</td>
@@ -283,31 +284,30 @@ const PlayerDetail: React.FC = () => {
                   <td>{stat.stats.PF}</td>
                   <td>{stat.stats.PTS}</td>
                   <td>{stat.stats.PLUS_MINUS}</td>
-                  <td className={colorClass}>{statVal}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+      </div>
 
-        {/* Pagination */}
-        <div style={{ marginTop: "10px", textAlign: "center" }}>
-          <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className={styles.paginationArrow}>
-            &lt;
+      {/* Pagination */}
+      <div className={styles.pagination}>
+        <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} disabled={currentPage === 1} className={styles.arrowButton}>
+          &lt;
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`${styles.paginationButton} ${currentPage === i + 1 ? styles.activePage : ""}`}
+          >
+            {i + 1}
           </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`${styles.paginationButton} ${currentPage === i + 1 ? styles.activePage : ""}`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className={styles.paginationArrow}>
-            &gt;
-          </button>
-        </div>
+        ))}
+        <button onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className={styles.arrowButton}>
+          &gt;
+        </button>
       </div>
 
       {/* Season Averages Table */}

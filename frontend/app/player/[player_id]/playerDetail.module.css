@@ -43,10 +43,10 @@
 .statsTableContainer {
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid #555;
   width: 100%;
   margin: auto;
   min-width: 900px;
+  padding-bottom: 2vh;
 }
 
 .statsTableContainer th,
@@ -59,6 +59,14 @@
 
 .statsTableContainer th {
   color: #cc9a36;
+}
+
+.statsTableContainer th:first-child,
+.statsTableContainer td:first-child {
+  position: sticky;
+  left: 0;
+  background: #0a0117;
+  z-index: 2;
 }
 
 .dateCol {
@@ -88,14 +96,110 @@
   margin-bottom: 5px;
 }
 
+.averageStats {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  color: #eee;
+}
+
+.averageStats h3 {
+  margin-bottom: 10px;
+}
+
+.averageStats ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.averageStats li {
+  margin-bottom: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.arrowButton {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.arrowButton:hover {
+  transform: scale(1.2);
+  color: #cc9a36;
+}
+
+.arrowButton[disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.paginationButton {
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.paginationButton:hover {
+  transform: scale(1.2);
+  color: #cc9a36;
+}
+
+.activePage {
+  border: 1px solid #cc9a36;
+}
+
+.green {
+  color: green !important;
+  font-weight: bold;
+}
+
+.red {
+  color: red !important;
+  font-weight: bold;
+}
+
+.formContainer {
+  margin: 20px 0;
+  color: white;
+}
+
+.formControl {
+  background-color: #0a0117;
+  color: #cc9a36;
+  border: 1px solid #555;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: #ffaa3b;
+  box-shadow: 0 0 4px #ffaa3b;
+}
+
 @media (max-width: 1280px) {
   .header h2 {
     font-size: 1.5rem;
     margin: auto;
-  }
-
-  .statsTable {
-    overflow-x: auto;
   }
 }
 
@@ -122,73 +226,4 @@
     text-align: center;
     margin: 0 auto;
   }
-}
-
-.averageStats {
-  margin-top: 40px;
-  padding: 20px;
-  background-color: #1f1f1f;
-  border-radius: 8px;
-  color: #eee;
-}
-
-.averageStats h3 {
-  margin-bottom: 10px;
-}
-
-.averageStats ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.averageStats li {
-  margin-bottom: 5px;
-}
-
-.paginationButton,
-.paginationArrow {
-  padding: 6px 12px;
-  margin: 0 4px;
-  background-color: #eee;
-  border: 1px solid #ccc;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #333;
-}
-
-.paginationArrow[disabled] {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-.activePage {
-  background-color: #cc9a36;
-  color: white;
-  border-color: #cc9a36;
-}
-
-.green {
-  color: green !important;
-  font-weight: bold;
-}
-
-.red {
-  color: red !important;
-  font-weight: bold;
-}
-
-.formControl {
-  background-color: #0a0117;
-  color: #cc9a36;
-  border: 1px solid #cc9a36;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.formControl:focus {
-  outline: none;
-  border-color: #ffaa3b;
-  box-shadow: 0 0 4px #ffaa3b;
 }
