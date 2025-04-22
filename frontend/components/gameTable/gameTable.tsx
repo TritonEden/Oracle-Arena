@@ -10,9 +10,11 @@ interface Game {
   homeTeamLogoID: string;
   homeTeamCity: string
   homeTeamName: string;
+  homeTeamAbbreviation: string;
   awayTeamLogoID: string;
   awayTeamCity: string;
   awayTeamName: string;
+  awayTeamAbbreviation: string;
   predictedWinner: string;
   actualWinner: string;
   predictedTotal: string;
@@ -62,14 +64,14 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
         {/* Table Body */}
         {games.length > 0 ? (
           <>
-            {/* Header Row - appears once */}
+            {/* Header Row */}
             <div className={styles.headerRow}>
               <div>Visiting Team</div>
               <div>at</div>
               <div>Home Team</div>
             </div>
 
-            {/* Game rows */}
+            {/* Game Rows */}
             {games.map((game, index) => (
               <div key={index}>
                 <div className={styles.gameRow}>
@@ -81,6 +83,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                       <div>{game.awayTeamCity}</div>
                       <div>{game.awayTeamName}</div>
                     </div>
+                    <div className={styles.teamAbbreviation}>{game.awayTeamAbbreviation}</div>
                   </div>
                   <div className={styles.tableCell}>{game.startTime}</div>
                   <div className={`${styles.tableCell} ${styles.homeTeam}`}>
@@ -88,6 +91,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                       <div>{game.homeTeamCity}</div>
                       <div>{game.homeTeamName}</div>
                     </div>
+                    <div className={styles.teamAbbreviation}>{game.homeTeamAbbreviation}</div>
                   </div>
                   <div className={styles.tableCell}>
                     <img src={`https://cdn.nba.com/logos/nba/${game.homeTeamLogoID}/primary/D/logo.svg`} alt={game.homeTeamName} className={styles.logo} />

@@ -350,9 +350,11 @@ def get_home_away_team_info_on_date(request, game_date):
                 'homeTeamLogoID': home_stats["team_id"],
                 'homeTeamCity': home_stats["team_city"],
                 'homeTeamName': home_stats["team_name"],
+                'homeTeamAbbreviation': home_stats["team_abbreviation"],
                 'awayTeamLogoID': away_stats["team_id"],
                 'awayTeamCity': away_stats["team_city"],
-                'awayTeamName': away_stats["team_name"],   
+                'awayTeamName': away_stats["team_name"],
+                'awayTeamAbbreviation': away_stats["team_abbreviation"],   
                 'predictedWinner': win_prediction,
                 'actualWinner': "--",  # Placeholder for actual winner if you have data
                 'predictedTotal': over_under_prediction,
