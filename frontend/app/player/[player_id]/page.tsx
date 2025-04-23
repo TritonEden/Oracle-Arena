@@ -225,13 +225,12 @@ useEffect(() => {
       </div>
 
       {/* Over/Under Controls */}
-      <div className={styles.formContainer} style={{ margin: "20px 0" }}>
+      <div className={styles.formContainer}>
         <label>
           Compare:
           <select className={styles.formControl}
             value={selectedStat}
             onChange={(e) => setSelectedStat(e.target.value)}
-            style={{ margin: "0 10px" }}
           >
             {overUnderOptions.map((opt) => (
               <option key={opt.key} value={opt.key}>
@@ -242,10 +241,9 @@ useEffect(() => {
         </label>
         <label>
           Value:
-          <input type="number" className={styles.formControl}
+          <input type="number" className={`${styles.formControl} ${styles.numInput}`}
             value={compareValue ?? ""}
             onChange={(e) => setCompareValue(e.target.value ? parseFloat(e.target.value) : null)}
-            style={{ marginLeft: "10px", width: "80px" }}
           />
         </label>
       </div>
@@ -335,7 +333,7 @@ useEffect(() => {
       </div>
 
       {/* Season Averages Table */}
-      <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>Season Averages</h2>
+      <h2 style={{ color: "#cc9a36", marginTop: "40px", marginBottom: "10px" }}>Regular Season Averages</h2>
       <div className={styles.statsTable}>
         <table className={styles.statsTableContainer}>
           <thead>{avgHeaders}</thead>

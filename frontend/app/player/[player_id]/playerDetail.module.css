@@ -4,12 +4,16 @@
   margin: auto;
 }
 
+.container h2 {
+  font-size: 2rem;
+}
+
 .header {
   display: grid;
   grid-template-columns: 1fr 3fr;
   align-items: center;
   position: relative;
-  margin-bottom: 20px;
+  margin: 20px 0 20px;
 }
 
 .back {
@@ -185,9 +189,15 @@
   background-color: #0a0117;
   color: #cc9a36;
   border: 1px solid #555;
+  margin: 0 10px;
   padding: 6px 10px;
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.numInput {
+  margin-left: 10px;
+  width: 80px;
 }
 
 .formControl:focus {
@@ -203,12 +213,13 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .header {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
+    margin: 0 0 20px;
   }
 
   .back {

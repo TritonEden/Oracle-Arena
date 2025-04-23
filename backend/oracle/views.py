@@ -124,7 +124,8 @@ def get_wins_losses(request, team_id, season_year):
             )
             SELECT 
                 COUNT(*) FILTER (WHERE win = 1) AS wins,
-                COUNT(*) FILTER (WHERE win = 0) AS losses
+                COUNT(*) FILTER (WHERE win = 0) AS losses,
+                CONCAT(COUNT(*) FILTER (WHERE win = 1), '-', COUNT(*) FILTER (WHERE win = 0)) AS wl_record
             FROM GameResults;
 
         """, [team_id, season_year])
@@ -133,8 +134,8 @@ def get_wins_losses(request, team_id, season_year):
 
         # Format the result as a list of dictionaries
         result = [dict(zip(columns, row)) for row in rows]
-
-    return JsonResponse(result, safe=False)
+    
+    return JsonResponse(result[0]['wl_record'], safe=False)
 
 #Given a team id and season year, show all of the games and results from that game -- essentially it is how the wins and losses are calculated
 def get_team_game_results(request, team_id, season_year):
@@ -327,38 +328,49 @@ def get_home_away_team_info_on_date(request, game_date):
 
         result = []
         for row in rows:
+            game_id = row[columns.index('game_id')]
+            
             home_stats = {
                 "team_id": row[columns.index('home_team_id')],
                 "team_city": row[columns.index('home_team_location')],
                 "team_name": row[columns.index('home_team_name')],
-                "team_abbreviation": row[columns.index('home_team_abbreviation')]
+                "team_abbreviation": row[columns.index('home_team_abbreviation')],
+                "team_score" : int(row[columns.index('home_score')])
             }
 
             away_stats = {
                 "team_id": row[columns.index('away_team_id')],
                 "team_city": row[columns.index('away_team_location')],
                 "team_name": row[columns.index('away_team_name')],
-                "team_abbreviation": row[columns.index('away_team_abbreviation')]
+                "team_abbreviation": row[columns.index('away_team_abbreviation')],
+                "team_score" : int(row[columns.index('away_score')])
             }
 
-            win_prediction = home_stats["team_name"]  # Placeholder, you can adjust with your prediction logic
-            over_under_prediction = str(float(row[columns.index('home_score')]) + float(row[columns.index('away_score')]))  # Example total
+            winner_prediction = home_stats["team_abbreviation"]  # Placeholder, you can adjust with your prediction logic
+            winner_actual = home_stats["team_abbreviation"] if home_stats["team_score"] > away_stats["team_score"] else away_stats["team_abbreviation"]
+            total_score_prediction = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))  # Example total
+            total_score_actual = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))
 
             # Construct the result dictionary
             game_info = {
                 # 'startTime': row[columns.index('game_date')],
+                'gameID' : game_id,
+                'homeTeamID' : home_stats["team_id"],
                 'homeTeamLogoID': home_stats["team_id"],
                 'homeTeamCity': home_stats["team_city"],
                 'homeTeamName': home_stats["team_name"],
                 'homeTeamAbbreviation': home_stats["team_abbreviation"],
+                'homeTeamScore' : home_stats["team_score"],
+                'awayTeamID' : away_stats["team_id"],
                 'awayTeamLogoID': away_stats["team_id"],
                 'awayTeamCity': away_stats["team_city"],
                 'awayTeamName': away_stats["team_name"],
-                'awayTeamAbbreviation': away_stats["team_abbreviation"],   
-                'predictedWinner': win_prediction,
-                'actualWinner': "--",  # Placeholder for actual winner if you have data
-                'predictedTotal': over_under_prediction,
-                'actualTotal': "--"  # Placeholder for actual total if you have data
+                'awayTeamAbbreviation': away_stats["team_abbreviation"],
+                'awayTeamScore' : away_stats["team_score"],
+                'predictedWinner': winner_prediction,
+                'actualWinner': winner_actual,
+                'predictedTotal': total_score_prediction,
+                'actualTotal': total_score_actual
             }
 
             result.append(game_info)
