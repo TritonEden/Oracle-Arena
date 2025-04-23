@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 # from .views import testfunction, playersummary, gamesummary
 # from .views import presentGameSummary, player_stats, get_player_game_stats
-from .views import get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats, get_players, get_wins_losses, get_game_ids, get_player_stats_for_season, get_player_average_stats_for_season, get_players_from_team, get_team_game_results, get_game, get_home_away_team_info_on_date
+from .views import get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats, get_players, get_wins_losses, get_game_ids, get_player_stats_for_season, get_player_average_stats_for_season, get_players_from_team, get_team_game_results, get_game, get_home_away_team_info_on_date, get_player_game_stats_by_game
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('testfunction/', testfunction),
@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/player_stats/', get_players, name='get_players'),
     # path('api/player_stats/', player_stats, name='player_stats'),
     path("api/player_game_stats/<int:player_id>/", get_player_game_stats, name="player_game_stats"),
+    path("api/player_game_stats_by_game/<int:game_id>/", get_player_game_stats_by_game, name="player_game_stats_by_game"),
     path("api/player_game_stats/", get_all_player_game_stats, name="all_player_game_stats"),
     path("api/game/<int:game_id>/", get_game, name="game"),
     path("api/games/", get_games, name="games"),

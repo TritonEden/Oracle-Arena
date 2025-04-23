@@ -23,12 +23,32 @@ from nba_api.live.nba.endpoints import scoreboard
 def get_player_game_stats(request, player_id):
     with connection.cursor() as cursor:
         # Execute raw SQL query, with paramaterized query to prevent SQL injection
-        cursor.execute("SELECT * FROM player_game_stats WHERE player_id = %s;", [player_id])
+        cursor.execute("""
+                        WITH new_player_game_stats as (
+                            SELECT DISTINCT ON (game_id, player_id) *
+                            FROM player_game_stats
+                        ) SELECT * FROM new_player_game_stats WHERE player_id::INT = %s;
+                       """, [player_id])
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]
         # Get column names
         return JsonResponse([dict(zip(columns, row)) for row in rows], safe=False)
-    
+
+def get_player_game_stats_by_game(request, game_id):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query, with paramaterized query to prevent SQL injection
+        cursor.execute("""
+                        WITH new_player_game_stats as (
+                            SELECT DISTINCT ON (game_id, player_id) *
+                            FROM player_game_stats
+                        ) SELECT * FROM new_player_game_stats WHERE game_id::INT = %s;
+                       """, [game_id])
+        rows = cursor.fetchall()  # Get all rows
+        columns = [col[0] for col in cursor.description]
+        # Get column names
+        return JsonResponse([dict(zip(columns, row)) for row in rows], safe=False)
+
+
 # Gets all player game stats
 def get_game(request, game_id):
     with connection.cursor() as cursor:
@@ -42,7 +62,11 @@ def get_game(request, game_id):
 def get_all_player_game_stats(request):
     with connection.cursor() as cursor:
         # Execute raw SQL query
-        cursor.execute("SELECT * FROM player_game_stats;")
+        cursor.execute("""
+                        WITH new_player_game_stats as (
+                            SELECT DISTINCT ON (game_id, player_id) *
+                            FROM player_game_stats
+                        ) SELECT * FROM new_player_game_stats;""")
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
 
@@ -75,9 +99,12 @@ def get_game_ids(request, date):
 # Gets the wins and losses for the SEASON for a given team and season year
 def get_wins_losses(request, team_id, season_year):
     with connection.cursor() as cursor:
-        # Execute raw SQL query
         cursor.execute("""
-            WITH TeamGames AS (
+            WITH new_player_game_stats as (
+                SELECT DISTINCT ON (game_id, player_id) *
+                FROM player_game_stats
+            ),
+            TeamGames AS (
                 SELECT DISTINCT g.game_id, g.game_date,
                     CASE 
                         WHEN g.home_team_id = t.team_id THEN 'home'
@@ -92,7 +119,7 @@ def get_wins_losses(request, team_id, season_year):
                 SELECT 
                     pgs.game_id, pgs.team_id,
                     SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
-                FROM player_game_stats pgs
+                FROM new_player_game_stats pgs
                 GROUP BY pgs.game_id, pgs.team_id
             ),
             GameResults AS (
@@ -103,7 +130,7 @@ def get_wins_losses(request, team_id, season_year):
                 FROM TeamGames tg
                 JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.home_team_id::INTEGER
                 JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.away_team_id::INTEGER
-                WHERE tg.role = 'home' AND tg.game_id::TEXT LIKE '2%'
+                WHERE tg.role = 'home' AND tg.game_id >= 20000000 AND tg.game_id < 30000000
 
                 UNION
 
@@ -114,35 +141,36 @@ def get_wins_losses(request, team_id, season_year):
                 FROM TeamGames tg
                 JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.away_team_id::INTEGER
                 JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.home_team_id::INTEGER
-                WHERE tg.role = 'away' AND tg.game_id::TEXT LIKE '2%'
-            ),
-            Streak AS (
-                SELECT *, 
-                    ROW_NUMBER() OVER (ORDER BY game_date ASC) AS rn,
-                    SUM(win) OVER (ORDER BY game_date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_wins
-                FROM GameResults
+                WHERE tg.role = 'away' AND tg.game_id >= 20000000 AND tg.game_id < 30000000
             )
             SELECT 
                 COUNT(*) FILTER (WHERE win = 1) AS wins,
                 COUNT(*) FILTER (WHERE win = 0) AS losses,
                 CONCAT(COUNT(*) FILTER (WHERE win = 1), '-', COUNT(*) FILTER (WHERE win = 0)) AS wl_record
             FROM GameResults;
-
         """, [team_id, season_year])
-        rows = cursor.fetchall()  # Get all rows
-        columns = [col[0] for col in cursor.description]  # Get column names
 
-        # Format the result as a list of dictionaries
-        result = [dict(zip(columns, row)) for row in rows]
-    
-    return JsonResponse(result[0]['wl_record'], safe=False)
+        row = cursor.fetchone()  # Get a single row
+        print("Fetched row:", row)
+
+        if not row:
+            return JsonResponse({'wins': 0, 'losses': 0, 'wl_record': '0-0'})  # or 404/empty
+
+        columns = [col[0] for col in cursor.description]
+        result = dict(zip(columns, row))  # Convert to dict
+
+    return JsonResponse(result)
 
 #Given a team id and season year, show all of the games and results from that game -- essentially it is how the wins and losses are calculated
 def get_team_game_results(request, team_id, season_year):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
-            WITH TeamGames AS (
+            WITH new_player_game_stats as (
+                SELECT DISTINCT ON (game_id, player_id) *
+                FROM player_game_stats
+            ),
+            TeamGames AS (
                 SELECT DISTINCT g.game_id, g.game_date,
                     CASE 
                         WHEN g.home_team_id = t.team_id THEN 'home'
@@ -157,7 +185,7 @@ def get_team_game_results(request, team_id, season_year):
                 SELECT 
                     pgs.game_id, pgs.team_id,
                     SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
-                FROM player_game_stats pgs
+                FROM new_player_game_stats pgs
                 GROUP BY pgs.game_id, pgs.team_id
             ),
             GameResults AS (
@@ -239,8 +267,12 @@ def get_player_stats_for_season(request, player_id, season_year):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
+            WITH new_player_game_stats as (
+                SELECT DISTINCT ON (game_id, player_id) *
+                FROM player_game_stats
+            )
             SELECT pgs.game_id, pgs.player_game_stats
-            FROM Player_Game_Stats pgs
+            FROM new_player_game_stats pgs
             JOIN Games g ON g.game_id = pgs.game_id::INTEGER
             WHERE pgs.player_id = %s
             AND g.season_year = %s;
@@ -258,13 +290,17 @@ def get_player_average_stats_for_season(request, player_id, season_year):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
+            WITH new_player_game_stats as (
+                SELECT DISTINCT ON (game_id, player_id) *
+                FROM player_game_stats
+            )
             SELECT 
                 jsonb_object_agg(key, avg_val) AS average_stats
             FROM (
             SELECT 
                 key,
                 AVG((value)::NUMERIC) AS avg_val
-            FROM Player_Game_Stats pgs
+            FROM new_player_game_stats pgs
             JOIN Games g ON g.game_id = pgs.game_id::INTEGER
             CROSS JOIN LATERAL jsonb_each_text(pgs.player_game_stats::JSONB)
             WHERE pgs.player_id::INTEGER = %s::INTEGER
@@ -286,12 +322,16 @@ def get_home_away_team_info_on_date(request, game_date):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
-            WITH TeamScores AS (
+            WITH new_player_game_stats as (
+                SELECT DISTINCT ON (game_id, player_id) *
+                FROM player_game_stats
+            ),
+            TeamScores AS (
                 SELECT 
                     pgs.game_id::TEXT AS game_id,
                     pgs.team_id::TEXT AS team_id,
                     SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
-                FROM player_game_stats pgs
+                FROM new_player_game_stats pgs
                 GROUP BY pgs.game_id, pgs.team_id
             ), 
             GameStats AS (
@@ -307,7 +347,9 @@ def get_home_away_team_info_on_date(request, game_date):
                     COALESCE(hs.team_score, -1) AS home_score,
                     COALESCE(ascore.team_score, -1) AS away_score,
                     g.game_date,
-                    g.game_id AS game_id
+                    g.game_id AS game_id,
+                    g.winner AS winner,
+                    g.total_score_prediction as total_score_prediction
                 FROM games g
                 JOIN teams ht 
                     ON g.home_team_id::TEXT = ht.team_id::TEXT AND g.season_year = ht.season_year
