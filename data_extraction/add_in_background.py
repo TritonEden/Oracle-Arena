@@ -57,6 +57,9 @@ days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days ba
 for current_date in days:
 
     #If we are processing the current date, we do not have stats -- so let's just get the teams and games
+    if current_date > date.today():
+        print(f"Skipping future date (for now) {current_date}.")
+        continue
     if current_date == date.today():
         print("Fetching today's games and teams...")
         games = fetch_with_retry(scoreboard.ScoreBoard)
