@@ -70,96 +70,120 @@ const PlayerDetail: React.FC = () => {
   );
 
   useEffect(() => {
+    const cacheKey = `playerName-${player_id}`;
+    const cachedName = sessionStorage.getItem(cacheKey);
+    if (cachedName) {
+      setPlayerName(cachedName);
+      return;
+    }
+  
     fetch(`http://localhost:8000/api/players/`)
       .then((res) => res.json())
       .then((data) => {
         const foundPlayer = data.find((p: any) => p.player_id.toString() === player_id);
         if (foundPlayer) {
-          setPlayerName(`${foundPlayer.first_name} ${foundPlayer.last_name}`);
+          const fullName = `${foundPlayer.first_name} ${foundPlayer.last_name}`;
+          setPlayerName(fullName);
+          sessionStorage.setItem(cacheKey, fullName);
         }
       })
-      .catch((err) => {
-        console.error("Failed to fetch player name", err);
-      });
+      .catch((err) => console.error("Failed to fetch player name", err));
   }, [player_id]);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
-        );
-        const data = await res.json();
+  const cacheKey = `playerStats-${player_id}-${season_year}`;
+  const cachedStats = sessionStorage.getItem(cacheKey);
 
-        const uniqueGamesMap = new Map<string, any>();
-        for (const entry of data) {
-          if (entry.game_id.startsWith("2") && !uniqueGamesMap.has(entry.game_id)) {
-            uniqueGamesMap.set(entry.game_id, entry);
-          }
+  const fetchStats = async () => {
+    if (cachedStats) {
+      setStats(JSON.parse(cachedStats));
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
+      );
+      const data = await res.json();
+
+      const uniqueGamesMap = new Map<string, any>();
+      for (const entry of data) {
+        if (entry.game_id.startsWith("2") && !uniqueGamesMap.has(entry.game_id)) {
+          uniqueGamesMap.set(entry.game_id, entry);
         }
-
-        const uniqueGames = Array.from(uniqueGamesMap.values());
-
-        const withDates: PlayerGameStats[] = await Promise.all(
-          uniqueGames.map(async (entry: any) => {
-            const dateRes = await fetch(`http://localhost:8000/api/game/${entry.game_id}/`);
-            const dateData = await dateRes.json();
-            const stats = JSON.parse(entry.player_game_stats);
-
-            if (stats.MIN) {
-              const [minutes, seconds] = stats.MIN.split(":");
-              stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
-            }
-
-            return {
-              game_id: entry.game_id,
-              game_date: dateData[0]?.game_date ?? "1970-01-01",
-              stats: stats,
-            };
-          })
-        );
-
-        const isEmptyStats = (stats: { [key: string]: any }) =>
-          !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
-
-        const filteredStats = withDates.filter((entry) => !isEmptyStats(entry.stats));
-
-        const sortedByDate = filteredStats.sort(
-          (a, b) => new Date(b.game_date).getTime() - new Date(a.game_date).getTime()
-        );
-
-        setStats(sortedByDate);
-      } catch (err) {
-        console.error("Error fetching player season stats:", err);
       }
-    };
 
-    fetchStats();
-  }, [player_id, season_year]);
+      const uniqueGames = Array.from(uniqueGamesMap.values());
 
-  useEffect(() => {
-    const years = Array.from({ length: 5 }, (_, i) => {
-      const [start, end] = season_year.split("-");
-      const prevStart = parseInt(start) - i;
-      return `${prevStart}-${(parseInt(end) - i).toString().padStart(2, "0")}`;
-    });
+      const withDates: PlayerGameStats[] = await Promise.all(
+        uniqueGames.map(async (entry: any) => {
+          const dateRes = await fetch(`http://localhost:8000/api/game/${entry.game_id}/`);
+          const dateData = await dateRes.json();
+          const stats = JSON.parse(entry.player_game_stats);
 
-    Promise.all(
-      years.map((year) =>
-        fetch(`http://localhost:8000/api/player_average_stats_for_season/${player_id}/${year}/`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.length > 0) {
-              return { season: year, stats: JSON.parse(data[0].average_stats) };
-            }
-          })
-          .catch(() => null)
-      )
-    ).then((results) => {
-      const validResults = results.filter((item) => item !== null) as AverageStats[];
-      setAverageStats(validResults);
-    });
-  }, [player_id, season_year]);
+          if (stats.MIN) {
+            const [minutes, seconds] = stats.MIN.split(":");
+            stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
+          }
+
+          return {
+            game_id: entry.game_id,
+            game_date: dateData[0]?.game_date ?? "1970-01-01",
+            stats: stats,
+          };
+        })
+      );
+
+      const isEmptyStats = (stats: { [key: string]: any }) =>
+        !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
+
+      const filteredStats = withDates.filter((entry) => !isEmptyStats(entry.stats));
+      const sortedByDate = filteredStats.sort(
+        (a, b) => new Date(b.game_date).getTime() - new Date(a.game_date).getTime()
+      );
+
+      setStats(sortedByDate);
+      sessionStorage.setItem(cacheKey, JSON.stringify(sortedByDate));
+    } catch (err) {
+      console.error("Error fetching player season stats:", err);
+    }
+  };
+
+  fetchStats();
+}, [player_id, season_year]);
+
+useEffect(() => {
+  const cacheKey = `playerAvgStats-${player_id}-${season_year}`;
+  const cachedAverages = sessionStorage.getItem(cacheKey);
+
+  const years = Array.from({ length: 5 }, (_, i) => {
+    const [start, end] = season_year.split("-");
+    const prevStart = parseInt(start) - i;
+    return `${prevStart}-${(parseInt(end) - i).toString().padStart(2, "0")}`;
+  });
+
+  if (cachedAverages) {
+    setAverageStats(JSON.parse(cachedAverages));
+    return;
+  }
+
+  Promise.all(
+    years.map((year) =>
+      fetch(`http://localhost:8000/api/player_average_stats_for_season/${player_id}/${year}/`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length > 0) {
+            return { season: year, stats: JSON.parse(data[0].average_stats) };
+          }
+        })
+        .catch(() => null)
+    )
+  ).then((results) => {
+    const validResults = results.filter((item) => item !== null) as AverageStats[];
+    setAverageStats(validResults);
+    sessionStorage.setItem(cacheKey, JSON.stringify(validResults));
+  });
+}, [player_id, season_year]);
 
   const totalPages = Math.ceil(stats.length / gamesPerPage);
   const currentStats = stats.slice((currentPage - 1) * gamesPerPage, currentPage * gamesPerPage);
