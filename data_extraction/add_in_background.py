@@ -13,10 +13,19 @@ import warnings
 import random
 import sqlalchemy.exc as sa_exc
 
-# with open("../backend/.env", "r") as f:
-    # password = f.readlines()[0].strip()
-# assert os.path.exists("../backend/.env"), "Please create a .env file in the backend directory."
-password = os.getenv('PASSWORD', '')
+#Take an argument from the command line for local flag
+if len(sys.argv) > 1:
+    local = sys.argv[1].lower() == '--local'
+else:
+    local = False
+
+assert os.path.exists(".env"), "Please create a .env file in the Oracle-Arena directory."
+
+if local:
+    with open(".env", "r") as f:
+        password = f.readlines()[3].strip().split("=")[1].strip()
+else:
+    password = os.getenv('PASSWORD', '')
 
 def safe_row_insert(df, table_name, engine):
     with warnings.catch_warnings():
@@ -43,7 +52,7 @@ players_df = pd.DataFrame(columns=['player_id', 'player_first_name', 'player_las
 games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id'])
 player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 'player_game_stats'])
 
-days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days back, 6 days forward
+days = [date.today() - timedelta(days=i) for i in range(10, 13, 1)] #Do 5 days back, 6 days forward
 
 for current_date in days:
 
@@ -67,7 +76,10 @@ for current_date in days:
 
         DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
 
+        print("Saving today's teams and games to the database...")
+
         engine = create_engine(DATABASE_URL)
+        print("Engine created")
         # Save the DataFrames to the database row by row
 
         #Change the name of some columns for the players and change it to new_players_df
@@ -102,13 +114,107 @@ for current_date in days:
         try:
             player_stats = boxscore.get_data_frames()[0]
             team_stats = boxscore.get_data_frames()[1]
+
+            if player_stats.empty or team_stats.empty:
+                boxscore = fetch_with_retry(endpoints.boxscoretraditionalv3.BoxScoreTraditionalV3, game_id=game_id)
+                print("Fetching BoxScoreTraditionalV3")
+                player_stats = boxscore.get_data_frames()[0]
+                team_stats = boxscore.get_data_frames()[1]
+                #Rename the columns to match the old ones
+                player_stats["PLAYER_NAME"] = player_stats["firstName"] + " " + player_stats["familyName"]
+                player_stats = player_stats.rename(columns={
+                    "gameId": "GAME_ID",
+                    "personId": "PLAYER_ID",
+                    "teamId": "TEAM_ID",
+                    "teamCity": "TEAM_CITY",
+                    "teamName": "TEAM_NAME",
+                    "teamTricode": "TEAM_ABBREVIATION",
+                    "minutes": "MIN",
+                    "fieldGoalsMade": "FGM",
+                    "fieldGoalsAttempted": "FGA",
+                    "fieldGoalsPercentage": "FG_PCT",
+                    "threePointersMade": "FG3M",
+                    "threePointersAttempted": "FG3A",
+                    "threePointersPercentage": "FG3_PCT",
+                    "freeThrowsMade": "FTM",
+                    "freeThrowsAttempted": "FTA",
+                    "freeThrowsPercentage": "FT_PCT",
+                    "reboundsOffensive": "OREB",
+                    "reboundsDefensive": "DREB",
+                    "reboundsTotal": "REB",
+                    "assists": "AST",
+                    "steals": "STL",
+                    "blocks": "BLK",
+                    "turnovers": "TO",
+                    "foulsPersonal": "PF",
+                    "points": "PTS",
+                    "plusMinusPoints": "PLUS_MINUS"
+                })
+
+                team_stats = team_stats.rename(columns={
+                    "gameId": "GAME_ID",
+                    "teamId": "TEAM_ID",
+                    "teamCity": "TEAM_CITY",
+                    "teamName": "TEAM_NAME",
+                    "teamTricode": "TEAM_ABBREVIATION",
+                    "minutes": "MIN",
+                    "fieldGoalsMade": "FGM",
+                    "fieldGoalsAttempted": "FGA",
+                    "fieldGoalsPercentage": "FG_PCT",
+                    "threePointersMade": "FG3M",
+                    "threePointersAttempted": "FG3A",
+                    "threePointersPercentage": "FG3_PCT",
+                    "freeThrowsMade": "FTM",
+                    "freeThrowsAttempted": "FTA",
+                    "freeThrowsPercentage": "FT_PCT",
+                    "reboundsOffensive": "OREB",
+                    "reboundsDefensive": "DREB",
+                    "reboundsTotal": "REB",
+                    "assists": "AST",
+                    "steals": "STL",
+                    "blocks": "BLK",
+                    "turnovers": "TO",
+                    "foulsPersonal": "PF",
+                    "points": "PTS"
+                })
+
+                #For player_stats, if MIN is an empty string, set it to null and then all of the other stats to null
+                player_stats.loc[player_stats["MIN"] == "", "MIN"] = None
+
+                for i, row in player_stats.iterrows():
+                    if row["MIN"] is None:
+                        player_stats.at[i, "FGM"] = None
+                        player_stats.at[i, "FGA"] = None
+                        player_stats.at[i, "FG_PCT"] = None
+                        player_stats.at[i, "FG3M"] = None
+                        player_stats.at[i, "FG3A"] = None
+                        player_stats.at[i, "FG3_PCT"] = None
+                        player_stats.at[i, "FTM"] = None
+                        player_stats.at[i, "FTA"] = None
+                        player_stats.at[i, "FT_PCT"] = None
+                        player_stats.at[i, "OREB"] = None
+                        player_stats.at[i, "DREB"] = None
+                        player_stats.at[i, "REB"] = None
+                        player_stats.at[i, "AST"] = None
+                        player_stats.at[i, "STL"] = None
+                        player_stats.at[i, "BLK"] = None
+                        player_stats.at[i, "TO"] = None
+                        player_stats.at[i, "PF"] = None
+                        player_stats.at[i, "PTS"] = None
+                        player_stats.at[i, "PLUS_MINUS"] = None
+
             teams_df = fill_teams_df(game_id, team_stats, teams_df)
+            print("Got teams_df")
             players_df = fill_players_df(player_stats, players_df)
+            print("Got players_df")
             games_df = fill_games_df(game_id, current_date, games_df)
+            print("Got games_df")
             player_game_stats_df = get_player_game_stats(game_id, player_stats, player_game_stats_df)
+            print("Got player_game_stats_df")
 
             #Go thru the player_game_stats_df and all the jsons. In those jsons, replace any Nans to None
             player_game_stats_df = json_fix(player_game_stats_df)
+            print("Got player_game_stats_df with json fix")
 
             # Save the DataFrames to CSV files
             teams_df.to_csv("teams-tmp.csv", index=False)
@@ -136,10 +242,11 @@ for current_date in days:
             df_games["game_id"] = df_games["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
             df_stats["game_id"] = df_stats["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
 
-
+            print("Saving stats to the database...")
             DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
 
             engine = create_engine(DATABASE_URL)
+            print("Engine created")
             # Save the DataFrames to the database row by row
 
             #Change the name of some columns for the players and change it to new_players_df
