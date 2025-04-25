@@ -89,10 +89,13 @@ const TeamStats: React.FC = () => {
             >
               <div className={styles.card}>
                 <div className={styles.imagePlaceholder}>
-                  <img
-                    src={getTeamLogoUrl(team.team_id)}
-                    alt={`${team.team_name} logo`}
-                  />
+                <img
+                  src={getTeamLogoUrl(team.team_id)}
+                  alt={`${team.team_name} logo`}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "/images/logo.png";
+                  }}
+                />
                 </div>
                 <div className={styles.info}>
                   <p className={styles.abbreviation}>
