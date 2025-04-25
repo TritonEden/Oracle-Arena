@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
     return (
         <nav className={`${styles.navbar} ${isVisible ? styles.show : styles.hide}`}>
             <div className={styles.navContainer}>
-                <Link href="home">
+                <Link href="/home">
                     <Image
                         src="/images/LogoWithText.png"
                         width={300}
