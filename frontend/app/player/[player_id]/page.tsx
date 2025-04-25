@@ -108,7 +108,9 @@ const PlayerDetail: React.FC = () => {
 
       const uniqueGamesMap = new Map<string, any>();
       for (const entry of data) {
-        if (entry.game_id.startsWith("2") && !uniqueGamesMap.has(entry.game_id)) {
+        if ((entry.game_id.startsWith("2") || 
+            entry.game_id.startsWith("4")) && 
+            !uniqueGamesMap.has(entry.game_id)) {
           uniqueGamesMap.set(entry.game_id, entry);
         }
       }
@@ -282,20 +284,25 @@ useEffect(() => {
             {currentStats.map((stat, index) => {
               const statVal = getStatValue(stat.stats);
               const colorClass = getColorClass(statVal);
+              const isPlayoffGame = (game_id?: string): boolean => {
+                return game_id?.startsWith("4") ?? false;
+              };
               return (
                 <tr key={index}>
-                  <td>{stat.game_date}</td>
+                  <td className={stat?.game_id && isPlayoffGame(stat.game_id) ? styles.playoffDate : ""}>
+                    {stat?.game_date}
+                  </td>
                   <td className={colorClass}>{statVal}</td>
                   <td>{stat.stats.MIN ?? "-"}</td>
                   <td>{stat.stats.FGM}</td>
                   <td>{stat.stats.FGA}</td>
-                  <td>{stat.stats.FG_PCT}</td>
+                  <td>{stat.stats.FG_PCT !== undefined ? stat.stats.FG_PCT.toFixed(3) : "-"}</td>
                   <td>{stat.stats.FG3M}</td>
                   <td>{stat.stats.FG3A}</td>
-                  <td>{stat.stats.FG3_PCT}</td>
+                  <td>{stat.stats.FG3_PCT !== undefined ? stat.stats.FG3_PCT.toFixed(3) : "-"}</td>
                   <td>{stat.stats.FTM}</td>
                   <td>{stat.stats.FTA}</td>
-                  <td>{stat.stats.FT_PCT}</td>
+                  <td>{stat.stats.FT_PCT !== undefined ? stat.stats.FT_PCT.toFixed(3) : "-"}</td>
                   <td>{stat.stats.OREB}</td>
                   <td>{stat.stats.DREB}</td>
                   <td>{stat.stats.REB}</td>
@@ -345,13 +352,13 @@ useEffect(() => {
                   <td>{season.season}</td>
                   <td>{s?.FGM?.toFixed(1) ?? "-"}</td>
                   <td>{s?.FGA?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FG_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FG_PCT ? s.FG_PCT.toFixed(3) : "-"}</td>
                   <td>{s?.FG3M?.toFixed(1) ?? "-"}</td>
                   <td>{s?.FG3A?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FG3_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FG3_PCT ? s.FG3_PCT.toFixed(3) : "-"}</td>
                   <td>{s?.FTM?.toFixed(1) ?? "-"}</td>
                   <td>{s?.FTA?.toFixed(1) ?? "-"}</td>
-                  <td>{s?.FT_PCT?.toFixed(3) ?? "-"}</td>
+                  <td>{s?.FT_PCT ? s.FT_PCT.toFixed(3) : "-"}</td>
                   <td>{s?.OREB?.toFixed(1) ?? "-"}</td>
                   <td>{s?.DREB?.toFixed(1) ?? "-"}</td>
                   <td>{s?.REB?.toFixed(1) ?? "-"}</td>

@@ -238,3 +238,9 @@
     margin: 0 auto;
   }
 }
+
+.playoffDate {
+  color: #ffd700 !important;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.5) !important;
+}

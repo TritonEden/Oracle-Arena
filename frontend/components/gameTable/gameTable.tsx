@@ -54,14 +54,27 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
       // Try getting cached data
       const cached = localStorage.getItem(cacheKey);
+      const isTodayOrFuture = selectedDate >= new Date(new Date().toDateString());
+
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
-          setGames(parsed);
-          setLoading(false);
-          return;
+          const cacheAge = Date.now() - parsed.timestamp;
+          const oneDay = 24 * 60 * 60 * 1000;
+        
+          if (
+            parsed &&
+            Array.isArray(parsed.data) &&
+            (!isTodayOrFuture || cacheAge < oneDay)
+          ) {
+            setGames(parsed.data);
+            setLoading(false);
+            return;
+          } else {
+            localStorage.removeItem(cacheKey); // clean up invalid or stale cache
+          }
         } catch (err) {
-          console.warn("Corrupt cache, refetching from API...");
+          console.warn("Error parsing cache:", err);
           localStorage.removeItem(cacheKey);
         }
       }
@@ -77,7 +90,10 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
         }
         const data: Game[] = await response.json();
         setGames(data);
-        localStorage.setItem(cacheKey, JSON.stringify(data)); // Cache result
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({ timestamp: Date.now(), data })
+        );
 
         const newWinLoss: { [teamId: number]: string } = {};
         for (const game of data) {
