@@ -149,7 +149,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                         <div>{game.awayTeamName}</div>
                       </div>
                       <div className={styles.teamAbbreviation}>{game.awayTeamAbbreviation}</div>
-                      <div className={styles.WLRecord}>{winLossRecords[game.awayTeamID]} 10 - 10</div>
+                      <div className={styles.WLRecord}>{winLossRecords[game.awayTeamID]}</div>
                     </div>
                   </div>
                   <div className={styles.timeAndScore}>
@@ -163,7 +163,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                         <div>{game.homeTeamName}</div>
                       </div>
                       <div className={styles.teamAbbreviation}>{game.homeTeamAbbreviation}</div>
-                      <div className={styles.WLRecord}>{winLossRecords[game.homeTeamID]} 10 - 10</div>
+                      <div className={styles.WLRecord}>{winLossRecords[game.homeTeamID]}</div>
                     </div>
                   </div>
                   <div className={styles.tableCell}>
