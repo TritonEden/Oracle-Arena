@@ -131,7 +131,7 @@ def fill_games_df(game_id, game_date, games_df):
     # Convert the data to a data frame and concatenate it with the existing games_df
     new_row = pd.DataFrame([
         {'game_id': game_id, 'season_year': season_year, 'game_date': game_date,
-        'home_team_id': home_team_id, 'away_team_id': away_team_id, 'game_time': 'In the Past'}
+        'home_team_id': home_team_id, 'away_team_id': away_team_id, 'game_time': 'Final'}
     ])
 
     # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
@@ -362,6 +362,8 @@ def fill_games_df_future(games, games_df):
         
     return games_df
 
+
+# Since games are already in the database, we may need to update the game_time column like this
 def insert_date_in_db(games_df, engine):
 
     for _, row in games_df.iterrows():
