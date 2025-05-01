@@ -73,6 +73,26 @@
   width: 11vw;
 }
 
+.WLRecord {
+  font-size: 1.2rem;
+  padding-top: 1vh;
+  color: #a0a0a0;
+}
+
+.timeAndScore {
+  border: none;
+}
+
+.startTime {
+  font-size: 1.3rem;
+  padding: 0 1.5vw 0 1.5vw;
+}
+
+.score {
+  font-size: 1rem;
+  padding-top: 2vh;
+}
+
 .dataLabelRow {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -93,6 +113,7 @@
 
 .displayData {
   padding-bottom: 5vh;
+  color: #a0a0a0;
 }
 
 .tableCell {
@@ -141,6 +162,31 @@
 
   .logo {
     width: 14vw;
+  }
+
+  .awayTeam {
+    border: none;
+  }
+  
+  .homeTeam {
+    border: none;
+  }
+
+  .WLRecord {
+    font-size: 1rem;
+  }
+
+  .timeAndScore {
+    border-left: 1px solid #555;
+    border-right: 1px solid #555; 
+  }
+
+  .startTime {
+    font-size: 1rem;
+  }
+
+  .score {
+    font-size: 0.8rem;
   }
 
   .tableCell {

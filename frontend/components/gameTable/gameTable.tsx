@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import styles from "./gameTable.module.css";
 
 interface Game {
-  startTime: number;
+  seasonYear: string;
+  startTime: string;
   homeTeamID: number;
   homeTeamLogoID: string;
   homeTeamCity: string;
@@ -36,7 +37,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
     try {
       const response = await fetch(`http://localhost:8000/api/wins_losses/${teamId}/${seasonYear}`);
       const data = await response.json();
-      return data;
+      return data.wl_record;
     } catch (error) {
       console.error(`Error fetching W-L for team ${teamId}:`, error);
       return "--";
@@ -48,7 +49,6 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   useEffect(() => {
     const fetchGames = async () => {
       const sqlDate = selectedDate.toISOString().split("T")[0];
-      const seasonYear = selectedDate.getFullYear().toString();
 
       const cacheKey = getCacheKey(selectedDate);
 
@@ -100,10 +100,10 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
           const { homeTeamID, awayTeamID } = game;
 
           if (!newWinLoss[homeTeamID]) {
-            newWinLoss[homeTeamID] = await fetchWinLoss(homeTeamID, seasonYear);
+            newWinLoss[homeTeamID] = await fetchWinLoss(homeTeamID, game.seasonYear);
           }
           if (!newWinLoss[awayTeamID]) {
-            newWinLoss[awayTeamID] = await fetchWinLoss(awayTeamID, seasonYear);
+            newWinLoss[awayTeamID] = await fetchWinLoss(awayTeamID, game.seasonYear);
           }
         }
 
@@ -149,11 +149,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                         <div>{game.awayTeamName}</div>
                       </div>
                       <div className={styles.teamAbbreviation}>{game.awayTeamAbbreviation}</div>
-                      <div className={styles.WLRecord}>{winLossRecords[game.awayTeamID]}</div>
+                      <div className={styles.WLRecord}>{winLossRecords[game.awayTeamID]} 10 - 10</div>
                     </div>
                   </div>
                   <div className={styles.timeAndScore}>
-                    <div className={styles.tableCell}>{game.startTime}</div>
+                    <div className={styles.startTime}>{game.startTime}</div>
                     <div className={styles.score}>{game.awayTeamScore} - {game.homeTeamScore}</div>
                   </div>
                   <div className={`${styles.tableCell} ${styles.homeTeam}`}>
@@ -163,7 +163,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                         <div>{game.homeTeamName}</div>
                       </div>
                       <div className={styles.teamAbbreviation}>{game.homeTeamAbbreviation}</div>
-                      <div className={styles.WLRecord}>{winLossRecords[game.homeTeamID]}</div>
+                      <div className={styles.WLRecord}>{winLossRecords[game.homeTeamID]} 10 - 10</div>
                     </div>
                   </div>
                   <div className={styles.tableCell}>

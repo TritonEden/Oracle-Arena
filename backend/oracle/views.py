@@ -146,7 +146,7 @@ def get_wins_losses(request, team_id, season_year):
             SELECT 
                 COUNT(*) FILTER (WHERE win = 1) AS wins,
                 COUNT(*) FILTER (WHERE win = 0) AS losses,
-                CONCAT(COUNT(*) FILTER (WHERE win = 1), '-', COUNT(*) FILTER (WHERE win = 0)) AS wl_record
+                CONCAT(COUNT(*) FILTER (WHERE win = 1), ' - ', COUNT(*) FILTER (WHERE win = 0)) AS wl_record
             FROM GameResults;
         """, [team_id, season_year])
 
@@ -154,7 +154,7 @@ def get_wins_losses(request, team_id, season_year):
         print("Fetched row:", row)
 
         if not row:
-            return JsonResponse({'wins': 0, 'losses': 0, 'wl_record': '0-0'})  # or 404/empty
+            return JsonResponse({'wins': 0, 'losses': 0, 'wl_record': '0 - 0'})  # or 404/empty
 
         columns = [col[0] for col in cursor.description]
         result = dict(zip(columns, row))  # Convert to dict
@@ -347,6 +347,7 @@ def get_home_away_team_info_on_date(request, game_date):
                     COALESCE(hs.team_score, -1) AS home_score,
                     COALESCE(ascore.team_score, -1) AS away_score,
                     g.game_date,
+                    g.season_year AS season_year,
                     g.game_id AS game_id,
                     g.game_time AS game_time,
                     g.winner AS winner,
@@ -372,6 +373,8 @@ def get_home_away_team_info_on_date(request, game_date):
         result = []
         for row in rows:
             game_id = row[columns.index('game_id')]
+            season_year = row[columns.index('season_year')]
+            game_time = row[columns.index('game_time')]
             
             home_stats = {
                 "team_id": row[columns.index('home_team_id')],
@@ -396,8 +399,9 @@ def get_home_away_team_info_on_date(request, game_date):
 
             # Construct the result dictionary
             game_info = {
-                # 'startTime': row[columns.index('game_date')],
                 'gameID' : game_id,
+                'seasonYear' : season_year,
+                'startTime' : game_time,
                 'homeTeamID' : home_stats["team_id"],
                 'homeTeamLogoID': home_stats["team_id"],
                 'homeTeamCity': home_stats["team_city"],
