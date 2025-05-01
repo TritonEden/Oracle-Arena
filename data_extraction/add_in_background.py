@@ -49,7 +49,7 @@ def safe_row_insert(df, table_name, engine):
 # Initialize DataFrames
 teams_df = pd.DataFrame(columns=['team_id', 'season_year', 'team_location', 'team_name', 'team_abbreviation'])
 players_df = pd.DataFrame(columns=['player_id', 'player_first_name', 'player_last_name'])
-games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id'])
+games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id', 'game_time'])
 player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 'player_game_stats'])
 
 days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days back, 6 days forward
@@ -58,7 +58,43 @@ for current_date in days:
 
     #If we are processing the current date, we do not have stats -- so let's just get the teams and games
     if current_date > date.today():
-        print(f"Skipping future date (for now) {current_date}.")
+        print(f"Adding future date: {current_date}.")
+        # Get the schedule for that day
+        games = endpoints.scoreboardv2.ScoreboardV2(game_date=current_date)
+
+        if games is None:
+            print(f"Error fetching future date's games: 100. Skipping.")
+            continue
+
+        games = games.game_header.get_data_frame()
+
+                
+        df_games = fill_games_df_future(games, games_df)
+
+        df_games = df_games.drop_duplicates()
+
+        if not check_dfs([df_games]):
+            print("DataFrames have null values. Skipping")
+            continue
+
+        df_games = df_games.astype({"game_id": str})
+        df_games["game_id"] = df_games["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
+
+        DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
+
+        print("Saving future date's teams and games to the database...")
+
+        engine = create_engine(DATABASE_URL)
+        print("Engine created")
+        # Save the DataFrames to the database row by row
+
+        #Change the name of some columns for the players and change it to new_players_df
+        safe_row_insert(df_games, 'games', engine)
+        
+        #If a date is/was in the future, we may have to go ahead and update it to what we know now
+        print("Updating the dates...")
+        insert_date_in_db(df_games, engine)
+        
         continue
     if current_date == date.today():
         print("Fetching today's games and teams...")
@@ -88,6 +124,10 @@ for current_date in days:
         #Change the name of some columns for the players and change it to new_players_df
         safe_row_insert(df_teams, 'teams', engine)
         safe_row_insert(df_games, 'games', engine)
+
+        #If a date is/was in the future, we may have to go ahead and update it to what we know now
+        print("Updating the dates...")
+        insert_date_in_db(df_games, engine)
         continue
     print(f"Fetching games for {current_date}...")
 
@@ -258,9 +298,12 @@ for current_date in days:
             safe_row_insert(df_games, 'games', engine)
             safe_row_insert(df_stats, 'player_game_stats', engine)
 
+            print("Updating the dates...")
+            insert_date_in_db(df_games, engine)
+
             teams_df = pd.DataFrame(columns=['team_id', 'season_year', 'team_location', 'team_name', 'team_abbreviation'])
             players_df = pd.DataFrame(columns=['player_id', 'player_first_name', 'player_last_name'])
-            games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id'])
+            games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id', 'game_time'])
             player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 'player_game_stats'])
 
 

@@ -348,6 +348,7 @@ def get_home_away_team_info_on_date(request, game_date):
                     COALESCE(ascore.team_score, -1) AS away_score,
                     g.game_date,
                     g.game_id AS game_id,
+                    g.game_time AS game_time,
                     g.winner AS winner,
                     g.total_score_prediction as total_score_prediction
                 FROM games g

@@ -6,6 +6,7 @@ from nba_api.stats.endpoints import boxscoresummaryv2
 import json
 import time
 import math
+import sqlalchemy
 
 def get_home_away_team(game_id):
     """
@@ -130,7 +131,7 @@ def fill_games_df(game_id, game_date, games_df):
     # Convert the data to a data frame and concatenate it with the existing games_df
     new_row = pd.DataFrame([
         {'game_id': game_id, 'season_year': season_year, 'game_date': game_date,
-        'home_team_id': home_team_id, 'away_team_id': away_team_id}
+        'home_team_id': home_team_id, 'away_team_id': away_team_id, 'game_time': 'Final'}
     ])
 
     # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
@@ -212,9 +213,6 @@ def check_dfs(dfs: list):
             return False
     return True
 
-import json
-import math
-
 def json_fix(df):
     # This function will clean the 'player_game_stats' column
     
@@ -269,13 +267,22 @@ def fill_games_df_v1(boxscore, games_df):
         game_date = date.fromisoformat(game_date)
         game_date = game_date.strftime("%Y-%m-%d")
 
+        game_time = game['gameEt']
+
+        #Convert to just the time -- and am/pm format and remove seconds
+        game_time = game_time.split("T")[1]
+        game_time = game_time.split(".")[0]
+        game_time = game_time.split(":")
+        game_time = f"{int(game_time[0]) % 12}:{game_time[1]} {['am', 'pm'][int(game_time[0]) // 12]} ET"
+
         home_team_id = game['homeTeam']['teamId']
         away_team_id = game['awayTeam']['teamId']
+
         season_year = get_season(game_id)
         
         new_row = pd.DataFrame([
             {'game_id': game_id, 'season_year': season_year, 'game_date': game_date,
-            'home_team_id': home_team_id, 'away_team_id': away_team_id}
+            'home_team_id': home_team_id, 'away_team_id': away_team_id, 'game_time': game_time}
         ])
 
         # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
@@ -321,3 +328,56 @@ def fill_teams_df_v1(boxscore, teams_df):
             teams_df = pd.concat([teams_df, new_rows_filtered], ignore_index=True)
         
     return teams_df
+
+def fill_games_df_future(games, games_df):
+    
+    for _, game in games.iterrows()   : 
+        game_id = game['GAME_ID']
+        game_date = game['GAME_DATE_EST']
+        # Turn 2025-04-10T23:00:00Z into a date object -- truncate time
+
+        game_date = game_date.split("T")[0]
+        game_date = date.fromisoformat(game_date)
+        game_date = game_date.strftime("%Y-%m-%d")
+        
+
+        game_time = game['GAME_STATUS_TEXT']
+
+        home_team_id = game['HOME_TEAM_ID']
+        away_team_id = game['VISITOR_TEAM_ID']
+        season_year = get_season(game_id)
+
+        new_row = pd.DataFrame([
+            {'game_id': game_id, 'season_year': season_year, 'game_date': game_date,
+            'home_team_id': home_team_id, 'away_team_id': away_team_id, 'game_time': game_time}
+        ])
+
+        # Ensure uniqueness before concatenation (set lookup is O(1) time complexity)
+        existing_keys = set(zip(games_df['game_id'], games_df['season_year']))
+        new_rows_filtered = new_row[~new_row.apply(lambda row: (row['game_id'], row['season_year']) in existing_keys, axis=1)]
+
+        # Concatenate only if new unique rows exist
+        if not new_rows_filtered.empty:
+            games_df = pd.concat([games_df, new_rows_filtered], ignore_index=True)
+        
+    return games_df
+
+
+# Since games are already in the database, we may need to update the game_time column like this
+def insert_date_in_db(games_df, engine):
+
+    for _, row in games_df.iterrows():
+
+        with engine.connect() as connection:
+            #Return the number of rows affected by the query
+            ret = connection.execute(
+                sqlalchemy.text(
+                    """
+                    UPDATE games
+                    SET game_time = :game_time
+                    WHERE game_id = :game_id
+                    """
+                ),
+                {"game_id": row['game_id'], "game_time": row['game_time']}
+            )
+            connection.commit()
