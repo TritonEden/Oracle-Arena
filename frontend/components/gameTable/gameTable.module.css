@@ -132,6 +132,14 @@
   font-size: 1.2rem;
 }
 
+.standardPred {
+  display: block;
+}
+
+.mobilePred {
+  display: none;
+}
+
 .noData {
   width: 100vw;
   height: 50vh;
@@ -179,6 +187,7 @@
   .timeAndScore {
     border-left: 1px solid #555;
     border-right: 1px solid #555; 
+    padding: 0 3vw;
   }
 
   .startTime {
@@ -186,7 +195,7 @@
   }
 
   .score {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .tableCell {
@@ -203,5 +212,13 @@
   
   .predictData {
     font-size: 0.9rem;
+  }
+
+  .standardPred {
+    display: none;
+  }
+  
+  .mobilePred {
+    display: block;
   }
 }

@@ -392,13 +392,14 @@ def get_home_away_team_info_on_date(request, game_date):
                 "team_score" : int(row[columns.index('away_score')])
             }
 
-            total_score_prediction = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))  # Example total
+            total_score_prediction = row[columns.index('total_score_prediction')]
             total_score = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))
             total_score_actual = str(total_score) if (
                 float(row[columns.index('home_score')]) + float(row[columns.index('away_score')]) > 0
             ) else '--'
             
-            winner_prediction = home_stats["team_abbreviation"]  # Placeholder, you can adjust with your prediction logic
+            winner_prediction_binary = row[columns.index('winner')]
+            winner_prediction = home_stats["team_abbreviation"] if winner_prediction_binary == 1.0 else away_stats["team_abbreviation"]
             
             if total_score_actual != '--':
                 winner_actual = (

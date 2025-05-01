@@ -183,9 +183,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                   <div className={styles.tableCell}>Total Score</div>
                 </div>
                 <div className={styles.dataRow}>
-                  <div className={`${styles.tableCell} ${styles.actualData}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.standardPred}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.mobilePred}`}>Pred.</div>
                   <div className={`${styles.tableCell} ${styles.predictData}`}>Actual</div>
-                  <div className={`${styles.tableCell} ${styles.actualData}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.standardPred}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.mobilePred}`}>Pred.</div>
                   <div className={`${styles.tableCell} ${styles.predictData}`}>Actual</div>
                 </div>
                 <div className={`${styles.dataRow} ${styles.displayData}`}>
