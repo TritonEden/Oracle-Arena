@@ -392,14 +392,26 @@ def get_home_away_team_info_on_date(request, game_date):
                 "team_score" : int(row[columns.index('away_score')])
             }
 
-            winner_prediction = home_stats["team_abbreviation"]  # Placeholder, you can adjust with your prediction logic
-            winner_actual = home_stats["team_abbreviation"] if home_stats["team_score"] > away_stats["team_score"] else away_stats["team_abbreviation"]
             total_score_prediction = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))  # Example total
-            total_score_actual = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))
+            total_score = int((float(row[columns.index('home_score')])) + (float(row[columns.index('away_score')])))
+            total_score_actual = str(total_score) if (
+                float(row[columns.index('home_score')]) + float(row[columns.index('away_score')]) > 0
+            ) else '--'
+            
+            winner_prediction = home_stats["team_abbreviation"]  # Placeholder, you can adjust with your prediction logic
+            
+            if total_score_actual != '--':
+                winner_actual = (
+                    home_stats["team_abbreviation"]
+                    if home_stats["team_score"] > away_stats["team_score"]
+                    else away_stats["team_abbreviation"]
+                )
+            else:
+                winner_actual = '--'
 
             # Construct the result dictionary
             game_info = {
-                'gameID' : game_id,
+                'gameId' : game_id,
                 'seasonYear' : season_year,
                 'startTime' : game_time,
                 'homeTeamID' : home_stats["team_id"],
