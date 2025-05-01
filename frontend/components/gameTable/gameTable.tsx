@@ -20,8 +20,8 @@ interface Game {
   awayTeamScore: number;
   predictedWinner: string;
   actualWinner: string;
-  predictedTotal: number;
-  actualTotal: number;
+  predictedTotal: string;
+  actualTotal: string;
 }
 
 interface GameTableProps {
@@ -154,7 +154,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                   </div>
                   <div className={styles.timeAndScore}>
                     <div className={styles.startTime}>{game.startTime}</div>
-                    <div className={styles.score}>{game.awayTeamScore} - {game.homeTeamScore}</div>
+                    {Number(game.awayTeamScore) !== -1 && Number(game.homeTeamScore) !== -1 && (
+                      <div className={styles.score}>
+                        {game.awayTeamScore} - {game.homeTeamScore}
+                      </div>
+                    )}
                   </div>
                   <div className={`${styles.tableCell} ${styles.homeTeam}`}>
                     <div className={styles.homeTeamInfo}>
@@ -179,9 +183,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
                   <div className={styles.tableCell}>Total Score</div>
                 </div>
                 <div className={styles.dataRow}>
-                  <div className={`${styles.tableCell} ${styles.actualData}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.standardPred}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.mobilePred}`}>Pred.</div>
                   <div className={`${styles.tableCell} ${styles.predictData}`}>Actual</div>
-                  <div className={`${styles.tableCell} ${styles.actualData}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.standardPred}`}>Prediction</div>
+                  <div className={`${styles.tableCell} ${styles.actualData} ${styles.mobilePred}`}>Pred.</div>
                   <div className={`${styles.tableCell} ${styles.predictData}`}>Actual</div>
                 </div>
                 <div className={`${styles.dataRow} ${styles.displayData}`}>
