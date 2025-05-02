@@ -33,6 +33,8 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   const [winLossRecords, setWinLossRecords] = useState<{ [teamId: number]: string }>({});
   const [loading, setLoading] = useState<boolean>(true);
 
+  const getCacheKey = (date: Date) => `gamesData_${date.toISOString().split("T")[0]}`;
+
   const fetchWinLoss = async (teamId: number, seasonYear: string): Promise<string> => {
     try {
       const response = await fetch(`http://localhost:8000/api/wins_losses/${teamId}/${seasonYear}`);
@@ -44,79 +46,72 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
     }
   };
 
-  const getCacheKey = (date: Date) => `gamesData_${date.toISOString().split("T")[0]}`;
+  const fetchGames = async (forceRefresh: boolean = false) => {
+    const sqlDate = selectedDate.toISOString().split("T")[0];
+    const cacheKey = getCacheKey(selectedDate);
+    const isTodayOrFuture = selectedDate >= new Date(new Date().toDateString());
 
-  useEffect(() => {
-    const fetchGames = async () => {
-      const sqlDate = selectedDate.toISOString().split("T")[0];
-
-      const cacheKey = getCacheKey(selectedDate);
-
-      // Try getting cached data
+    if (!forceRefresh) {
       const cached = localStorage.getItem(cacheKey);
-      const isTodayOrFuture = selectedDate >= new Date(new Date().toDateString());
-
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
           const cacheAge = Date.now() - parsed.timestamp;
-          const oneDay = 24 * 60 * 60 * 1000;
-        
+          const sixHours = 6 * 60 * 60 * 1000;
+
           if (
             parsed &&
             Array.isArray(parsed.data) &&
-            (!isTodayOrFuture || cacheAge < oneDay)
+            (!isTodayOrFuture || cacheAge < sixHours)
           ) {
             setGames(parsed.data);
             setLoading(false);
             return;
-          } else {
-            localStorage.removeItem(cacheKey); // clean up invalid or stale cache
           }
         } catch (err) {
           console.warn("Error parsing cache:", err);
-          localStorage.removeItem(cacheKey);
         }
       }
+    }
 
-      // If no cache, fetch from API
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `http://localhost:8000/api/home_away_team_info_on_date/${sqlDate}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data: Game[] = await response.json();
-        setGames(data);
-        localStorage.setItem(
-          cacheKey,
-          JSON.stringify({ timestamp: Date.now(), data })
-        );
-
-        const newWinLoss: { [teamId: number]: string } = {};
-        for (const game of data) {
-          const { homeTeamID, awayTeamID } = game;
-
-          if (!newWinLoss[homeTeamID]) {
-            newWinLoss[homeTeamID] = await fetchWinLoss(homeTeamID, game.seasonYear);
-          }
-          if (!newWinLoss[awayTeamID]) {
-            newWinLoss[awayTeamID] = await fetchWinLoss(awayTeamID, game.seasonYear);
-          }
-        }
-
-        setWinLossRecords(newWinLoss);
-      } catch (error) {
-        console.error("Error fetching game summary:", error);
-      } finally {
-        setLoading(false);
+    // Fetch fresh data
+    setLoading(true);
+    try {
+      localStorage.removeItem(cacheKey);
+      const response = await fetch(
+        `http://localhost:8000/api/home_away_team_info_on_date/${sqlDate}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
+      const data: Game[] = await response.json();
+      setGames(data);
+      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data }));
 
+      const newWinLoss: { [teamId: number]: string } = {};
+      for (const game of data) {
+        if (!newWinLoss[game.homeTeamID]) {
+          newWinLoss[game.homeTeamID] = await fetchWinLoss(game.homeTeamID, game.seasonYear);
+        }
+        if (!newWinLoss[game.awayTeamID]) {
+          newWinLoss[game.awayTeamID] = await fetchWinLoss(game.awayTeamID, game.seasonYear);
+        }
+      }
+      setWinLossRecords(newWinLoss);
+    } catch (error) {
+      console.error("Error fetching game summary:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchGames();
   }, [selectedDate]);
+
+  const handleManualRefresh = () => {
+    fetchGames(true);
+  };
 
   if (loading) {
     return <div className={styles.loading}>Loading Games ...</div>;
@@ -124,6 +119,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
   return (
     <div className={styles.tableContainer}>
+      <div className={styles.refreshContainer}>
+        <button className={styles.refreshButton} onClick={handleManualRefresh}>
+          🔄 Refresh Games
+        </button>
+      </div>
       <div className={styles.gamesTable}>
         {games.length > 0 ? (
           <>
