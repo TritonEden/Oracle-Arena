@@ -28,7 +28,7 @@ const About = () => {
           onClick={() => handleSectionChange("about")}
           aria-label="Show About Sub-Page"
         >
-          About the Team and Project
+          Mission and Team
         </button>
         <button
           className={`${styles.navItem} ${activeSection === "model" ? styles.navItemActive : ''}`}
@@ -207,8 +207,191 @@ const About = () => {
       </div>
 
       {/* Prediction Model Explanation Tab*/}
-      <div className={`${styles.modelExplain} ${styles.subPage}`} style={{ display: activeSection === "model" ? "block" : "none" }}>
-        This is the section that explains how the prediction model works.
+      <div className={`${styles.modelInfo} ${styles.subPage}`} style={{ display: activeSection === "model" ? "block" : "none" }}>
+        <div className={styles.sectionLabel}>Model Features</div>
+        <div className={styles.subHeader}>Statistics Columns</div>
+        <div className={styles.modelInfoText}>
+          The stats columns used were field goals made (FGM), field goals attempted (FGA), three-point field goals made (FG3M), three-point 
+          field goals attempted (FG3A), free throws made (FTM), free throws attempted (FTA), offensive rebounds (OREB), defensive rebounds 
+          (DREB), assists (AST), steals (STL), blocks (BLK), turnovers (TO), points (PTS), estimated possessions (POSS), wins, and losses.
+        </div>
+        <div className={styles.modelInfoText}>
+          Stats are from the 2018-19 NBA season to the current NBA season. Each of the stats in the stats columns are found for the home and 
+          away team per 100 possessions. Those stats are then averaged over the current season and over the past 5 games for the team and the 
+          average of their opponents in the current season.
+        </div>
+        <div className={styles.modelInfoText}>
+        <Image className={styles.modelImage}
+            src="/images/statsTree.png"
+            width={2000}
+            height={300}
+            alt="Stats Tree"
+          />
+        </div>
+        <div className={styles.modelInfoText}>
+          The data is scaled with a Min-Max scaler to ensure equal contribution of features and then it is split into 80% training data and 20% 
+          testing data. This split occurs without shuffling the data to prevent data leakage.
+        </div>
+        <div className={styles.modelInfoTableContainer}>
+          {/* Win Prediction Table */}
+          <div className={styles.modelInfoTable}>
+            <div className={styles.dataTitle}>Win Prediction</div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Regular Season</th>
+                  <th>Playoffs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td colSpan={2}>Deep Feedforward Nueral Network</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>Accuracy</td>
+                  <td>0.66</td>
+                  <td>0.67</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>F1 Score</td>
+                  <td>0.71</td>
+                  <td>0.73</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>Loss</td>
+                  <td>0.62</td>
+                  <td>0.66</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className={styles.modelInfoTable}>
+            {/* Total Score Prediction Table */}
+            <div className={styles.dataTitle}>Total Score Prediction</div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Regular Season</th>
+                  <th>Playoffs</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr>
+                  <td></td>
+                  <td>Gradient Boosting Regressor</td>
+                  <td>Ridge Regression</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>RMSE</td>
+                  <td>18.60</td>
+                  <td>16.67</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>MSE</td>
+                  <td>346.33</td>
+                  <td>277.83</td>
+                </tr>
+                <tr>
+                  <td className={styles.rowLabel}>R<sup>2</sup></td>
+                  <td>0.11</td>
+                  <td>0.08</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className={styles.modelInfoText}>
+          The playoff model has less data to train on, but because playoff games have less variance the playoff performance metrics are generally
+          better than the regular season ones. NBA win prediction models commonly get accuracy between 60%-70% over much smaller test sets. 
+        </div>
+        <div className={styles.subHeader}>Win Prediction Models</div>
+        <div className={styles.modelInfoText}>
+          This neural network is a deep feedforward model built using Keras' Sequential API. It passes features through four hidden layers of 
+          progressively smaller sizes: 256, 128, 64, and 32 neurons, respectively. Each hidden layer uses the ReLU activation function to introduce 
+          non-linearity, which helps the network learn complex patterns in the data. To improve training stability and speed, each layer is followed 
+          by batch normalization, which standardizes the inputs to the layer and reduces internal covariate shift. Additionally, dropout is applied 
+          after each layer with increasing rates (from 30% up to 60%) to reduce overfitting by randomly deactivating a portion of the neurons during 
+          training. The final layer is a dense layer with a single neuron and a sigmoid activation function, which outputs a probability between 0 and 
+          1. 1 means the model predicts the home team to win and 0 means it predicted the away team. The model is compiled with the Nadam optimizer, 
+          a variant of Adam that incorporates Nesterov momentum, and uses binary cross entropy as the loss function, which is standard for binary 
+          classification problems. Accuracy is used as the performance metric during training and evaluation. The playoff model is the same as the 
+          regular season but with slightly less dropout due to the lack of training data compared to the regular season model.
+        </div>
+        <div className={styles.modelInfoDataContainer}>
+          <div>
+            <div className={styles.dataTitle}>Regular Season Confusion Matrix</div>
+            <Image className={styles.modelImage}
+              src="/images/regSeasonConfusionMatrix.png"
+              width={500}
+              height={500}
+              alt="Regular Season Confusion Matrix"
+            />
+          </div>
+          <div>
+            <div className={styles.dataTitle}>Playoffs Confusion Matrix</div>
+            <Image className={styles.modelImage}
+              src="/images/playoffConfusionMatrix.png"
+              width={500}
+              height={500}
+              alt="Playoff Confusion Matrix"
+            />
+          </div>
+        </div>
+        <div className={styles.subHeader}>Total Score Prediction Models</div>
+        <div className={styles.modelInfoText}>
+          The regular season model uses XGBoost which is a decision tree based model that implements regularization techniques to improve model generalization 
+          and prevent overfitting. The hyperparameters tuned version of this model performed best for the regular season. For the playoffs however the best 
+          performing model was ridge regression. Playoff data is limited compared to the regular season data, so having lower model capacity likely made ridge 
+          regression less prone to overfitting than XGBoost.
+        </div>
+        <div className={styles.modelInfoDataContainer}>
+          <div>
+            <div className={styles.dataTitle}>Regular Season Scatter Plot</div>
+            <Image className={styles.modelImage}
+              src="/images/regSeasonScatterPlot.png"
+              width={500}
+              height={500}
+              alt="Regular Season Scatter Plot"
+            />
+          </div>
+          <div>
+            <div className={styles.dataTitle}>Playoff Scatter Plot</div>
+            <Image className={styles.modelImage}
+              src="/images/playoffScatterPlot.png"
+              width={500}
+              height={500}
+              alt="Playoff Scatter Plot"
+            />
+          </div>
+        </div>
+        <div className={styles.modelInfoDataContainer}>
+          <div>
+            <div className={styles.dataTitle}>Regular Season Histogram</div>
+            <Image className={styles.modelImage}
+              src="/images/regSeasonHistogram.png"
+              width={500}
+              height={500}
+              alt="Regular Season Histogram"
+            />
+          </div>
+          <div>
+            <div className={styles.dataTitle}>Playoff Histogram</div>
+            <Image className={styles.modelImage}
+              src="/images/playoffHistogram.png"
+              width={500}
+              height={500}
+              alt="Playoff Histogram"
+            />
+          </div>
+        </div>
+        <div className={styles.disclaimer}>
+          This model is not always accurate and has the potential to make incorrect predictions. We do not assume any 
+          responsibility for any monetary loss or reprecusions of decisions made based on its predicitons.
+        </div>
       </div>
     </div>
   );

@@ -31,10 +31,11 @@
 
 .subPage {
   display: none;
-  margin-top: 10vh;
+  margin-top: 6vh;
   padding-bottom: 5vh;
 }
 
+/* About Page */
 .about {
   width: 90%;
   margin-left: auto;
@@ -44,22 +45,25 @@
 .sectionLabel {
   font-size: 30px;
   color: #cc9a36;
-  padding-bottom: 2vh;
+  padding-bottom: 3vh;
 }
 
 .missionStatement {
   font-style: italic;
   font-size: 38px;
-  padding-bottom: 10vh;
+  padding-bottom: 6vh;
 }
 
 .history {
-  padding-bottom: 10vh;
+  padding-bottom: 6vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
 }
 
 .teamMemberA {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
@@ -67,7 +71,7 @@
 
 .teamMemberB {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 1fr;
   align-items: center;
   margin-left: auto;
   margin-right: auto;
@@ -122,6 +126,8 @@
 .aboutMemberLeft {
   text-align: right;
   margin-left: 8vw;
+  padding-right: 1vw;
+  border-right: 1px solid #555;
   animation: aboutMemberLeftAppear 1s ease forwards;
 }
 
@@ -140,6 +146,8 @@
 .aboutMemberRight {
   text-align: left;
   margin-right: 8vw;
+  padding-left: 1vw;
+  border-left: 1px solid #555;
   animation: aboutMemberRightAppear 1s ease forwards;
 }
 
@@ -154,6 +162,77 @@
   padding-bottom: 5vh;
 }
 
+/* Model Explanation Page */
+.modelInfo {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subHeader {
+  font-size: 1.3rem;
+  color: #cc9a36;
+}
+
+.modelInfoText {
+  padding-bottom: 3vh;
+}
+
+.modelInfoTableContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  padding-bottom: 3vh;
+}
+
+.modelInfoTable {
+  width: 100%;
+}
+
+.modelInfoDataContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 3vh;
+}
+
+.dataTitle {
+  color: #cc9a36;
+}
+
+.modelImage {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modelInfoTable table {
+  table-layout: fixed;
+  width: 98%;
+}
+
+.modelInfoTable th,
+.modelInfoTable td {
+  border: 1px solid #555;
+}
+
+.modelInfoTable th:nth-child(1) {
+  width: 20%;
+}
+
+.modelInfoTable tr:nth-child(-n+1) td:nth-child(1),
+.modelInfoTable th:nth-child(1) {
+  border: none;
+}
+
+.disclaimer {
+  font-style: italic;
+  color: #a0a0a0;
+}
+
+/* Mobile View */
 @media (max-width: 1280px) {
   .teamMemberA, .teamMemberB {
     grid-template-columns: 1fr;
@@ -165,11 +244,32 @@
   .imageContainerLeft, .imageContainerRight {
     grid-area: image;
     padding-bottom: 2vh;
+    border: none;
   }
 
   .aboutMemberLeft, .aboutMemberRight {
     grid-area: text;
     text-align: center;
     margin: 0;
+    border: none;
+  }
+
+  .modelInfoTableContainer {
+    display: block;
+  }
+
+  .modelInfoTable {
+    padding-bottom: 3vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .modelInfoDataContainer {
+    display: block;
+  
+  }
+  .modelImage {
+    width: 80%;
+    padding-bottom: 3vh;
   }
 }
