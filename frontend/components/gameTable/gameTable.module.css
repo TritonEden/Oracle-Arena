@@ -222,3 +222,24 @@
     display: block;
   }
 }
+
+.refreshContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.refreshButton {
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.refreshButton:hover {
+  background-color: #005bb5;
+}

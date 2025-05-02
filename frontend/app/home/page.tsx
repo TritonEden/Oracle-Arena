@@ -24,7 +24,6 @@ export default function Home() {
     return `${year}-${month}-${day}`;
   };
 
-  // ✅ Always use query param as source of truth
   const selectedDate = queryDate ? parseDate(queryDate) : new Date();
 
   const handleDateChange = (date: Date) => {
