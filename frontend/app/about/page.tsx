@@ -216,9 +216,9 @@ const About = () => {
           (DREB), assists (AST), steals (STL), blocks (BLK), turnovers (TO), points (PTS), estimated possessions (POSS), wins, and losses.
         </div>
         <div className={styles.modelInfoText}>
-          Stats are from the 2018-19 NBA season to the current NBA season. Each of the stats in the stats columns are found for the home and 
-          away team per 100 possessions. Those stats are then averaged over the current season and over the past 5 games for the team and the 
-          average of their opponents in the current season.
+        The stats used as input to the models are from the 2018-19 NBA season to the current NBA season. Each of the stats in the stats columns
+        are found for the home and away team per 100 possessions. Those stats are then averaged over the current season and over the past 5 games 
+        for the team and their opponent’s stats.
         </div>
         <div className={styles.modelInfoText}>
         <Image className={styles.modelImage}
