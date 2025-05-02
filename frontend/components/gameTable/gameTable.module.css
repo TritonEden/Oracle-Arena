@@ -225,12 +225,12 @@
 
 .refreshContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
 .refreshButton {
-  background-color: #0070f3;
+  background-color: #001936;
   color: white;
   border: none;
   padding: 6px 12px;
