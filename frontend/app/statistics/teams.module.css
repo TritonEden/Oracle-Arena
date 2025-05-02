@@ -22,7 +22,7 @@
   padding: 10px;
   text-align: center;
   transition: border 0.2s ease-in-out;
-  background-color: none;
+  background-color: #3f3f3f;
 }
 
 .card:hover {

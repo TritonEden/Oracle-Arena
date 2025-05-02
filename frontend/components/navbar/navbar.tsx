@@ -52,13 +52,13 @@ const Navbar: React.FC = () => {
                 {/* Navigation Links */}
                 <ul className={`${styles.navLinks} ${menuOpen ? styles.active : ''}`}>
                     <li>
-                        <Link href="/home">Home</Link>
+                        <Link href="/home" onClick={toggleMenu}>Home</Link>
                     </li>
                     <li>
-                        <Link href="/statistics">Stats</Link>
+                        <Link href="/statistics" onClick={toggleMenu}>Stats</Link>
                     </li>
                     <li>
-                        <Link href="/about">About</Link>
+                        <Link href="/about" onClick={toggleMenu}>About</Link>
                     </li>
                 </ul>
             </div>

@@ -37,13 +37,6 @@ const About = () => {
         >
           Model Explanation
         </button>
-        <button
-          className={`${styles.navItem} ${activeSection === "use" ? styles.navItemActive : ''}`}
-          onClick={() => handleSectionChange("use")}
-          aria-label="Show How to Use Data Visualization Sub-Page"
-        >
-          How to Use Data Visualization
-        </button>
       </div>
 
       {/* About Tab */}
@@ -216,11 +209,6 @@ const About = () => {
       {/* Prediction Model Explanation Tab*/}
       <div className={`${styles.modelExplain} ${styles.subPage}`} style={{ display: activeSection === "model" ? "block" : "none" }}>
         This is the section that explains how the prediction model works.
-      </div>
-
-      {/* Data Visualizations Tab */}
-      <div className={`${styles.useExplain} ${styles.subPage}`} style={{ display: activeSection === "use" ? "block" : "none" }}>
-        This is the section that explains how to use the data visualizations.
       </div>
     </div>
   );
