@@ -389,7 +389,7 @@ const About = () => {
           </div>
         </div>
         <div className={styles.disclaimer}>
-          This model is not always accurate and has the potential to make incorrect predictions. We do not assume any 
+          This model is not  accurate and has the potential to make incorrect predictions. We do not assume any 
           responsibility for any monetary loss or reprecusions of decisions made based on its predicitons.
         </div>
       </div>

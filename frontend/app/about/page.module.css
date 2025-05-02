@@ -261,6 +261,11 @@
   .modelInfoTable {
     padding-bottom: 3vh;
   }
+
+  .modelImage {
+    width: 90%;
+    padding-bottom: 3vh;
+  }
 }
 
 @media (max-width: 900px) {
@@ -270,6 +275,5 @@
   }
   .modelImage {
     width: 80%;
-    padding-bottom: 3vh;
   }
 }
