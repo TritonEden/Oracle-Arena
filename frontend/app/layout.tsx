@@ -13,17 +13,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Dark mode favicon */}
-        <link
-          rel="icon"
-          href="/images/logo.png"
-          media="(prefers-color-scheme: dark)"
-        />
-        {/* Light mode favicon */}
-        <link
-          rel="icon"
-          href="/images/logoBlack.png"
-          media="(prefers-color-scheme: light)"
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                const link = document.createElement("link");
+                link.rel = "icon";
+                link.href = darkMode ? "/images/logo.png" : "/images/darkLogo.png";
+                document.head.appendChild(link);
+              })();
+            `,
+          }}
         />
       </head>
       <body>

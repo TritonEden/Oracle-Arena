@@ -2,16 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #0a0117;
-    --secondary: #cc9a36;
-  }
-}
-
 body {
-  color: var(--secondary);
-  background: var(--primary);
+  color: #cc9a36;;
+  background: #0a0117;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
   min-height: 100vh;
