@@ -250,17 +250,17 @@ const About = () => {
                   <td colSpan={2}>Deep Feedforward Nueral Network</td>
                 </tr>
                 <tr>
-                  <td className={styles.rowLabel}>Accuracy</td>
+                  <td>Accuracy</td>
                   <td>0.66</td>
                   <td>0.67</td>
                 </tr>
                 <tr>
-                  <td className={styles.rowLabel}>F1 Score</td>
+                  <td>F1 Score</td>
                   <td>0.71</td>
                   <td>0.73</td>
                 </tr>
                 <tr>
-                  <td className={styles.rowLabel}>Loss</td>
+                  <td>Loss</td>
                   <td>0.62</td>
                   <td>0.66</td>
                 </tr>
