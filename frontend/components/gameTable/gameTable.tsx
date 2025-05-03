@@ -59,15 +59,15 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
           // const cacheAge = Date.now() - parsed.timestamp;
           // const sixHours = 6 * 60 * 60 * 1000;
 
-          // if (
-          //   parsed &&
-          //   Array.isArray(parsed.data) &&
-          //   (!isTodayOrFuture || cacheAge < sixHours)
-          // ) {
-          //   setGames(parsed.data);
-          //   setLoading(false);
-          //   return;
-          // }
+          if (
+            parsed &&
+            Array.isArray(parsed.data) // &&
+            // (!isTodayOrFuture || cacheAge < sixHours)
+          ) {
+            setGames(parsed.data);
+            setLoading(false);
+            return;
+          }
         } catch (err) {
           console.warn("Error parsing cache:", err);
         }
