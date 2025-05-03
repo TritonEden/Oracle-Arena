@@ -390,7 +390,7 @@ const About = () => {
         </div>
         <div className={styles.disclaimer}>
           These prediction models are not perfect and have the potential to make incorrect predictions. We do not assume any 
-          responsibility for any monetary loss or reprecusions of decisions made based on its predicitons.
+          responsibility for any monetary loss or reprecussions of decisions made based on its predicitons.
         </div>
       </div>
     </div>
