@@ -50,7 +50,7 @@ const About = () => {
         {/* History */}
         <div className={styles.sectionLabel}>History</div>
         <div className={styles.history}>
-          Oracle Arena was conceived in response to the fragmented landscape of NBA analytics tools, where fans, bettors, and data 
+          Oracle Arena was conceived in response to the fragmented landscape of NBA analytics tools, where fans, betters, and data 
           enthusiasts struggle with disjointed platforms that fail to provide a comprehensive, user friendly experience. With the rapid 
           growth of the sports betting industry and the increasing reliance on advanced analytics, we recognized the need for a solution 
           that integrates real time NBA data, predictive modeling, and data visualizations into a single, seamless platform. By 
@@ -184,7 +184,7 @@ const About = () => {
                 src="/images/peruskiPicture.png"
                 width={300}
                 height={300}
-                alt="Persuki (Ram Slam)"
+                alt="Peruski (Ram Slam)"
                 className={styles.image}
               />
             </div>
