@@ -223,7 +223,7 @@ const About = () => {
         <div className={styles.modelInfoText}>
         <Image className={styles.modelImage}
             src="/images/statsTree.png"
-            width={2000}
+            width={1000}
             height={300}
             alt="Stats Tree"
           />
@@ -282,7 +282,7 @@ const About = () => {
               <tbody>
               <tr>
                   <td></td>
-                  <td>Gradient Boosting Regressor</td>
+                  <td>XGBoost Regressor</td>
                   <td>Ridge Regression</td>
                 </tr>
                 <tr>
@@ -389,7 +389,7 @@ const About = () => {
           </div>
         </div>
         <div className={styles.disclaimer}>
-          This model is not  accurate and has the potential to make incorrect predictions. We do not assume any 
+          These prediction models are not perfect and have the potential to make incorrect predictions. We do not assume any 
           responsibility for any monetary loss or reprecusions of decisions made based on its predicitons.
         </div>
       </div>
