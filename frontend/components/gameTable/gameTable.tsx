@@ -85,8 +85,13 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data: Game[] = await response.json();
-      setGames(data);
-      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data }));
+      const filteredData = data.filter(game => {
+        const isFuture = selectedDate > new Date(new Date().toDateString());
+        return isFuture || game.startTime !== "TBD";
+      });
+
+      setGames(filteredData);
+      localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: filteredData }));
 
       const newWinLoss: { [teamId: number]: string } = {};
       for (const game of data) {

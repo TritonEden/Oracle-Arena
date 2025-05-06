@@ -207,7 +207,7 @@ def get_wins_losses(request, team_id, season_year):
         columns = [col[0] for col in cursor.description]  # Get column names
         result = [dict(zip(columns, row)) for row in rows]
 
-    return JsonResponse(result, safe=False)
+    return JsonResponse(result[0] if result else {"wins": 0, "losses": 0, "wl_record": "0 - 0"})
                        
 
 #Given a team id and season year, show all of the games and results from that game -- essentially it is how the wins and losses are calculated
