@@ -88,34 +88,40 @@ WSGI_APPLICATION = 'oracle.wsgi.application'
 
 #assert Path(".env").exists(), "Create a .env file with the database password"
 
-PASSWORD = os.getenv('PASSWORD', '')
+# PASSWORD = os.getenv('PASSWORD', '')
+POSTGRES_DB = os.getenv('POSTGRES_DB')
+POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')
+# PASSWORD = os.getenv('PASSWORD')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+
 
 if not LOCAL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'rgutkeecsoraclearenaadmin',
-            'PASSWORD': PASSWORD,
-            'HOST': 'rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com',
-            'PORT': '5432',
-            'OPTIONS': {
-                'sslmode': 'require'
-            }
+            'NAME': POSTGRES_DB,
+            'USER': POSTGRES_USER,
+            'PASSWORD': POSTGRES_PASSWORD,
+            'HOST': POSTGRES_HOST,
+            'PORT': POSTGRES_PORT,
+            # 'OPTIONS': {
+                # 'sslmode': 'require'
+            # }
         }
     }
-else: # Local Docker Postgres DB
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'oracle_db',
-            'USER': 'oracle_admin',
-            'PASSWORD': POSTGRES_PASSWORD,
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    } 
+# else: # Local Docker Postgres DB
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': 'oracle_db',
+#             'USER': 'oracle_admin',
+#             'PASSWORD': PASSWORD,
+#             'HOST': 'localhost',
+#             'PORT': '5432',
+#         }
+#     } 
 
 ALLOWED_HOSTS = [
     'ec2-3-95-168-187.compute-1.amazonaws.com',
