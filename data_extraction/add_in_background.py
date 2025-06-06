@@ -13,19 +13,26 @@ import warnings
 import random
 import sqlalchemy.exc as sa_exc
 
-#Take an argument from the command line for local flag
-if len(sys.argv) > 1:
-    local = sys.argv[1].lower() == '--local'
-else:
-    local = False
-
 assert os.path.exists(".env"), "Please create a .env file in the Oracle-Arena directory."
 
-if local:
-    with open(".env", "r") as f:
-        password = f.readlines()[3].strip().split("=")[1].strip()
-else:
-    password = os.getenv('PASSWORD', '')
+#Get all env vars in .env file, no libraries needed for this
+
+env_vars = {}
+with open(".env") as f:
+    for line in f:
+        key, value = line.strip().split('=', 1)
+        env_vars[key] = value
+
+host = env_vars.get("POSTGRES_HOST", "localhost")
+port = env_vars.get("POSTGRES_PORT", "5432")
+db_name = env_vars.get("POSTGRES_DB", "oracle_arena")
+user = env_vars.get("POSTGRES_USER", "postgres")
+password = env_vars.get("POSTGRES_PASSWORD", "password")
+
+#If any are defaults, print a warning
+if password == "password":
+    print("Warning: password is set to default value. Please change it in the .env file.")
+
 
 def safe_row_insert(df, table_name, engine):
     with warnings.catch_warnings():
@@ -51,6 +58,8 @@ teams_df = pd.DataFrame(columns=['team_id', 'season_year', 'team_location', 'tea
 players_df = pd.DataFrame(columns=['player_id', 'player_first_name', 'player_last_name'])
 games_df = pd.DataFrame(columns=['game_id', 'season_year', 'game_date', 'home_team_id', 'away_team_id', 'game_time'])
 player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 'player_game_stats'])
+
+DATABASE_URL = get_database_url(host, password, user, port, db_name)
 
 days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days back, 6 days forward
 
@@ -79,8 +88,6 @@ for current_date in days:
 
         df_games = df_games.astype({"game_id": str})
         df_games["game_id"] = df_games["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
-
-        DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
 
         print("Saving future date's teams and games to the database...")
 
@@ -112,8 +119,6 @@ for current_date in days:
 
         df_games = df_games.astype({"game_id": str})
         df_games["game_id"] = df_games["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
-
-        DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
 
         print("Saving today's teams and games to the database...")
 
@@ -286,8 +291,7 @@ for current_date in days:
             df_stats["game_id"] = df_stats["game_id"].apply(lambda x: f"00{x}" if len(x) == 2 else x)
 
             print("Saving stats to the database...")
-            DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
-
+            
             engine = create_engine(DATABASE_URL)
             print("Engine created")
             # Save the DataFrames to the database row by row

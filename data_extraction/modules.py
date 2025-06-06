@@ -381,3 +381,7 @@ def insert_date_in_db(games_df, engine):
                 {"game_id": row['game_id'], "game_time": row['game_time']}
             )
             connection.commit()
+
+#Literally all this does is return the database url, which we needed in multiple programs
+def get_database_url(host, password, user, port=5432, db_name="oracle_db"):
+    return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"

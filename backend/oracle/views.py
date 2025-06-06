@@ -7,18 +7,6 @@ from .utils import get_player_stats_from_csv, get_players_from_csv
 from .models import PlayerGameStats
 from nba_api.live.nba.endpoints import scoreboard
 
-# def testFunction(request):
-#     with connection.cursor() as cursor:
-#         # Execute raw SQL query
-#         cursor.execute("SELECT * FROM test_table;")
-#         rows = cursor.fetchall()  # Get all rows
-#         columns = [col[0] for col in cursor.description]  # Get column names
-
-#         # Format the result as a list of dictionaries
-#         result = [dict(zip(columns, row)) for row in rows]
-
-#     return JsonResponse(result, safe=False)
-
 # Gets all player game stats
 def get_player_game_stats(request, player_id):
     with connection.cursor() as cursor:
@@ -75,13 +63,14 @@ def get_all_player_game_stats(request):
 
     return JsonResponse(result, safe=False)
 
-# def get_player_game_stats(request, player_id):
-#     stats = get_player_stats_from_csv(player_id)
-#     return JsonResponse(stats, safe=False)
+def get_current_season(request):
+    with connection.cursor() as cursor:
+        # Execute raw SQL query
+        cursor.execute("SELECT MAX(season_year) FROM games;")
+        row = cursor.fetchone()  # Get the single row
+        current_season = row[0] if row else None  # Extract the value
 
-# def get_players(request):
-#     players = get_players_from_csv()
-#     return JsonResponse(players, safe=False)
+    return JsonResponse({"current_season": current_season})
 
 # Given a day, return all the game IDs for that day
 def get_game_ids(request, date):
@@ -98,117 +87,16 @@ def get_game_ids(request, date):
 
 # Gets the wins and losses for the SEASON for a given team and season year
 def get_wins_losses(request, team_id, season_year):
-    # with connection.cursor() as cursor:
-    #     cursor.execute("""
-    #         WITH new_player_game_stats as (
-    #             SELECT DISTINCT ON (game_id, player_id) *
-    #             FROM player_game_stats
-    #         ),
-    #         TeamGames AS (
-    #             SELECT DISTINCT g.game_id, g.game_date,
-    #                 CASE 
-    #                     WHEN g.home_team_id = t.team_id THEN 'home'
-    #                     ELSE 'away'
-    #                 END AS role,
-    #                 g.home_team_id, g.away_team_id
-    #             FROM Games g
-    #             JOIN Teams t ON g.home_team_id = t.team_id OR g.away_team_id = t.team_id
-    #             WHERE t.team_id = %s AND g.season_year = %s
-    #         ),
-    #         Scores AS (
-    #             SELECT 
-    #                 pgs.game_id, pgs.team_id,
-    #                 SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
-    #             FROM new_player_game_stats pgs
-    #             GROUP BY pgs.game_id, pgs.team_id
-    #         ),
-    #         GameResults AS (
-    #             SELECT tg.game_id::INTEGER, tg.game_date, 
-    #                 s1.team_score::NUMERIC AS team_score,
-    #                 s2.team_score::NUMERIC AS opp_score,
-    #                 CASE WHEN s1.team_score > s2.team_score THEN 1 ELSE 0 END AS win
-    #             FROM TeamGames tg
-    #             JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.home_team_id::INTEGER
-    #             JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.away_team_id::INTEGER
-    #             WHERE tg.role = 'home' AND tg.game_id >= 20000000 AND tg.game_id < 30000000
-
-    #             UNION
-
-    #             SELECT tg.game_id::INTEGER, tg.game_date, 
-    #                 s1.team_score::NUMERIC AS team_score,
-    #                 s2.team_score::NUMERIC AS opp_score,
-    #                 CASE WHEN s1.team_score > s2.team_score THEN 1 ELSE 0 END AS win
-    #             FROM TeamGames tg
-    #             JOIN Scores s1 ON tg.game_id::INTEGER = s1.game_id::INTEGER AND s1.team_id::INTEGER = tg.away_team_id::INTEGER
-    #             JOIN Scores s2 ON tg.game_id::INTEGER = s2.game_id::INTEGER AND s2.team_id::INTEGER = tg.home_team_id::INTEGER
-    #             WHERE tg.role = 'away' AND tg.game_id >= 20000000 AND tg.game_id < 30000000
-    #         )
-    #         SELECT 
-    #             COUNT(*) FILTER (WHERE win = 1) AS wins,
-    #             COUNT(*) FILTER (WHERE win = 0) AS losses,
-    #             CONCAT(COUNT(*) FILTER (WHERE win = 1), ' - ', COUNT(*) FILTER (WHERE win = 0)) AS wl_record
-    #         FROM GameResults;
-    #     """, [team_id, season_year])
-
-    #     row = cursor.fetchone()  # Get a single row
-    #     print("Fetched row:", row)
-
-    #     if not row:
-    #         return JsonResponse({'wins': 0, 'losses': 0, 'wl_record': '0 - 0'})  # or 404/empty
-
-    #     columns = [col[0] for col in cursor.description]
-    #     result = dict(zip(columns, row))  # Convert to dict
-
-    # return JsonResponse(result)
-
-    # TEMPORARY FIX FOR WINS AND LOSSES -- we will make dynamic tables later as a "future works" item
     with connection.cursor() as cursor:
         cursor.execute("""
-            WITH team_records AS (
-            SELECT * FROM (VALUES
-                (1610612738, 61, 21),
-                (1610612752, 51, 31),
-                (1610612761, 30, 52),
-                (1610612751, 26, 56),
-                (1610612755, 24, 58),
-                (1610612739, 64, 18),
-                (1610612754, 50, 32),
-                (1610612749, 48, 34),
-                (1610612765, 44, 38),
-                (1610612741, 39, 43),
-                (1610612753, 41, 41),
-                (1610612737, 40, 42),
-                (1610612748, 37, 45),
-                (1610612766, 19, 63),
-                (1610612764, 18, 64),
-                (1610612760, 68, 14),
-                (1610612743, 50, 32),
-                (1610612750, 49, 33),
-                (1610612757, 36, 46),
-                (1610612762, 17, 65),
-                (1610612747, 50, 32),
-                (1610612746, 50, 32),
-                (1610612744, 48, 34),
-                (1610612758, 40, 42),
-                (1610612756, 36, 46),
-                (1610612745, 52, 30),
-                (1610612763, 48, 34),
-                (1610612742, 39, 43),
-                (1610612759, 34, 48),
-                (1610612740, 21, 61)
-            ) AS r(team_id, wins, losses)
-            )
-            SELECT r.wins, r.losses, CONCAT(wins, ' - ', losses) AS wl_record
-            FROM teams g
-            JOIN team_records r ON g.team_id = r.team_id
-            WHERE season_year = %s AND g.team_id = %s;
-                       """, [season_year, team_id])
+            SELECT * FROM winloss
+            WHERE season_year = %s AND team_id = %s;
+            """, [season_year, team_id])
         rows = cursor.fetchall()
         columns = [col[0] for col in cursor.description]  # Get column names
         result = [dict(zip(columns, row)) for row in rows]
 
     return JsonResponse(result[0] if result else {"wins": 0, "losses": 0, "wl_record": "0 - 0"})
-                       
 
 #Given a team id and season year, show all of the games and results from that game -- essentially it is how the wins and losses are calculated
 def get_team_game_results(request, team_id, season_year):
