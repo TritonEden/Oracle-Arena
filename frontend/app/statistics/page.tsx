@@ -4,6 +4,22 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./teams.module.css";
 
+// Performance logging utility
+const logPerformance = async (label: string, operation: () => Promise<any>) => {
+  console.log(`Starting: ${label}...`);
+  const startTime = performance.now();
+  try {
+    const result = await operation();
+    const endTime = performance.now();
+    console.log(`${label} completed in ${((endTime - startTime) / 1000).toFixed(2)} seconds`);
+    return result;
+  } catch (error) {
+    const endTime = performance.now();
+    console.error(`${label} failed after ${((endTime - startTime) / 1000).toFixed(2)} seconds:`, error);
+    throw error;
+  }
+};
+
 interface Team {
   team_id: number;
   team_location: string;
@@ -12,12 +28,19 @@ interface Team {
   season_year: string;
 }
 
-const CURRENT_SEASON = "2024-25";
-
 const TeamStats: React.FC = () => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
   const [showCurrentSeasonOnly, setShowCurrentSeasonOnly] = useState(true);
+  const [currentSeason, setCurrentSeason] = useState<string>("2024-25");
+
+  useEffect(() => {
+    logPerformance("Fetch current season", async () => {
+      const res = await fetch("http://localhost:8000/api/get_current_season");
+      const data = await res.json();
+      setCurrentSeason(data.current_season);
+    }).catch((err) => console.error("Failed to fetch current season", err));
+  }, []);
 
   useEffect(() => {
     // Check if cached data exists in sessionStorage
@@ -30,33 +53,32 @@ const TeamStats: React.FC = () => {
       );
       setTeams(sorted);
       setFilteredTeams(
-        sorted.filter((team) => team.season_year === CURRENT_SEASON)
+        sorted.filter((team) => team.season_year === currentSeason)
       );
     } else {
       // If no cached data, fetch from API
-      fetch("http://localhost:8000/api/teams/")
-        .then((res) => res.json())
-        .then((data) => {
-          const sorted = [...data].sort(
-            (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
-          );
-          setTeams(sorted);
-          setFilteredTeams(
-            sorted.filter((team) => team.season_year === CURRENT_SEASON)
-          );
-          // Cache the fetched data in sessionStorage
-          sessionStorage.setItem("teamsData", JSON.stringify(data));
-        })
-        .catch((err) => console.error("Error fetching team data:", err));
+      logPerformance("Fetch teams data", async () => {
+        const res = await fetch("http://localhost:8000/api/teams/");
+        const data = await res.json();
+        const sorted = [...data].sort(
+          (a, b) => parseInt(b.season_year) - parseInt(a.season_year)
+        );
+        setTeams(sorted);
+        setFilteredTeams(
+          sorted.filter((team) => team.season_year === currentSeason)
+        );
+        // Cache the fetched data in sessionStorage
+        sessionStorage.setItem("teamsData", JSON.stringify(data));
+      }).catch((err) => console.error("Error fetching team data:", err));
     }
-  }, []);
+  }, [currentSeason]);
 
   const handleFilterChange = () => {
     const next = !showCurrentSeasonOnly;
     setShowCurrentSeasonOnly(next);
     setFilteredTeams(
       next
-        ? teams.filter((team) => team.season_year === CURRENT_SEASON)
+        ? teams.filter((team) => team.season_year === currentSeason)
         : teams
     );
   };
@@ -76,7 +98,7 @@ const TeamStats: React.FC = () => {
               checked={showCurrentSeasonOnly}
               onChange={handleFilterChange}
             />
-            Show only 2024-25 season
+            Show only {currentSeason} season
           </label>
         </div>
 
