@@ -36,13 +36,21 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   const getCacheKey = (date: Date) => `gamesData_${date.toISOString().split("T")[0]}`;
 
   const fetchWinLoss = async (teamId: number, seasonYear: string): Promise<string> => {
+    const label = `Fetch W-L: team ${teamId} (${seasonYear})`;
+    console.time(label);
     try {
       const response = await fetch(`http://localhost:8000/api/wins_losses/${teamId}/${seasonYear}`);
+      if (!response.ok) {
+        console.error(`Failed to fetch W-L for team ${teamId}: ${response.status} ${response.statusText}`);
+        return "--";
+      }
       const data = await response.json();
       return data.wl_record;
     } catch (error) {
       console.error(`Error fetching W-L for team ${teamId}:`, error);
       return "--";
+    } finally {
+      console.timeEnd(label);
     }
   };
 
@@ -56,14 +64,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
-          // const cacheAge = Date.now() - parsed.timestamp;
-          // const sixHours = 6 * 60 * 60 * 1000;
-
-          if (
-            parsed &&
-            Array.isArray(parsed.data) // &&
-            // (!isTodayOrFuture || cacheAge < sixHours)
-          ) {
+          if (parsed && Array.isArray(parsed.data)) {
             setGames(parsed.data);
             setLoading(false);
             return;
@@ -74,17 +75,27 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
       }
     }
 
-    // Fetch fresh data
     setLoading(true);
+    const gameDataTimer = `Fetch game data (${sqlDate})`;
+
     try {
+      console.log("Starting: Fetch game data and team W-L records...");
+      console.time(gameDataTimer);
+
       localStorage.removeItem(cacheKey);
       const response = await fetch(
         `http://localhost:8000/api/home_away_team_info_on_date/${sqlDate}`
       );
+
       if (!response.ok) {
+        console.timeEnd(gameDataTimer);
+        console.error(`Error fetching game data: ${response.status} ${response.statusText}`);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+
       const data: Game[] = await response.json();
+      console.timeEnd(gameDataTimer);
+
       const filteredData = data.filter(game => {
         const isFuture = selectedDate > new Date(new Date().toDateString());
         return isFuture || game.startTime !== "TBD";
@@ -94,6 +105,9 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
       localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: filteredData }));
 
       const newWinLoss: { [teamId: number]: string } = {};
+      const wlTimer = `Fetch W-L records (${sqlDate})`;
+      console.time(wlTimer);
+
       for (const game of data) {
         if (!newWinLoss[game.homeTeamID]) {
           newWinLoss[game.homeTeamID] = await fetchWinLoss(game.homeTeamID, game.seasonYear);
@@ -102,7 +116,11 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
           newWinLoss[game.awayTeamID] = await fetchWinLoss(game.awayTeamID, game.seasonYear);
         }
       }
+
+      console.timeEnd(wlTimer);
       setWinLossRecords(newWinLoss);
+
+      console.log("Completed: Game data and team W-L records fetch.");
     } catch (error) {
       console.error("Error fetching game summary:", error);
     } finally {
