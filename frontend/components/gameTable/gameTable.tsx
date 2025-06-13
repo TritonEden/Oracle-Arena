@@ -147,9 +147,13 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
     fetchGames();
   }, [selectedDate]);
 
-  const handleManualRefresh = () => {
-    fetchGames(true);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchGames(true);
+    }, 60000 * 60 * 12); // Refresh every 12 hours
+
+    return () => clearInterval(interval);
+  }, [selectedDate]);
 
   if (loading) {
     return <div className={styles.loading}>Loading Games ...</div>;
@@ -157,11 +161,6 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
   return (
     <div className={styles.tableContainer}>
-      <div className={styles.refreshContainer}>
-        <button className={styles.refreshButton} onClick={handleManualRefresh}>
-          🔄 Refresh Games
-        </button>
-      </div>
       <div className={styles.gamesTable}>
         {games.length > 0 ? (
           <>
