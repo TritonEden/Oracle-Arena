@@ -107,15 +107,30 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
       const newWinLoss: { [teamId: number]: string } = {};
       const wlTimer = `Fetch W-L records (${sqlDate})`;
       console.time(wlTimer);
+      
+      const promises = [];
+      const seen = new Set();
 
       for (const game of data) {
-        if (!newWinLoss[game.homeTeamID]) {
-          newWinLoss[game.homeTeamID] = await fetchWinLoss(game.homeTeamID, game.seasonYear);
+        if (!seen.has(game.homeTeamID)) {
+          seen.add(game.homeTeamID);
+          promises.push(
+            fetchWinLoss(game.homeTeamID, game.seasonYear).then(result => {
+              newWinLoss[game.homeTeamID] = result;
+            })
+          );
         }
-        if (!newWinLoss[game.awayTeamID]) {
-          newWinLoss[game.awayTeamID] = await fetchWinLoss(game.awayTeamID, game.seasonYear);
+        if (!seen.has(game.awayTeamID)) {
+          seen.add(game.awayTeamID);
+          promises.push(
+            fetchWinLoss(game.awayTeamID, game.seasonYear).then(result => {
+              newWinLoss[game.awayTeamID] = result;
+            })
+          );
         }
       }
+
+      await Promise.all(promises);
 
       console.timeEnd(wlTimer);
       setWinLossRecords(newWinLoss);

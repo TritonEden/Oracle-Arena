@@ -89,9 +89,10 @@ def get_game_ids(request, date):
 def get_wins_losses(request, team_id, season_year):
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT * FROM winloss
-            WHERE season_year = %s AND team_id = %s;
-            """, [season_year, team_id])
+            SELECT wins, losses, wl_record
+            FROM mv_team_win_loss_records
+            WHERE target_team_id = %s AND season_year = %s;
+            """, [team_id, season_year])
         rows = cursor.fetchall()
         columns = [col[0] for col in cursor.description]  # Get column names
         result = [dict(zip(columns, row)) for row in rows]
@@ -239,50 +240,9 @@ def get_home_away_team_info_on_date(request, game_date):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
-            WITH new_player_game_stats as (
-                SELECT DISTINCT ON (game_id, player_id) *
-                FROM player_game_stats
-            ),
-            TeamScores AS (
-                SELECT 
-                    pgs.game_id::TEXT AS game_id,
-                    pgs.team_id::TEXT AS team_id,
-                    SUM((pgs.player_game_stats::JSONB ->> 'PTS')::NUMERIC) AS team_score
-                FROM new_player_game_stats pgs
-                GROUP BY pgs.game_id, pgs.team_id
-            ), 
-            GameStats AS (
-                SELECT 
-                    ht.team_location AS home_team_location,
-                    ht.team_name AS home_team_name,
-                    ht.team_abbreviation AS home_team_abbreviation,
-                    ht.team_id AS home_team_id,
-                    at.team_location AS away_team_location,
-                    at.team_name AS away_team_name,
-                    at.team_abbreviation AS away_team_abbreviation,
-                    at.team_id AS away_team_id,
-                    COALESCE(hs.team_score, -1) AS home_score,
-                    COALESCE(ascore.team_score, -1) AS away_score,
-                    g.game_date,
-                    g.season_year AS season_year,
-                    g.game_id AS game_id,
-                    g.game_time AS game_time,
-                    g.winner AS winner,
-                    g.total_score_prediction as total_score_prediction
-                FROM games g
-                JOIN teams ht 
-                    ON g.home_team_id::TEXT = ht.team_id::TEXT AND g.season_year = ht.season_year
-                JOIN teams at 
-                    ON g.away_team_id::TEXT = at.team_id::TEXT AND g.season_year = at.season_year
-                LEFT JOIN TeamScores hs 
-                    ON hs.game_id = g.game_id::TEXT AND hs.team_id = g.home_team_id::TEXT
-                LEFT JOIN TeamScores ascore 
-                    ON ascore.game_id = g.game_id::TEXT AND ascore.team_id = g.away_team_id::TEXT
-                WHERE g.game_date = %s
-            )
-            SELECT * FROM GameStats;
-
-
+            SELECT *
+            FROM mv_game_stats
+            WHERE game_date = %s;
         """, [game_date])
         rows = cursor.fetchall()  # Get all rows
         columns = [col[0] for col in cursor.description]  # Get column names
