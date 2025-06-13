@@ -20,7 +20,7 @@ if password == "password":
     print("Warning: password is set to default value. Please change it in the .env file.")
 
 DATABASE_URL = get_database_url(host, password, user, port, db_name)
-print(f"Connecting to database at {DATABASE_URL}")
+# print(f"Connecting to database at {DATABASE_URL}")
 
 engine = sqlalchemy.create_engine(DATABASE_URL)
 connection = engine.connect()
@@ -123,3 +123,19 @@ for team_id, season_year in team_season_pairs:
 
 #Add other dynamic tables here, if needed
 print("Dynamic tables updated.")
+
+print("Updating each and every materialized view...")
+
+with engine.connect() as connection:
+    #Get all materialized views
+    result = connection.execute(text("""
+        SELECT matviewname FROM pg_matviews;
+    """))
+    matviews = result.fetchall()
+
+    for matview in matviews:
+        matview_name = matview[0]
+        print(f"Refreshing materialized view: {matview_name}")
+        connection.execute(text(f"REFRESH MATERIALIZED VIEW {matview_name};"))
+    connection.commit()
+print("All materialized views updated.")
