@@ -2,17 +2,20 @@ import pandas as pd
 from datetime import date, timedelta
 import nba_api.stats.endpoints as endpoints
 from nba_api.live.nba.endpoints import boxscore, scoreboard
-import sys
 import time
 from modules import *
-import sqlalchemy
 from sqlalchemy import create_engine
 import os
 from sqlalchemy.exc import SQLAlchemyError
 import warnings
 import random
 import sqlalchemy.exc as sa_exc
+import argparse
 
+args = argparse.ArgumentParser(description="Add data to the Oracle-Arena database in the background.")
+args.add_argument('--days', type=int, default=5, help='Number of days (backwards) to fetch data for (default: 5)')
+args.add_argument('--future_days', type=int, default=6, help='Number of future days to fetch data for (default: 6)')
+args = args.parse_args()
 assert os.path.exists(".env"), "Please create a .env file in the Oracle-Arena directory."
 
 #Get all env vars in .env file, no libraries needed for this
@@ -61,7 +64,7 @@ player_game_stats_df = pd.DataFrame(columns=['game_id', 'player_id', 'team_id', 
 
 DATABASE_URL = get_database_url(host, password, user, port, db_name)
 
-days = [date.today() - timedelta(days=i) for i in range(-6, 6, 1)] #Do 5 days back, 6 days forward
+days = [date.today() - timedelta(days=i) for i in range(args.future_days * -1, args.days+1, 1)] #Do 5 days back, 6 days forward
 
 for current_date in days:
 
