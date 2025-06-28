@@ -34,6 +34,23 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const getCacheKey = (date: Date) => `gamesData_${date.toISOString().split("T")[0]}`;
+  const getLastRefreshKey = (date: Date) => `lastRefresh_${date.toISOString().split("T")[0]}`;
+
+  // Function to check if we should refresh based on noon EST
+  const shouldRefreshAtNoon = (lastRefreshTime: number): boolean => {
+    const now = new Date();
+    const lastRefresh = new Date(lastRefreshTime);
+    
+    // Convert to EST
+    const nowEST = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+    const lastRefreshEST = new Date(lastRefresh.toLocaleString("en-US", {timeZone: "America/New_York"}));
+    
+    // Check if noon EST has passed since last refresh
+    const noonToday = new Date(nowEST);
+    noonToday.setHours(12, 0, 0, 0);
+    
+    return nowEST >= noonToday && lastRefreshEST < noonToday;
+  };
 
   const fetchWinLoss = async (teamId: number, seasonYear: string): Promise<string> => {
     const label = `Fetch W-L: team ${teamId} (${seasonYear})`;
@@ -57,17 +74,25 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
   const fetchGames = async (forceRefresh: boolean = false) => {
     const sqlDate = selectedDate.toISOString().split("T")[0];
     const cacheKey = getCacheKey(selectedDate);
+    const lastRefreshKey = getLastRefreshKey(selectedDate);
     const isTodayOrFuture = selectedDate >= new Date(new Date().toDateString());
 
     if (!forceRefresh) {
       const cached = localStorage.getItem(cacheKey);
-      if (cached) {
+      const lastRefresh = localStorage.getItem(lastRefreshKey);
+      
+      if (cached && lastRefresh) {
         try {
           const parsed = JSON.parse(cached);
+          const lastRefreshTime = parseInt(lastRefresh);
+          
           if (parsed && Array.isArray(parsed.data)) {
-            setGames(parsed.data);
-            setLoading(false);
-            return;
+            // Check if we should refresh based on noon EST
+            if (!shouldRefreshAtNoon(lastRefreshTime)) {
+              setGames(parsed.data);
+              setLoading(false);
+              return;
+            }
           }
         } catch (err) {
           console.warn("Error parsing cache:", err);
@@ -103,6 +128,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
       setGames(filteredData);
       localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: filteredData }));
+      localStorage.setItem(lastRefreshKey, Date.now().toString());
 
       const newWinLoss: { [teamId: number]: string } = {};
       const wlTimer = `Fetch W-L records (${sqlDate})`;
@@ -145,14 +171,6 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
   useEffect(() => {
     fetchGames();
-  }, [selectedDate]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchGames(true);
-    }, 60000 * 60 * 12); // Refresh every 12 hours
-
-    return () => clearInterval(interval);
   }, [selectedDate]);
 
   if (loading) {

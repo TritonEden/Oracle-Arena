@@ -50,10 +50,11 @@ const PlayerDetail: React.FC = () => {
   const [currentSeason, setCurrentSeason] = useState<string>("2024-25");
   const season_year = searchParams.get("season") ?? currentSeason;
   const team_id = searchParams.get("team_id");
+  const player_name = searchParams.get("player_name");
 
   const [stats, setStats] = useState<PlayerGameStats[]>([]);
   const [averageStats, setAverageStats] = useState<AverageStats[]>([]);
-  const [playerName, setPlayerName] = useState<string>("");
+  const [playerName, setPlayerName] = useState<string>(player_name || "");
   const [loadingStats, setLoadingStats] = useState<boolean>(true);
   const [loadingAverages, setLoadingAverages] = useState<boolean>(true);
 
@@ -62,6 +63,8 @@ const PlayerDetail: React.FC = () => {
 
   const [selectedStat, setSelectedStat] = useState("PTS");
   const [compareValue, setCompareValue] = useState<number | null>(null);
+
+  console.log("PlayerDetail: Loading player", { player_id, season_year, player_name });
 
   const avgHeaders = (
     <tr>
@@ -88,6 +91,22 @@ const PlayerDetail: React.FC = () => {
     </tr>
   );
 
+  // Function to check if we should refresh based on noon EST
+  const shouldRefreshAtNoon = (lastRefreshTime: number): boolean => {
+    const now = new Date();
+    const lastRefresh = new Date(lastRefreshTime);
+    
+    // Convert to EST
+    const nowEST = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+    const lastRefreshEST = new Date(lastRefresh.toLocaleString("en-US", {timeZone: "America/New_York"}));
+    
+    // Check if noon EST has passed since last refresh
+    const noonToday = new Date(nowEST);
+    noonToday.setHours(12, 0, 0, 0);
+    
+    return nowEST >= noonToday && lastRefreshEST < noonToday;
+  };
+
   useEffect(() => {
     logPerformance("Fetch current season", async () => {
       const res = await fetch("http://localhost:8000/api/get_current_season");
@@ -97,87 +116,129 @@ const PlayerDetail: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const cacheKey = `playerName-${player_id}`;
-    const cachedName = sessionStorage.getItem(cacheKey);
-    if (cachedName) {
-      setPlayerName(cachedName);
-      return;
+    if (player_name) {
+      setPlayerName(player_name);
+    } else {
+      // Only fetch player name if not provided in URL
+      const fetchPlayerName = async () => {
+        try {
+          const response = await fetch(`http://localhost:8000/api/player/${player_id}/`);
+          if (response.ok) {
+            const data = await response.json();
+            setPlayerName(`${data.first_name} ${data.last_name}`);
+          }
+        } catch (error) {
+          console.error("Error fetching player name:", error);
+        }
+      };
+      fetchPlayerName();
     }
-  
-    logPerformance("Fetch player name", async () => {
-      const res = await fetch(`http://localhost:8000/api/players/`);
-      const data = await res.json();
-      const foundPlayer = data.find((p: any) => p.player_id.toString() === player_id);
-      if (foundPlayer) {
-        const fullName = `${foundPlayer.first_name} ${foundPlayer.last_name}`;
-        setPlayerName(fullName);
-        sessionStorage.setItem(cacheKey, fullName);
-      }
-    }).catch((err) => console.error("Failed to fetch player name", err));
-  }, [player_id]);
+  }, [player_id, player_name]);
 
   useEffect(() => {
     const cacheKey = `playerStats-${player_id}-${season_year}`;
+    const lastRefreshKey = `playerStatsLastRefresh-${player_id}-${season_year}`;
     const cachedStats = sessionStorage.getItem(cacheKey);
+    const lastRefresh = sessionStorage.getItem(lastRefreshKey);
 
     const fetchStats = async () => {
+      console.log("PlayerDetail: Fetching stats for", { player_id, season_year });
       setLoadingStats(true);
-      if (cachedStats) {
-        setStats(JSON.parse(cachedStats));
-        setLoadingStats(false);
-        return;
+      
+      if (cachedStats && lastRefresh) {
+        try {
+          const lastRefreshTime = parseInt(lastRefresh);
+          if (!shouldRefreshAtNoon(lastRefreshTime)) {
+            console.log("PlayerDetail: Using cached stats");
+            setStats(JSON.parse(cachedStats));
+            setLoadingStats(false);
+            return;
+          }
+        } catch (err) {
+          console.warn("Error parsing last refresh time:", err);
+        }
       }
 
       try {
-        const data = await logPerformance("Fetch player season stats", async () => {
-          const res = await fetch(
-            `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
-          );
-          return res.json();
-        });
-
-        const uniqueGamesMap = new Map<string, any>();
-        for (const entry of data) {
-          if ((entry.game_id.startsWith("2") || 
-              entry.game_id.startsWith("4")) && 
-              !uniqueGamesMap.has(entry.game_id)) {
-            uniqueGamesMap.set(entry.game_id, entry);
-          }
-        }
-
-        const uniqueGames = Array.from(uniqueGamesMap.values());
-
-        const withDates: PlayerGameStats[] = await logPerformance("Process game dates and stats", async () => {
-          return Promise.all(
-            uniqueGames.map(async (entry: any) => {
-              const dateRes = await fetch(`http://localhost:8000/api/game/${entry.game_id}/`);
-              const dateData = await dateRes.json();
-              const stats = JSON.parse(entry.player_game_stats);
-
-              if (stats.MIN) {
-                const [minutes, seconds] = stats.MIN.split(":");
-                stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
-              }
-
-              return {
-                game_id: entry.game_id,
-                game_date: dateData[0]?.game_date ?? "1970-01-01",
-                stats: stats,
-              };
-            })
-          );
-        });
-
-        const isEmptyStats = (stats: { [key: string]: any }) =>
-          !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
-
-        const filteredStats = withDates.filter((entry) => !isEmptyStats(entry.stats));
-        const sortedByDate = filteredStats.sort(
-          (a, b) => new Date(b.game_date).getTime() - new Date(a.game_date).getTime()
+        const response = await fetch(
+          `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
         );
-
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("PlayerDetail: Raw API data count:", data.length);
+        
+        // Get unique game IDs
+        const gameIds = Array.from(new Set(data.map((entry: any) => entry.game_id)));
+        console.log("PlayerDetail: Unique games found:", gameIds.length);
+        
+        // Batch fetch game dates
+        const gameDates = await Promise.all(
+          gameIds.map(async (gameId) => {
+            try {
+              const dateRes = await fetch(`http://localhost:8000/api/game/${gameId}/`);
+              if (!dateRes.ok) {
+                console.warn(`Failed to fetch date for game ${gameId}: ${dateRes.status}`);
+                return { gameId, date: null };
+              }
+              const dateData = await dateRes.json();
+              return { 
+                gameId, 
+                date: dateData[0]?.game_date ?? null 
+              };
+            } catch (error) {
+              console.error(`Error fetching date for game ${gameId}:`, error);
+              return { gameId, date: null };
+            }
+          })
+        );
+        
+        // Create a map of game ID to date
+        const gameDateMap = new Map(gameDates.map(gd => [gd.gameId, gd.date]));
+        
+        // Process the raw data to match PlayerGameStats interface
+        const processedData: PlayerGameStats[] = data.map((entry: any) => {
+          try {
+            // Parse stats
+            const stats = JSON.parse(entry.player_game_stats);
+            
+            // Format minutes if present
+            if (stats.MIN) {
+              const [minutes, seconds] = stats.MIN.split(":");
+              stats.MIN = `${parseInt(minutes)}:${seconds.padStart(2, "0")}`;
+            }
+            
+            return {
+              game_id: entry.game_id,
+              game_date: gameDateMap.get(entry.game_id) ?? "1970-01-01",
+              stats: stats,
+            };
+          } catch (error) {
+            console.error(`Error processing game ${entry.game_id}:`, error);
+            return null;
+          }
+        });
+        
+        // Filter out null entries and empty stats
+        const validData = processedData.filter(entry => entry !== null);
+        
+        const filteredStats = validData.filter((entry) => {
+          if (!entry) return false;
+          const isEmptyStats = (stats: { [key: string]: any }) =>
+            !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
+          return !isEmptyStats(entry.stats);
+        });
+        
+        console.log("PlayerDetail: Processed games:", filteredStats.length);
+        
+        const sortedByDate = filteredStats.sort((a: PlayerGameStats, b: PlayerGameStats) =>
+          new Date(b.game_date).getTime() - new Date(a.game_date).getTime()
+        );
+        
         setStats(sortedByDate);
         sessionStorage.setItem(cacheKey, JSON.stringify(sortedByDate));
+        sessionStorage.setItem(lastRefreshKey, Date.now().toString());
       } catch (err) {
         console.error("Error fetching player season stats:", err);
       } finally {
@@ -190,7 +251,9 @@ const PlayerDetail: React.FC = () => {
 
   useEffect(() => {
     const cacheKey = `playerAvgStats-${player_id}-${season_year}`;
+    const lastRefreshKey = `playerAvgStatsLastRefresh-${player_id}-${season_year}`;
     const cachedAverages = sessionStorage.getItem(cacheKey);
+    const lastRefresh = sessionStorage.getItem(lastRefreshKey);
 
     const years = Array.from({ length: 5 }, (_, i) => {
       const [start, end] = season_year.split("-");
@@ -198,10 +261,17 @@ const PlayerDetail: React.FC = () => {
       return `${prevStart}-${(parseInt(end) - i).toString().padStart(2, "0")}`;
     });
 
-    if (cachedAverages) {
-      setAverageStats(JSON.parse(cachedAverages));
-      setLoadingAverages(false);
-      return;
+    if (cachedAverages && lastRefresh) {
+      try {
+        const lastRefreshTime = parseInt(lastRefresh);
+        if (!shouldRefreshAtNoon(lastRefreshTime)) {
+          setAverageStats(JSON.parse(cachedAverages));
+          setLoadingAverages(false);
+          return;
+        }
+      } catch (err) {
+        console.warn("Error parsing last refresh time:", err);
+      }
     }
 
     setLoadingAverages(true);
@@ -221,6 +291,7 @@ const PlayerDetail: React.FC = () => {
       const validResults = results.filter((item) => item !== null) as AverageStats[];
       setAverageStats(validResults);
       sessionStorage.setItem(cacheKey, JSON.stringify(validResults));
+      sessionStorage.setItem(lastRefreshKey, Date.now().toString());
     }).catch((err) => console.error("Error fetching average stats:", err))
     .finally(() => setLoadingAverages(false));
   }, [player_id, season_year]);
@@ -230,6 +301,9 @@ const PlayerDetail: React.FC = () => {
 
   const getStatValue = (s: any): number => {
     const toNum = (val: any) => Number(val ?? 0); // Helper for coercion
+    
+    // Handle case where s is undefined or null
+    if (!s) return 0;
   
     switch (selectedStat) {
       case "REB+AST":
@@ -334,26 +408,26 @@ const PlayerDetail: React.FC = () => {
                       {stat?.game_date}
                     </td>
                     <td className={colorClass}>{statVal}</td>
-                    <td>{stat.stats.MIN ?? "-"}</td>
-                    <td>{stat.stats.FGM}</td>
-                    <td>{stat.stats.FGA}</td>
-                    <td>{stat.stats.FG_PCT !== undefined ? stat.stats.FG_PCT.toFixed(3) : "-"}</td>
-                    <td>{stat.stats.FG3M}</td>
-                    <td>{stat.stats.FG3A}</td>
-                    <td>{stat.stats.FG3_PCT !== undefined ? stat.stats.FG3_PCT.toFixed(3) : "-"}</td>
-                    <td>{stat.stats.FTM}</td>
-                    <td>{stat.stats.FTA}</td>
-                    <td>{stat.stats.FT_PCT !== undefined ? stat.stats.FT_PCT.toFixed(3) : "-"}</td>
-                    <td>{stat.stats.OREB}</td>
-                    <td>{stat.stats.DREB}</td>
-                    <td>{stat.stats.REB}</td>
-                    <td>{stat.stats.AST}</td>
-                    <td>{stat.stats.STL}</td>
-                    <td>{stat.stats.BLK}</td>
-                    <td>{stat.stats.TO}</td>
-                    <td>{stat.stats.PF}</td>
-                    <td>{stat.stats.PTS}</td>
-                    <td>{stat.stats.PLUS_MINUS}</td>
+                    <td>{stat.stats?.MIN ?? "-"}</td>
+                    <td>{stat.stats?.FGM ?? "-"}</td>
+                    <td>{stat.stats?.FGA ?? "-"}</td>
+                    <td>{stat.stats?.FG_PCT !== undefined ? stat.stats.FG_PCT.toFixed(3) : "-"}</td>
+                    <td>{stat.stats?.FG3M ?? "-"}</td>
+                    <td>{stat.stats?.FG3A ?? "-"}</td>
+                    <td>{stat.stats?.FG3_PCT !== undefined ? stat.stats.FG3_PCT.toFixed(3) : "-"}</td>
+                    <td>{stat.stats?.FTM ?? "-"}</td>
+                    <td>{stat.stats?.FTA ?? "-"}</td>
+                    <td>{stat.stats?.FT_PCT !== undefined ? stat.stats.FT_PCT.toFixed(3) : "-"}</td>
+                    <td>{stat.stats?.OREB ?? "-"}</td>
+                    <td>{stat.stats?.DREB ?? "-"}</td>
+                    <td>{stat.stats?.REB ?? "-"}</td>
+                    <td>{stat.stats?.AST ?? "-"}</td>
+                    <td>{stat.stats?.STL ?? "-"}</td>
+                    <td>{stat.stats?.BLK ?? "-"}</td>
+                    <td>{stat.stats?.TO ?? "-"}</td>
+                    <td>{stat.stats?.PF ?? "-"}</td>
+                    <td>{stat.stats?.PTS ?? "-"}</td>
+                    <td>{stat.stats?.PLUS_MINUS ?? "-"}</td>
                   </tr>
                 );
               })}

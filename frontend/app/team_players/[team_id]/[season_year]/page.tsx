@@ -148,7 +148,7 @@ const TeamPlayersPage: React.FC = () => {
             {players.map((player) => (
               <Link
                 key={player.player_id}
-                href={`/player/${player.player_id}?season=${season_year}&team_id=${team_id}`}
+                href={`/player/${player.player_id}?season=${season_year}&team_id=${team_id}&player_name=${encodeURIComponent(`${player.first_name} ${player.last_name}`)}`}
                 className={styles.cardLink}
               >
                 <div className={styles.card}>
