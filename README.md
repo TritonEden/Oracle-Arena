@@ -6,6 +6,19 @@ Oracle Arena - A web application that hosts original player performance metrics,
 
 As sports betting and fantasy sports grow, there is an increasingly large group of sports fans interested in advanced analytics. Fans want to further their understanding of sports in order to gain an upper hand when betting on games or simply to discuss the sports they love in further detail. This project seeks to develop a web application with the statistical analysis tools NBA fans need to increase their understanding of the league.
 
+## Final Delieverables
+
+This folder contains the core documentation and presentation materials submitted for our Senior Design project. These files provide detailed insight into our project's objectives, technical implementation, and final results.
+
+- Oracle_Arena_Final_Report.pdf
+  - A 17-page technical report detailing the full scope of the project, including background research, system design, data pipeline, model architecture, testing, results, and conclusions.
+
+- Data_ML_Architecture_Presentation.pdf
+  - A slide presentation outlining our data collection and storage process, feature engineering steps, and an in-depth overview of the machine learning models used in the project.
+
+- Senior_Design_Showcase_Poster.pdf
+  - The final academic poster presented during the Senior Design Showcase. It summarizes the project’s motivation, methodology, results, and key takeaways in a visual format.
+
 ## Setup for webpage (frontend)
 
 1. Install NodeJS
