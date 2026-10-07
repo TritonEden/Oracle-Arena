@@ -1,0 +1,1 @@
+0 12 * * * python3 /app/data_extraction/add_in_background.py --days 5 --future-days 5 --output-dir './data_extraction/tmp_csvs'; >> /var/log/cron.log 2>&1 ; python3 /app/data_extraction/update_dynamic_tables.py >> /var/log/cron.log 2>&1
