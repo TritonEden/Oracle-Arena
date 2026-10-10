@@ -3,3 +3,4 @@
 *.env
 python-env-new/
 data_extraction/tmp_csvs
+
