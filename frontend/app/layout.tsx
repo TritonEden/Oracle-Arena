@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "../components/navbar/navbar";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Oracle Arena",
@@ -29,7 +30,7 @@ export default function RootLayout({
       </head>
       <body>
         <Navbar />
-        {children}
+        <Suspense fallback={<main>Loading...</main>}>{children}</Suspense>
       </body>
     </html>
   );

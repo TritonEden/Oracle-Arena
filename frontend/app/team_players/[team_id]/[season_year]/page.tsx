@@ -43,14 +43,14 @@ const TeamPlayersPage: React.FC = () => {
         setPlayers(JSON.parse(cachedPlayers));
         setLoadingPlayers(false);
       } else {
-        fetch(`http://localhost:8000/api/players_from_team/${team_id}/${season_year}/`)
+        fetch(`/api/players_from_team/${team_id}/${season_year}/`)
           .then((res) => res.json())
           .then(async (data) => {
             const enrichedPlayers = await Promise.all(
               data.map(async (player: Player) => {
                 try {
                   const res = await fetch(
-                    `http://localhost:8000/api/player_stats_for_season/${player.player_id}/${season_year}/`
+                    `/api/player_stats_for_season/${player.player_id}/${season_year}/`
                   );
                   const stats = await res.json();
                   const uniqueGames = new Set<string>();
@@ -104,7 +104,7 @@ const TeamPlayersPage: React.FC = () => {
         setTeam(JSON.parse(cachedTeam));
         setLoadingTeam(false);
       } else {
-        fetch("http://localhost:8000/api/teams/")
+        fetch("/api/teams/")
           .then((res) => res.json())
           .then((data) => {
             const matched = data.find(

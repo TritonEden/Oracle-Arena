@@ -56,7 +56,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
     const label = `Fetch W-L: team ${teamId} (${seasonYear})`;
     console.time(label);
     try {
-      const response = await fetch(`http://localhost:8000/api/wins_losses/${teamId}/${seasonYear}`);
+      const response = await fetch(`/api/wins_losses/${teamId}/${seasonYear}/`);
       if (!response.ok) {
         console.error(`Failed to fetch W-L for team ${teamId}: ${response.status} ${response.statusText}`);
         return "--";
@@ -109,7 +109,7 @@ const GameTable: React.FC<GameTableProps> = ({ selectedDate }) => {
 
       localStorage.removeItem(cacheKey);
       const response = await fetch(
-        `http://localhost:8000/api/home_away_team_info_on_date/${sqlDate}`
+        `/api/home_away_team_info_on_date/${sqlDate}/`
       );
 
       if (!response.ok) {

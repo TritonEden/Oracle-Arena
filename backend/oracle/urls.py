@@ -19,7 +19,10 @@ from django.urls import path
 # from .views import testfunction, playersummary, gamesummary
 # from .views import presentGameSummary, player_stats, get_player_game_stats
 from .views import get_players, get_player_game_stats, get_games, get_teams, get_all_player_game_stats, get_players, get_wins_losses, get_game_ids, get_player_stats_for_season, get_player_average_stats_for_season, get_players_from_team, get_team_game_results, get_game, get_home_away_team_info_on_date, get_player_game_stats_by_game, get_current_season
+from .views import health, get_player
 urlpatterns = [
+    path('healthz/', health, name='health'),
+    path('api/player/<int:player_id>/', get_player, name='player'),
     path('admin/', admin.site.urls),
     # path('testfunction/', testfunction),
     #make a path that takes in just a playerid

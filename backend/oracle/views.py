@@ -1,11 +1,20 @@
-import random
 from django.http import JsonResponse
-from django.core.paginator import Paginator
 from django.db import connection
-from django.db import models
-from .utils import get_player_stats_from_csv, get_players_from_csv
-from .models import PlayerGameStats
-from nba_api.live.nba.endpoints import scoreboard
+
+
+def health(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT 1")
+    return JsonResponse({"status": "ok"})
+
+
+def get_player(request, player_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT player_id, first_name, last_name FROM players WHERE player_id = %s", [player_id])
+        row = cursor.fetchone()
+    if row is None:
+        return JsonResponse({"error": "Player not found"}, status=404)
+    return JsonResponse(dict(zip(["player_id", "first_name", "last_name"], row)))
 
 # Gets all player game stats
 def get_player_game_stats(request, player_id):
@@ -223,7 +232,7 @@ def get_player_average_stats_for_season(request, player_id, season_year):
     with connection.cursor() as cursor:
         # Execute raw SQL query
         cursor.execute("""
-            SELECT jsonb_object_agg(key, avg_val) AS average_stats
+            SELECT jsonb_object_agg(key, avg_val)::text AS average_stats
             FROM player_season_averages
             WHERE player_id = %s AND season_year = %s;
         """, [player_id, season_year])
@@ -276,7 +285,11 @@ def get_home_away_team_info_on_date(request, game_date):
             ) else '--'
             
             winner_prediction_binary = row[columns.index('winner')]
-            winner_prediction = home_stats["team_abbreviation"] if winner_prediction_binary == 1.0 else away_stats["team_abbreviation"]
+            winner_prediction = (
+                '--' if winner_prediction_binary is None
+                else home_stats["team_abbreviation"] if winner_prediction_binary == 1.0
+                else away_stats["team_abbreviation"]
+            )
             
             if total_score_actual != '--':
                 winner_actual = (
