@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import sqlalchemy
 import pandas as pd
 import numpy as np
@@ -6,20 +7,15 @@ import joblib
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 
+from config import get_database_url
+
+MODELS_DIR = Path(__file__).resolve().parents[1] / "models"
+
 
 def get_data_from_db():
     # Get raw tables from the database
 
-    # If on local machine
-    # with open("../.env", "r") as f:
-    #     password = f.readlines()[3].strip().split("=")[1].strip() #May need to change the line number, but mine is on line 4
-    password = "CS402OAAPass$"
-
-    # If on Docker
-    #import os
-    #password = os.getenv('PASSWORD', '')
-
-    DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
+    DATABASE_URL = get_database_url()
 
     engine = sqlalchemy.create_engine(DATABASE_URL, echo=True)
 
@@ -1375,8 +1371,8 @@ def filter_by_date_playoffs(date, X_win_playoff, y_win_playoff, X_points_playoff
 # Only for playoffs at the moment
 # TODO: Make compatible with regular season
 def get_model_predictions(X_win_playoff, y_win_playoff, X_points_playoff, y_points_playoff):
-    winpred_playoff_model = load_model("winreg_playoff.h5")
-    pointspred_playoff_model = joblib.load("ridge_pointspred_playoff.joblib")
+    winpred_playoff_model = load_model(MODELS_DIR / "winpred_playoff" / "winreg_playoff.h5")
+    pointspred_playoff_model = joblib.load(MODELS_DIR / "pointspred_playoff" / "ridge_pointspred_playoff.joblib")
 
     win_scaler = MinMaxScaler()
     points_scaler = MinMaxScaler()
@@ -1407,9 +1403,7 @@ def prediction_to_db(y_win_playoff_pred, y_points_playoff_pred, games):
         "score_prediction": y_points_playoff_pred
     })
 
-    password = 'CS402OAAPass$'
-
-    DATABASE_URL = f"postgresql://rgutkeecsoraclearenaadmin:{password}@rg-utk-eecs-oracle-arena-postgresql-db.postgres.database.azure.com:5432/postgres"
+    DATABASE_URL = get_database_url()
 
     engine = sqlalchemy.create_engine(DATABASE_URL, echo=True)
 
