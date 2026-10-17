@@ -1,0 +1,13 @@
+# Pinned to the versions that produced the models in ml/models (see ml/models/RESULTS.md).
+# Install: pip install -r requirements.txt
+tensorflow==2.21.0
+keras==3.15.1
+scikit-learn==1.9.1
+xgboost==3.4.1
+pandas==3.0.6
+numpy==2.5.4
+scipy==1.18.1
+joblib==1.6.0
+SQLAlchemy==2.0.54
+psycopg2-binary==2.9.13
+python-dotenv==1.2.4
