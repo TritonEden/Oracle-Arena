@@ -5,7 +5,7 @@ import { useParams, useSearchParams, useRouter } from "next/navigation";
 import styles from "./playerDetail.module.css";
 
 // Performance logging utility
-const logPerformance = async (label: string, operation: () => Promise<any>) => {
+const logPerformance = async <T,>(label: string, operation: () => Promise<T>) => {
   console.log(`Starting: ${label}...`);
   const startTime = performance.now();
   try {
@@ -20,10 +20,20 @@ const logPerformance = async (label: string, operation: () => Promise<any>) => {
   }
 };
 
+interface StatLine {
+  MIN?: string;
+  [key: string]: number | string | null | undefined;
+}
+
+interface PlayerStatsResponse {
+  game_id: string;
+  player_game_stats: string;
+}
+
 interface PlayerGameStats {
   game_id: string;
   game_date: string;
-  stats: { [key: string]: any };
+  stats: StatLine;
 }
 
 interface AverageStats {
@@ -109,7 +119,7 @@ const PlayerDetail: React.FC = () => {
 
   useEffect(() => {
     logPerformance("Fetch current season", async () => {
-      const res = await fetch("http://localhost:8000/api/get_current_season");
+      const res = await fetch("/api/get_current_season");
       const data = await res.json();
       setCurrentSeason(data.current_season);
     }).catch((err) => console.error("Failed to fetch current season", err));
@@ -122,7 +132,7 @@ const PlayerDetail: React.FC = () => {
       // Only fetch player name if not provided in URL
       const fetchPlayerName = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/player/${player_id}/`);
+          const response = await fetch(`/api/player/${player_id}/`);
           if (response.ok) {
             const data = await response.json();
             setPlayerName(`${data.first_name} ${data.last_name}`);
@@ -161,23 +171,23 @@ const PlayerDetail: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/api/player_stats_for_season/${player_id}/${season_year}/`
+          `/api/player_stats_for_season/${player_id}/${season_year}/`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
+        const data: PlayerStatsResponse[] = await response.json();
         console.log("PlayerDetail: Raw API data count:", data.length);
         
         // Get unique game IDs
-        const gameIds = Array.from(new Set(data.map((entry: any) => entry.game_id)));
+        const gameIds = Array.from(new Set(data.map((entry) => entry.game_id)));
         console.log("PlayerDetail: Unique games found:", gameIds.length);
         
         // Batch fetch game dates
         const gameDates = await Promise.all(
           gameIds.map(async (gameId) => {
             try {
-              const dateRes = await fetch(`http://localhost:8000/api/game/${gameId}/`);
+              const dateRes = await fetch(`/api/game/${gameId}/`);
               if (!dateRes.ok) {
                 console.warn(`Failed to fetch date for game ${gameId}: ${dateRes.status}`);
                 return { gameId, date: null };
@@ -198,10 +208,10 @@ const PlayerDetail: React.FC = () => {
         const gameDateMap = new Map(gameDates.map(gd => [gd.gameId, gd.date]));
         
         // Process the raw data to match PlayerGameStats interface
-        const processedData: PlayerGameStats[] = data.map((entry: any) => {
+        const processedData: (PlayerGameStats | null)[] = data.map((entry) => {
           try {
             // Parse stats
-            const stats = JSON.parse(entry.player_game_stats);
+            const stats: StatLine = JSON.parse(entry.player_game_stats);
             
             // Format minutes if present
             if (stats.MIN) {
@@ -221,11 +231,11 @@ const PlayerDetail: React.FC = () => {
         });
         
         // Filter out null entries and empty stats
-        const validData = processedData.filter(entry => entry !== null);
+        const validData = processedData.filter((entry): entry is PlayerGameStats => entry !== null);
         
         const filteredStats = validData.filter((entry) => {
           if (!entry) return false;
-          const isEmptyStats = (stats: { [key: string]: any }) =>
+          const isEmptyStats = (stats: StatLine) =>
             !stats || Object.values(stats).every((val) => val === 0 || val === null || val === "");
           return !isEmptyStats(entry.stats);
         });
@@ -278,7 +288,7 @@ const PlayerDetail: React.FC = () => {
     logPerformance("Fetch player average stats", async () => {
       const results = await Promise.all(
         years.map((year) =>
-          fetch(`http://localhost:8000/api/player_average_stats_for_season/${player_id}/${year}/`)
+          fetch(`/api/player_average_stats_for_season/${player_id}/${year}/`)
             .then((res) => res.json())
             .then((data) => {
               if (data.length > 0) {
@@ -299,8 +309,8 @@ const PlayerDetail: React.FC = () => {
   const totalPages = Math.ceil(stats.length / gamesPerPage);
   const currentStats = stats.slice((currentPage - 1) * gamesPerPage, currentPage * gamesPerPage);
 
-  const getStatValue = (s: any): number => {
-    const toNum = (val: any) => Number(val ?? 0); // Helper for coercion
+  const getStatValue = (s: StatLine | null | undefined): number => {
+    const toNum = (val: unknown) => Number(val ?? 0); // Helper for coercion
     
     // Handle case where s is undefined or null
     if (!s) return 0;
@@ -411,13 +421,13 @@ const PlayerDetail: React.FC = () => {
                     <td>{stat.stats?.MIN ?? "-"}</td>
                     <td>{stat.stats?.FGM ?? "-"}</td>
                     <td>{stat.stats?.FGA ?? "-"}</td>
-                    <td>{stat.stats?.FG_PCT !== undefined ? stat.stats.FG_PCT.toFixed(3) : "-"}</td>
+                    <td>{typeof stat.stats?.FG_PCT === "number" ? stat.stats.FG_PCT.toFixed(3) : "-"}</td>
                     <td>{stat.stats?.FG3M ?? "-"}</td>
                     <td>{stat.stats?.FG3A ?? "-"}</td>
-                    <td>{stat.stats?.FG3_PCT !== undefined ? stat.stats.FG3_PCT.toFixed(3) : "-"}</td>
+                    <td>{typeof stat.stats?.FG3_PCT === "number" ? stat.stats.FG3_PCT.toFixed(3) : "-"}</td>
                     <td>{stat.stats?.FTM ?? "-"}</td>
                     <td>{stat.stats?.FTA ?? "-"}</td>
-                    <td>{stat.stats?.FT_PCT !== undefined ? stat.stats.FT_PCT.toFixed(3) : "-"}</td>
+                    <td>{typeof stat.stats?.FT_PCT === "number" ? stat.stats.FT_PCT.toFixed(3) : "-"}</td>
                     <td>{stat.stats?.OREB ?? "-"}</td>
                     <td>{stat.stats?.DREB ?? "-"}</td>
                     <td>{stat.stats?.REB ?? "-"}</td>

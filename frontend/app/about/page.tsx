@@ -76,14 +76,14 @@ const About = () => {
             <p className={styles.text}>
               I became a basketball fan at 10 years old while watching the Miami Heat go on their run to win the finals in 2013.
               I have been a LeBron stan from day 1, and trust me, when I am in the gym I play just like him. As an NBA fan,
-              I have always focused on players and love analyzing which stats best measure a player's impact on winning.
+              I have always focused on players and love analyzing which stats best measure a player&apos;s impact on winning.
               I am constantly browsing Basketball Reference and I catch as many Lakers games as I can. I love using Oracle Arena
               as an NBA analysis tool. Finding out which statistics have most impact winning according to our models is incredibly
               exciting for me. Besides coming up with the idea for Oracle Arena, my primary work for this project has been developing
               the machine learning model used for our predictions, including training and testing. I have also worked on data extraction.
               <br></br>
               <br></br>
-              <b>Fun Fact</b>: I have some of the best post moves in West Knoxville, and have been described as a "less athletic DeMar DeRozan".
+              <b>Fun Fact</b>: I have some of the best post moves in West Knoxville, and have been described as a &quot;less athletic DeMar DeRozan&quot;.
             </p>
           </div>
         </div>
@@ -133,16 +133,16 @@ const About = () => {
               <p className={styles.name}>Nolan Coffey</p>
               <p className={styles.description}>Backend Development: DevOps</p>
               <p className={styles.text}>
-                I have seen some NBA games, caught UT men's basketball, and played enough pickup to know there are two types of players: 
-                those who call every foul and those who've studied Malice at the Palace like it is a game tape. I aspire to be somewhere 
+                I have seen some NBA games, caught UT men&apos;s basketball, and played enough pickup to know there are two types of players:
+                those who call every foul and those who&apos;ve studied Malice at the Palace like it is a game tape. I aspire to be somewhere
                 in between with aggressive box outs, minimal criminal charges. I am proud of what we have created with Oracle Arena, and 
                 feel that we have made something for every type of basketball fan. I am excited to see how this project continues to evolve.
                 I am responsible for working on our Backend Pipeline consisting of Nginx and Django, containerizing with Docker and deployment to Azure. 
-                Through this project I've learned valuable DevOps skills and improved my ability to coordinate and communicate with a development 
+                Through this project I&apos;ve learned valuable DevOps skills and improved my ability to coordinate and communicate with a development
                 team.
                 <br></br>
                 <br></br>
-                <b>Fun Fact</b>: The name on my driver's license says "Nolan", but on the court they call me the "Layup King".
+                <b>Fun Fact</b>: The name on my driver&apos;s license says &quot;Nolan&quot;, but on the court they call me the &quot;Layup King&quot;.
               </p>
             </div>
           </div>
@@ -155,7 +155,7 @@ const About = () => {
               <p className={styles.description}>Frontend Development: Statistics</p>
               <p className={styles.text}>
                 I am pretty sure that I have only touched a basketball 20 times in my entire lifespan. I discovered basketball in middle 
-                school in PE class. It, sadly, did not discover me. This led to my teammates calling me "The Decoy" because nobody guards me. 
+                school in PE class. It, sadly, did not discover me. This led to my teammates calling me &quot;The Decoy&quot; because nobody guards me.
                 Working on Oracle Arena has given me some valuable insight into the sport, especially individual player statistics. This is 
                 because I created the Statistics page that hosts individual player performance data. Another role I took on is data collection 
                 in order to get player data. My hope is that others like me can use the Statistics page to make themselves sound smarter about 
@@ -199,7 +199,7 @@ const About = () => {
                 necessary NBA data, and creating a database for storage along with API endpoints for access.
                 <br></br>
                 <br></br>
-                <b>Fun Fact</b>: My favorite player is Shaquille O'Neal, proud inventor of the Papa John's Shaq-a-Roni.
+                <b>Fun Fact</b>: My favorite player is Shaquille O&apos;Neal, proud inventor of the Papa John&apos;s Shaq-a-Roni.
               </p>
             </div>
           </div>
@@ -310,7 +310,7 @@ const About = () => {
         </div>
         <div className={styles.subHeader}>Win Prediction Models</div>
         <div className={styles.modelInfoText}>
-          This neural network is a deep feedforward model built using Keras' Sequential API. It passes features through four hidden layers of 
+          This neural network is a deep feedforward model built using Keras&apos; Sequential API. It passes features through four hidden layers of
           progressively smaller sizes: 256, 128, 64, and 32 neurons, respectively. Each hidden layer uses the ReLU activation function to introduce 
           non-linearity, which helps the network learn complex patterns in the data. To improve training stability and speed, each layer is followed 
           by batch normalization, which standardizes the inputs to the layer and reduces internal covariate shift. Additionally, dropout is applied 

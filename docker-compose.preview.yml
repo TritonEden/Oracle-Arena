@@ -1,0 +1,66 @@
+services:
+  web-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile-backend
+    image: oracle-arena-backend:preview
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_PORT: "5432"
+      DJANGO_DEBUG: "false"
+      DJANGO_ALLOWED_HOSTS: "courtoracle.fyi,www.courtoracle.fyi,web-backend,localhost,127.0.0.1"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "https://courtoracle.fyi,https://www.courtoracle.fyi"
+      DJANGO_TRUST_PROXY: "true"
+      DJANGO_SECURE_SSL_REDIRECT: "true"
+    depends_on:
+      database:
+        condition: service_healthy
+    mem_limit: 192m
+    cpus: 0.5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz/', timeout=5)"]
+      interval: 20s
+      timeout: 6s
+      retries: 5
+  web-frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile-frontend
+      args:
+        API_INTERNAL_URL: http://web-backend:8000
+    image: oracle-arena-frontend:preview
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+      NODE_OPTIONS: --max-old-space-size=192
+    depends_on:
+      web-backend:
+        condition: service_healthy
+    mem_limit: 256m
+    cpus: 0.5
+    networks: [default, edge]
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: fragrancefinder_fragfinder-network
+      traefik.http.routers.courtoracle-http.rule: "Host(`courtoracle.fyi`) || Host(`www.courtoracle.fyi`)"
+      traefik.http.routers.courtoracle-http.entrypoints: web
+      traefik.http.routers.courtoracle-http.middlewares: courtoracle-https
+      traefik.http.middlewares.courtoracle-https.redirectscheme.scheme: https
+      traefik.http.routers.courtoracle.rule: "Host(`courtoracle.fyi`) || Host(`www.courtoracle.fyi`)"
+      traefik.http.routers.courtoracle.entrypoints: websecure
+      traefik.http.routers.courtoracle.tls: "true"
+      traefik.http.routers.courtoracle.tls.certresolver: letsencrypt
+      traefik.http.services.courtoracle.loadbalancer.server.port: "3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:3000/home',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 20s
+      timeout: 6s
+      retries: 5
+networks:
+  edge:
+    external: true
+    name: fragrancefinder_fragfinder-network

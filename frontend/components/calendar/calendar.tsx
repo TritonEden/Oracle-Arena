@@ -52,7 +52,7 @@ const Calendar: React.FC<CalendarProps> = ({ selectedDate, setSelectedDate }) =>
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDayOfMonth = getFirstDayOfMonth(currentMonth, currentYear);
 
-    let daysArray = [];
+    const daysArray = [];
     for (let i = 0; i < firstDayOfMonth; i++) {
       daysArray.push(null);
     }

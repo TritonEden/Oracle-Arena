@@ -15,7 +15,7 @@ const PlayerStats: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/player_stats/")
+    fetch("/api/player_stats/")
       .then((response) => response.json())
       .then((data) => setPlayers(data))
       .catch((error) => console.error("Error fetching player data:", error));

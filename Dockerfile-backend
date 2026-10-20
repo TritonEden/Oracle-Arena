@@ -1,0 +1,10 @@
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
+WORKDIR /app
+COPY backend/requirements-web.txt ./requirements-web.txt
+RUN pip install --no-cache-dir -r requirements-web.txt
+COPY backend ./backend
+WORKDIR /app/backend
+USER 10001:10001
+EXPOSE 8000
+CMD ["gunicorn", "oracle.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "2", "--timeout", "60", "--access-logfile", "-", "--error-logfile", "-"]

@@ -16,17 +16,20 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR.parent / ".env")
+load_dotenv(BASE_DIR / ".env")  # Backward-compatible fallback; environment values win.
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)9%z8*36wz%!p9-)dw#606i*46(ag*pn(8mw1g%zh%z*0v@n@7'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') or 'django-insecure-)9%z8*36wz%!p9-)dw#606i*46(ag*pn(8mw1g%zh%z*0v@n@7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'true').lower() == 'true'
+if not DEBUG and not os.getenv('DJANGO_SECRET_KEY'):
+    raise ValueError('DJANGO_SECRET_KEY is required when DEBUG is disabled')
 LOCAL = False
 
 ALLOWED_HOSTS = []
@@ -93,8 +96,8 @@ POSTGRES_DB = os.getenv('POSTGRES_DB')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', '')
 # PASSWORD = os.getenv('PASSWORD')
-POSTGRES_HOST = os.getenv('POSTGRES_HOST')
-POSTGRES_PORT = os.getenv('POSTGRES_PORT')
+POSTGRES_HOST = os.getenv('POSTGRES_HOST', '127.0.0.1')
+POSTGRES_PORT = os.getenv('POSTGRES_PORT', '5432')
 
 
 if not LOCAL:
@@ -123,12 +126,19 @@ if not LOCAL:
 #         }
 #     } 
 
-ALLOWED_HOSTS = [
-    'ec2-3-95-168-187.compute-1.amazonaws.com',
-    'localhost',
-    '127.0.0.1',
-    '172.210.68.66', #Azure's VM IP address
-]
+ALLOWED_HOSTS = [host.strip() for host in os.getenv(
+    'DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1'
+).split(',') if host.strip()]
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv(
+    'DJANGO_CSRF_TRUSTED_ORIGINS', ''
+).split(',') if origin.strip()]
+if os.getenv('DJANGO_TRUST_PROXY', 'false').lower() == 'true':
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = os.getenv('DJANGO_SECURE_SSL_REDIRECT', 'false').lower() == 'true'
+SECURE_REDIRECT_EXEMPT = [r'^healthz/$']
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
 
 
 # Password validation

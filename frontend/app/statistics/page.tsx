@@ -5,7 +5,7 @@ import Link from "next/link";
 import styles from "./teams.module.css";
 
 // Performance logging utility
-const logPerformance = async (label: string, operation: () => Promise<any>) => {
+const logPerformance = async <T,>(label: string, operation: () => Promise<T>) => {
   console.log(`Starting: ${label}...`);
   const startTime = performance.now();
   try {
@@ -36,7 +36,7 @@ const TeamStats: React.FC = () => {
 
   useEffect(() => {
     logPerformance("Fetch current season", async () => {
-      const res = await fetch("http://localhost:8000/api/get_current_season");
+      const res = await fetch("/api/get_current_season");
       const data = await res.json();
       setCurrentSeason(data.current_season);
     }).catch((err) => console.error("Failed to fetch current season", err));
@@ -58,7 +58,7 @@ const TeamStats: React.FC = () => {
     } else {
       // If no cached data, fetch from API
       logPerformance("Fetch teams data", async () => {
-        const res = await fetch("http://localhost:8000/api/teams/");
+        const res = await fetch("/api/teams/");
         const data = await res.json();
         const sorted = [...data].sort(
           (a, b) => parseInt(b.season_year) - parseInt(a.season_year)

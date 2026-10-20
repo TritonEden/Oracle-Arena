@@ -1,0 +1,958 @@
+NBA data extraction starting for 2026-10-08.
+Date range: 2026-10-03 -> 2026-10-13
+Total dates: 11
+Output directory: /home/oracle/Oracle-Arena/data_extraction/tmp_csvs
+
+======================================================================
+Processing 2026-10-03
+======================================================================
+Fetching schedule: 2026-10-03
+  API request succeeded: ScoreboardV3 for 2026-10-03
+Found 1 game(s) for 2026-10-03.
+  Game 0012600009: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600009
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-04
+======================================================================
+Fetching schedule: 2026-10-04
+  API request succeeded: ScoreboardV3 for 2026-10-04
+Found 2 game(s) for 2026-10-04.
+  Game 0012600066: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600066
+    Added 42 player stat row(s).
+  Game 0012600067: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600067
+    Added 41 player stat row(s).
+
+======================================================================
+Processing 2026-10-05
+======================================================================
+Fetching schedule: 2026-10-05
+  API request succeeded: ScoreboardV3 for 2026-10-05
+Found 5 game(s) for 2026-10-05.
+  Game 0012600004: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600004
+    Added 41 player stat row(s).
+  Game 0012600022: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600022
+    Added 41 player stat row(s).
+  Game 0012600023: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600023
+    Added 42 player stat row(s).
+  Game 0012600024: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600024
+    Added 42 player stat row(s).
+  Game 0012600028: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600028
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-06
+======================================================================
+Fetching schedule: 2026-10-06
+  API request succeeded: ScoreboardV3 for 2026-10-06
+Found 4 game(s) for 2026-10-06.
+  Game 0012600025: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600025
+    Added 41 player stat row(s).
+  Game 0012600026: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600026
+    Added 42 player stat row(s).
+  Game 0012600027: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600027
+    Added 41 player stat row(s).
+  Game 0012600010: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600010
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-07
+======================================================================
+Fetching schedule: 2026-10-07
+  API request succeeded: ScoreboardV3 for 2026-10-07
+Found 5 game(s) for 2026-10-07.
+  Game 0012600029: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600029
+    Added 41 player stat row(s).
+  Game 0012600030: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600030
+    Added 43 player stat row(s).
+  Game 0012600031: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600031
+    Added 40 player stat row(s).
+  Game 0012600032: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600032
+    Added 42 player stat row(s).
+  Game 0012600033: Halftime            
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-08
+======================================================================
+Fetching schedule: 2026-10-08
+  API request succeeded: ScoreboardV3 for 2026-10-08
+Found 6 game(s) for 2026-10-08.
+  Game 0012600011: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600001: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600034: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600035: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600005: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600036: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-09
+======================================================================
+Fetching schedule: 2026-10-09
+  API request succeeded: ScoreboardV3 for 2026-10-09
+Found 2 game(s) for 2026-10-09.
+  Game 0012600012: 8:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600037: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-10
+======================================================================
+Fetching schedule: 2026-10-10
+  API request succeeded: ScoreboardV3 for 2026-10-10
+Found 7 game(s) for 2026-10-10.
+  Game 0012600015: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600006: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600038: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600002: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600013: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600014: 8:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600039: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-11
+======================================================================
+Fetching schedule: 2026-10-11
+  API request succeeded: ScoreboardV3 for 2026-10-11
+Found 4 game(s) for 2026-10-11.
+  Game 0012600016: 6:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600041: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600040: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600065: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-12
+======================================================================
+Fetching schedule: 2026-10-12
+  API request succeeded: ScoreboardV3 for 2026-10-12
+Found 5 game(s) for 2026-10-12.
+  Game 0012600042: 4:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600007: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600050: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600043: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600044: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-13
+======================================================================
+Fetching schedule: 2026-10-13
+  API request succeeded: ScoreboardV3 for 2026-10-13
+Found 5 game(s) for 2026-10-13.
+  Game 0012600045: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600046: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600047: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600048: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600049: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+FINAL EXTRACTION SUMMARY
+======================================================================
+Date range: 2026-10-03 -> 2026-10-13
+Games found: 46
+Completed games processed: 16
+Player-game stat rows: 663
+
+Current invocation row counts:
+  teams: 31
+  players: 478
+  games: 46
+  player_game_stats: 663
+
+CSV files:
+  teams: teams.csv
+  players: players.csv
+  games: games.csv
+  player_game_stats: player_game_stats.csv
+
+Extraction complete.
+NBA data extraction starting for 2026-10-08.
+Date range: 2026-10-03 -> 2026-10-13
+Total dates: 11
+Output directory: /home/oracle/Oracle-Arena/data_extraction/tmp_csvs
+
+======================================================================
+Processing 2026-10-03
+======================================================================
+Fetching schedule: 2026-10-03
+  API request succeeded: ScoreboardV3 for 2026-10-03
+Found 1 game(s) for 2026-10-03.
+  Game 0012600009: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600009
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-04
+======================================================================
+Fetching schedule: 2026-10-04
+  API request succeeded: ScoreboardV3 for 2026-10-04
+Found 2 game(s) for 2026-10-04.
+  Game 0012600066: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600066
+    Added 42 player stat row(s).
+  Game 0012600067: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600067
+    Added 41 player stat row(s).
+
+======================================================================
+Processing 2026-10-05
+======================================================================
+Fetching schedule: 2026-10-05
+  API request succeeded: ScoreboardV3 for 2026-10-05
+Found 5 game(s) for 2026-10-05.
+  Game 0012600004: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600004
+    Added 41 player stat row(s).
+  Game 0012600022: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600022
+    Added 41 player stat row(s).
+  Game 0012600023: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600023
+    Added 42 player stat row(s).
+  Game 0012600024: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600024
+    Added 42 player stat row(s).
+  Game 0012600028: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600028
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-06
+======================================================================
+Fetching schedule: 2026-10-06
+  API request succeeded: ScoreboardV3 for 2026-10-06
+Found 4 game(s) for 2026-10-06.
+  Game 0012600025: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600025
+    Added 41 player stat row(s).
+  Game 0012600026: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600026
+    Added 42 player stat row(s).
+  Game 0012600027: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600027
+    Added 41 player stat row(s).
+  Game 0012600010: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600010
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-07
+======================================================================
+Fetching schedule: 2026-10-07
+  API request succeeded: ScoreboardV3 for 2026-10-07
+Found 5 game(s) for 2026-10-07.
+  Game 0012600029: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600029
+    Added 41 player stat row(s).
+  Game 0012600030: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600030
+    Added 43 player stat row(s).
+  Game 0012600031: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600031
+    Added 40 player stat row(s).
+  Game 0012600032: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600032
+    Added 42 player stat row(s).
+  Game 0012600033: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600033
+    Added 39 player stat row(s).
+
+======================================================================
+Processing 2026-10-08
+======================================================================
+Fetching schedule: 2026-10-08
+  API request succeeded: ScoreboardV3 for 2026-10-08
+Found 6 game(s) for 2026-10-08.
+  Game 0012600011: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600001: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600034: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600035: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600005: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600036: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-09
+======================================================================
+Fetching schedule: 2026-10-09
+  API request succeeded: ScoreboardV3 for 2026-10-09
+Found 2 game(s) for 2026-10-09.
+  Game 0012600012: 8:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600037: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-10
+======================================================================
+Fetching schedule: 2026-10-10
+  API request succeeded: ScoreboardV3 for 2026-10-10
+Found 7 game(s) for 2026-10-10.
+  Game 0012600015: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600006: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600038: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600002: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600013: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600014: 8:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600039: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-11
+======================================================================
+Fetching schedule: 2026-10-11
+  API request succeeded: ScoreboardV3 for 2026-10-11
+Found 4 game(s) for 2026-10-11.
+  Game 0012600016: 6:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600041: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600040: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600065: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-12
+======================================================================
+Fetching schedule: 2026-10-12
+  API request succeeded: ScoreboardV3 for 2026-10-12
+Found 5 game(s) for 2026-10-12.
+  Game 0012600042: 4:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600007: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600050: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600043: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600044: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-13
+======================================================================
+Fetching schedule: 2026-10-13
+  API request succeeded: ScoreboardV3 for 2026-10-13
+Found 5 game(s) for 2026-10-13.
+  Game 0012600045: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600046: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600047: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600048: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600049: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+FINAL EXTRACTION SUMMARY
+======================================================================
+Date range: 2026-10-03 -> 2026-10-13
+Games found: 46
+Completed games processed: 17
+Player-game stat rows: 702
+
+Current invocation row counts:
+  teams: 31
+  players: 496
+  games: 46
+  player_game_stats: 702
+
+CSV files:
+  teams: teams.csv
+  players: players.csv
+  games: games.csv
+  player_game_stats: player_game_stats.csv
+
+Extraction complete.
+NBA data extraction starting for 2026-10-09.
+Date range: 2026-10-04 -> 2026-10-14
+Total dates: 11
+Output directory: /home/oracle/Oracle-Arena/data_extraction/tmp_csvs
+
+======================================================================
+Processing 2026-10-04
+======================================================================
+Fetching schedule: 2026-10-04
+  API request succeeded: ScoreboardV3 for 2026-10-04
+Found 2 game(s) for 2026-10-04.
+  Game 0012600066: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600066
+    Added 42 player stat row(s).
+  Game 0012600067: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600067
+    Added 41 player stat row(s).
+
+======================================================================
+Processing 2026-10-05
+======================================================================
+Fetching schedule: 2026-10-05
+  API request succeeded: ScoreboardV3 for 2026-10-05
+Found 5 game(s) for 2026-10-05.
+  Game 0012600004: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600004
+    Added 41 player stat row(s).
+  Game 0012600022: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600022
+    Added 41 player stat row(s).
+  Game 0012600023: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600023
+    Added 42 player stat row(s).
+  Game 0012600024: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600024
+    Added 42 player stat row(s).
+  Game 0012600028: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600028
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-06
+======================================================================
+Fetching schedule: 2026-10-06
+  API request succeeded: ScoreboardV3 for 2026-10-06
+Found 4 game(s) for 2026-10-06.
+  Game 0012600025: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600025
+    Added 41 player stat row(s).
+  Game 0012600026: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600026
+    Added 42 player stat row(s).
+  Game 0012600027: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600027
+    Added 41 player stat row(s).
+  Game 0012600010: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600010
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-07
+======================================================================
+Fetching schedule: 2026-10-07
+  API request succeeded: ScoreboardV3 for 2026-10-07
+Found 5 game(s) for 2026-10-07.
+  Game 0012600029: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600029
+    Added 41 player stat row(s).
+  Game 0012600030: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600030
+    Added 43 player stat row(s).
+  Game 0012600031: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600031
+    Added 40 player stat row(s).
+  Game 0012600032: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600032
+    Added 42 player stat row(s).
+  Game 0012600033: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600033
+    Added 39 player stat row(s).
+
+======================================================================
+Processing 2026-10-08
+======================================================================
+Fetching schedule: 2026-10-08
+  API request succeeded: ScoreboardV3 for 2026-10-08
+Found 6 game(s) for 2026-10-08.
+  Game 0012600011: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600011
+    Added 42 player stat row(s).
+  Game 0012600001: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600001
+    Added 42 player stat row(s).
+  Game 0012600034: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600034
+    Added 41 player stat row(s).
+  Game 0012600035: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600035
+    Added 42 player stat row(s).
+  Game 0012600005: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600005
+    Added 42 player stat row(s).
+  Game 0012600036: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600036
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-09
+======================================================================
+Fetching schedule: 2026-10-09
+  API request succeeded: ScoreboardV3 for 2026-10-09
+Found 2 game(s) for 2026-10-09.
+  Game 0012600012: 8:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600037: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-10
+======================================================================
+Fetching schedule: 2026-10-10
+  API request succeeded: ScoreboardV3 for 2026-10-10
+Found 7 game(s) for 2026-10-10.
+  Game 0012600015: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600006: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600038: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600002: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600013: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600014: 8:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600039: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-11
+======================================================================
+Fetching schedule: 2026-10-11
+  API request succeeded: ScoreboardV3 for 2026-10-11
+Found 4 game(s) for 2026-10-11.
+  Game 0012600016: 6:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600041: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600040: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600065: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-12
+======================================================================
+Fetching schedule: 2026-10-12
+  API request succeeded: ScoreboardV3 for 2026-10-12
+Found 5 game(s) for 2026-10-12.
+  Game 0012600042: 4:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600007: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600050: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600043: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600044: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-13
+======================================================================
+Fetching schedule: 2026-10-13
+  API request succeeded: ScoreboardV3 for 2026-10-13
+Found 5 game(s) for 2026-10-13.
+  Game 0012600045: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600046: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600047: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600048: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600049: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-14
+======================================================================
+Fetching schedule: 2026-10-14
+  API request succeeded: ScoreboardV3 for 2026-10-14
+Found 7 game(s) for 2026-10-14.
+  Game 0012600003: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600017: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600051: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600052: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600053: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600054: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600064: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+FINAL EXTRACTION SUMMARY
+======================================================================
+Date range: 2026-10-04 -> 2026-10-14
+Games found: 52
+Completed games processed: 22
+Player-game stat rows: 909
+
+Current invocation row counts:
+  teams: 31
+  players: 559
+  games: 52
+  player_game_stats: 909
+
+CSV files:
+  teams: teams.csv
+  players: players.csv
+  games: games.csv
+  player_game_stats: player_game_stats.csv
+
+Extraction complete.
+NBA data extraction starting for 2026-10-10.
+Date range: 2026-10-05 -> 2026-10-15
+Total dates: 11
+Output directory: /home/oracle/Oracle-Arena/data_extraction/tmp_csvs
+
+======================================================================
+Processing 2026-10-05
+======================================================================
+Fetching schedule: 2026-10-05
+  API request succeeded: ScoreboardV3 for 2026-10-05
+Found 5 game(s) for 2026-10-05.
+  Game 0012600004: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600004
+    Added 41 player stat row(s).
+  Game 0012600022: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600022
+    Added 41 player stat row(s).
+  Game 0012600023: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600023
+    Added 42 player stat row(s).
+  Game 0012600024: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600024
+    Added 42 player stat row(s).
+  Game 0012600028: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600028
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-06
+======================================================================
+Fetching schedule: 2026-10-06
+  API request succeeded: ScoreboardV3 for 2026-10-06
+Found 4 game(s) for 2026-10-06.
+  Game 0012600025: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600025
+    Added 41 player stat row(s).
+  Game 0012600026: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600026
+    Added 42 player stat row(s).
+  Game 0012600027: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600027
+    Added 41 player stat row(s).
+  Game 0012600010: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600010
+    Added 42 player stat row(s).
+
+======================================================================
+Processing 2026-10-07
+======================================================================
+Fetching schedule: 2026-10-07
+  API request succeeded: ScoreboardV3 for 2026-10-07
+Found 5 game(s) for 2026-10-07.
+  Game 0012600029: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600029
+    Added 41 player stat row(s).
+  Game 0012600030: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600030
+    Added 43 player stat row(s).
+  Game 0012600031: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600031
+    Added 40 player stat row(s).
+  Game 0012600032: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600032
+    Added 42 player stat row(s).
+  Game 0012600033: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600033
+    Added 39 player stat row(s).
+
+======================================================================
+Processing 2026-10-08
+======================================================================
+Fetching schedule: 2026-10-08
+  API request succeeded: ScoreboardV3 for 2026-10-08
+Found 6 game(s) for 2026-10-08.
+  Game 0012600011: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600011
+    Added 42 player stat row(s).
+  Game 0012600001: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600001
+    Added 42 player stat row(s).
+  Game 0012600034: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600034
+    Added 41 player stat row(s).
+  Game 0012600035: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600035
+    Added 42 player stat row(s).
+  Game 0012600005: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600005
+    Added 42 player stat row(s).
+  Game 0012600036: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600036
+    Added 40 player stat row(s).
+
+======================================================================
+Processing 2026-10-09
+======================================================================
+Fetching schedule: 2026-10-09
+  API request succeeded: ScoreboardV3 for 2026-10-09
+Found 2 game(s) for 2026-10-09.
+  Game 0012600012: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600012
+    Added 38 player stat row(s).
+  Game 0012600037: Final
+    Fetching BoxScoreTraditionalV3...
+  API request succeeded: BoxScoreTraditionalV3 for 0012600037
+    Added 41 player stat row(s).
+
+======================================================================
+Processing 2026-10-10
+======================================================================
+Fetching schedule: 2026-10-10
+  API request succeeded: ScoreboardV3 for 2026-10-10
+Found 7 game(s) for 2026-10-10.
+  Game 0012600015: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600006: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600038: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600002: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600013: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600014: 8:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600039: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-11
+======================================================================
+Fetching schedule: 2026-10-11
+  API request succeeded: ScoreboardV3 for 2026-10-11
+Found 4 game(s) for 2026-10-11.
+  Game 0012600016: 6:00 am ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600041: 6:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600040: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600065: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-12
+======================================================================
+Fetching schedule: 2026-10-12
+  API request succeeded: ScoreboardV3 for 2026-10-12
+Found 5 game(s) for 2026-10-12.
+  Game 0012600042: 4:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600007: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600050: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600043: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600044: 9:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-13
+======================================================================
+Fetching schedule: 2026-10-13
+  API request succeeded: ScoreboardV3 for 2026-10-13
+Found 5 game(s) for 2026-10-13.
+  Game 0012600045: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600046: 7:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600047: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600048: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600049: 10:00 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-14
+======================================================================
+Fetching schedule: 2026-10-14
+  API request succeeded: ScoreboardV3 for 2026-10-14
+Found 7 game(s) for 2026-10-14.
+  Game 0012600003: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600017: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600051: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600052: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600053: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600054: 8:00 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600064: 10:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+Processing 2026-10-15
+======================================================================
+Fetching schedule: 2026-10-15
+  API request succeeded: ScoreboardV3 for 2026-10-15
+Found 2 game(s) for 2026-10-15.
+  Game 0012600055: 7:30 pm ET
+    Not final; schedule saved, box score skipped.
+  Game 0012600020: 8:30 pm ET
+    Not final; schedule saved, box score skipped.
+
+======================================================================
+FINAL EXTRACTION SUMMARY
+======================================================================
+Date range: 2026-10-05 -> 2026-10-15
+Games found: 52
+Completed games processed: 22
+Player-game stat rows: 905
+
+Current invocation row counts:
+  teams: 31
+  players: 575
+  games: 52
+  player_game_stats: 905
+
+CSV files:
+  teams: teams.csv
+  players: players.csv
+  games: games.csv
+  player_game_stats: player_game_stats.csv
+
+Extraction complete.
