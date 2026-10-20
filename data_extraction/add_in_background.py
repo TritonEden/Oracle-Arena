@@ -59,6 +59,11 @@ CSV_FILES = {
     "player_game_stats": "player_game_stats.csv",
 }
 
+# Helper print function
+def print_with_log(message=""):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
+    sys.stdout.flush()
 
 # ---------------------------------------------------------------------------
 # CLI
@@ -358,7 +363,7 @@ def retry_api_request(
                     f"{description} returned None."
                 )
 
-            print(
+            print_with_log(
                 f"  API request succeeded: {description}"
             )
 
@@ -368,16 +373,16 @@ def retry_api_request(
             raise
 
         except Exception as exc:
-            print(
+            print_with_log(
                 f"  API request failed: {description}"
             )
-            print(
+            print_with_log(
                 f"    Attempt: {attempt}"
             )
-            print(
+            print_with_log(
                 f"    Error: {type(exc).__name__}: {exc}"
             )
-            print(
+            print_with_log(
                 f"    Retrying in {delay:.1f} seconds..."
             )
 
@@ -408,7 +413,7 @@ def fetch_scoreboard(
     retry_delay,
     max_retry_delay,
 ):
-    print(f"Fetching schedule: {game_date}")
+    print_with_log(f"Fetching schedule: {game_date}")
 
     return retry_api_request(
         lambda: scoreboardv3.ScoreboardV3(
@@ -645,7 +650,7 @@ def build_games_df(
             )
 
         if visitor_team_id is None or home_team_id is None:
-            print(
+            print_with_log(
                 f"  WARNING: Could not determine home/away IDs "
                 f"for game {game_id}."
             )
@@ -1126,7 +1131,7 @@ def process_completed_game(
     )
 
     if player_stats.empty:
-        print(
+        print_with_log(
             f"  WARNING: No player stats returned for {game_id}."
         )
         return
@@ -1162,10 +1167,10 @@ def process_date(
     dataframes,
     args,
 ):
-    print()
-    print("=" * 70)
-    print(f"Processing {game_date}")
-    print("=" * 70)
+    print_with_log()
+    print_with_log("=" * 70)
+    print_with_log(f"Processing {game_date}")
+    print_with_log("=" * 70)
 
     scoreboard = fetch_scoreboard(
         game_date,
@@ -1180,7 +1185,7 @@ def process_date(
     )
 
     if game_header.empty:
-        print(
+        print_with_log(
             f"No games found for {game_date}."
         )
         return {
@@ -1219,7 +1224,7 @@ def process_date(
 
     game_count = len(games_df)
 
-    print(
+    print_with_log(
         f"Found {game_count} game(s) for {game_date}."
     )
 
@@ -1250,7 +1255,7 @@ def process_date(
         game = game_rows.get(game_id)
 
         if game is None:
-            print(
+            print_with_log(
                 f"  WARNING: No GameHeader row for {game_id}."
             )
             continue
@@ -1265,18 +1270,18 @@ def process_date(
             or "Unknown"
         )
 
-        print(
+        print_with_log(
             f"  Game {game_id}: {status_text}"
         )
 
         if not is_game_final(game):
-            print(
+            print_with_log(
                 f"    Not final; schedule saved, "
                 f"box score skipped."
             )
             continue
 
-        print(
+        print_with_log(
             f"    Fetching BoxScoreTraditionalV3..."
         )
 
@@ -1322,11 +1327,11 @@ def process_date(
             completed += 1
             stats_count += new_stats
 
-            print(
+            print_with_log(
                 f"    Added {new_stats} player stat row(s)."
             )
         else:
-            print(
+            print_with_log(
                 f"    Box score returned no player rows."
             )
 
@@ -1469,24 +1474,24 @@ def main():
             get_date_range(args)
         )
     except ValueError as exc:
-        print(f"ERROR: {exc}")
+        print_with_log(f"ERROR: {exc}")
         sys.exit(1)
 
     today = date.today()
 
-    print(
+    print_with_log(
         f"NBA data extraction starting for {today}."
     )
 
-    print(
+    print_with_log(
         f"Date range: {dates[0]} -> {dates[-1]}"
     )
 
-    print(
+    print_with_log(
         f"Total dates: {len(dates)}"
     )
 
-    print(
+    print_with_log(
         f"Output directory: {args.output_dir}"
     )
 
@@ -1512,8 +1517,8 @@ def main():
             total_stats += result["stats"]
 
         except KeyboardInterrupt:
-            print()
-            print(
+            print_with_log()
+            print_with_log(
                 "Interrupted by user."
             )
             raise
@@ -1523,12 +1528,12 @@ def main():
             # requests already retry forever. This catches unexpected
             # programming/data/database errors so the remaining dates can
             # still be processed.
-            print()
-            print(
+            print_with_log()
+            print_with_log(
                 f"ERROR processing {game_date}: "
                 f"{type(exc).__name__}: {exc}"
             )
-            print(
+            print_with_log(
                 "Continuing with the next date."
             )
 
@@ -1550,63 +1555,63 @@ def main():
         args.output_dir
     )
 
-    print()
-    print("=" * 70)
-    print("FINAL EXTRACTION SUMMARY")
-    print("=" * 70)
+    print_with_log()
+    print_with_log("=" * 70)
+    print_with_log("FINAL EXTRACTION SUMMARY")
+    print_with_log("=" * 70)
 
-    print(
+    print_with_log(
         f"Date range: {dates[0]} -> {dates[-1]}"
     )
 
-    print(
+    print_with_log(
         f"Games found: {total_games}"
     )
 
-    print(
+    print_with_log(
         f"Completed games processed: {total_completed}"
     )
 
-    print(
+    print_with_log(
         f"Player-game stat rows: {total_stats}"
     )
 
-    print()
-    print("Current invocation row counts:")
+    print_with_log()
+    print_with_log("Current invocation row counts:")
 
     for name, df in dataframes.items():
-        print(
+        print_with_log(
             f"  {name}: {len(df)}"
         )
 
-    print()
-    print("CSV files:")
+    print_with_log()
+    print_with_log("CSV files:")
 
     for name, filename in CSV_FILES.items():
-        print(
+        print_with_log(
             f"  {name}: {filename}"
         )
 
     if failed_dates:
-        print()
-        print(
+        print_with_log()
+        print_with_log(
             "Dates with unexpected processing errors:"
         )
 
         for failed_date in failed_dates:
-            print(
+            print_with_log(
                 f"  {failed_date}"
             )
 
-        print()
-        print(
+        print_with_log()
+        print_with_log(
             "These dates should be run again."
         )
 
         sys.exit(2)
 
-    print()
-    print(
+    print_with_log()
+    print_with_log(
         "Extraction complete."
     )
 
