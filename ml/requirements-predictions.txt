@@ -1,0 +1,14 @@
+# CPU-only inference for ml/src/predict.py; no notebook or GPU extras.
+# Match the saved-model environment in requirements.txt, using CPU variants.
+# CPU builds reduce disk usage; peak RAM depends on feature preparation and data.
+tensorflow-cpu==2.21.0
+keras==3.15.1
+scikit-learn==1.9.1
+xgboost-cpu==3.4.1
+pandas==3.0.6
+numpy==2.5.4
+scipy==1.18.1
+joblib==1.6.0
+SQLAlchemy==2.0.54
+psycopg2-binary==2.9.13
+python-dotenv==1.2.4
